@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "browser-agents": "^1.0.1",
     "puppeteer": "^1.9.0"
   }
 }

@@ -1,3 +1,8 @@
+# research resources used under development #
+#############################################
+/dev-resources
+/dev-resources/*
+/dev-resources/**/*
 
 # Compiled source #
 ###################
