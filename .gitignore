@@ -4,6 +4,12 @@
 /dev-resources/*
 /dev-resources/**/*
 
+# playaround and try out things #
+#################################
+/playaround
+/playaround/*
+/playaround/**/*
+
 # Compiled source #
 ###################
 *.com
