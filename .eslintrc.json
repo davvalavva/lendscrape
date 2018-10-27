@@ -11,6 +11,7 @@
         // JSON spec. doesn't allow it, but apparently it's ok with ESLint's parser.
         // PRAISE BE!
         "no-console": "off",
-        "semi": ["error", "never"]
+        "semi": ["error", "never"],
+        "comma-dangle": ["error", {"functions": "never"}]
     }
 }
