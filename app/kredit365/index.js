@@ -41,7 +41,6 @@ try {
 
     // Omvandla tabelldata från strängar till nummer
     const data = rows.map(row => row.map(strVal => parseNum(strVal)))
-    console.log(data)
 
     // Stänga ned headless browser
     await closeBrowser()

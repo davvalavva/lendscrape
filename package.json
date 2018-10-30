@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node app/kredit365/index.js",
-    "test": "tap app/**/*test.js",
+    "test": "tap app/**/*test.js --cov --color --reporter=spec --coverage-report=html",
     "build": "",
     "bash-example": "bash playaround/bash-example.sh",
     "env": "env"
@@ -23,6 +23,7 @@
     "eslint": "^5.8.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
-    "tap": "^12.0.1"
+    "tap": "^12.0.1",
+    "tap-spec": "^5.0.0"
   }
 }
