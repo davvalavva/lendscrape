@@ -1,9 +1,3 @@
-# research resources used under development #
-#############################################
-/dev-resources
-/dev-resources/*
-/dev-resources/**/*
-
 # playaround and try out things #
 #################################
 /playaround
@@ -115,6 +109,9 @@ coverage
 
 # nyc test coverage
 .nyc_output
+
+# VSCode
+.vscode/**/*
 
 # Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
 .grunt

@@ -18,7 +18,7 @@ module.exports = {
     await page.setExtraHTTPHeaders({ Referer: 'https://google.com/' })
     return page
   },
-  closeBrowser: () => {
+  closeBrowser: async () => {
     if (browserInstance) return browserInstance.close()
     throw new Error(`Can't close non-existing browser`)
   },
