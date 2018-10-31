@@ -16,9 +16,9 @@ const manualVals = require('./manualVals.js')
  */
 module.exports = (tableData, mappings) => {
   const arrValsToOneObj = (obj, val, i) => (
-    { ...obj, [mappings.keys.scraped[i].mappedKey]: val }
+    { ...obj, [mappings.scraped[i].mapped]: val }
   )
-  const manVals = manualVals(mappings.keys.manual, dateTime)
+  const manVals = manualVals(mappings.manual, dateTime)
   const transformed = tableData.reduce(
     (arrOfObjects, arr) => arrOfObjects
       .concat(

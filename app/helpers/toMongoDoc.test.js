@@ -2,22 +2,19 @@ const { test } = require('tap')
 const toMongoDoc = require('./toMongoDoc')
 
 const mappings = {
-  documentType: 'type-1',
-  keys: {
-    scraped: [
-      { mappedKey: 'belopp',         scrapedKey: 'Belopp'     },
-      { mappedKey: 'uppl.avg',       scrapedKey: 'Uppl. avg'  },
-      { mappedKey: 'fakt.avg',       scrapedKey: 'Fakt. avg'  },
-      { mappedKey: 'ränta (kr)',     scrapedKey: 'Ränta'      },
-      { mappedKey: 'betala totalt',  scrapedKey: 'Total'      },
-      { mappedKey: 'eff. ränta (%)', scrapedKey: 'Eff. ränta' },
-      { mappedKey: 'nom. ränta (%)', scrapedKey: 'Nom. ränta' }
-    ],
-    manual: [
-      { key: 'löptid (d)',    value: 30 },
-      { key: 'leverantörsId', value: 1  }
-    ]
-  }
+  scraped: [
+    { mapped: 'belopp', key: 'Belopp' },
+    { mapped: 'uppl.avg', key: 'Uppl. avg' },
+    { mapped: 'fakt.avg', key: 'Fakt. avg' },
+    { mapped: 'ränta (kr)', key: 'Ränta' },
+    { mapped: 'betala totalt', key: 'Total' },
+    { mapped: 'eff. ränta (%)', key: 'Eff. ränta' },
+    { mapped: 'nom. ränta (%)', key: 'Nom. ränta' }
+  ],
+  manual: [
+    { key: 'löptid (d)', value: 30 },
+    { key: 'leverantörsId', value: 1 }
+  ]
 }
 const tableData = [[2000, 350, 45, 64, 2459, 1135, 39], [3000, 350, 45, 96, 3491, 532, 39]]
 const wanted = [
