@@ -2,7 +2,7 @@ const { test } = require('tap')
 const parseNum = require('./parseNum')
 const { ParseError } = require('./customErrors')
 
-test('parseNum(value, keepDecimals, decimalSep) invoked with different arguments to parse', (t) => {
+test('parseNum(value, keepDecimals, decimalSep)', (t) => {
   const visualTabs = str => str.replace(/\t/g, '\\t') // display tab chars in console as '\t'
   let val
   let found

@@ -1,0 +1,15 @@
+{
+  "type-1": {
+    "leverantörsId":   { "mandatory": true,  "type": "int"   },
+    "belopp":          { "mandatory": true,  "type": "int"   },
+    "uppl.avg":        { "mandatory": false, "type": "int"   },
+    "fakt.avg":        { "mandatory": false, "type": "int"   },
+    "ränta (kr)":      { "mandatory": false, "type": "int"   },
+    "betala totalt":   { "mandatory": false, "type": "int"   },
+    "eff. ränta (%)":  { "mandatory": false, "type": "int"   },
+    "nom. ränta (%)":  { "mandatory": false, "type": "int"   },
+    "löptid (d)":      { "mandatory": true,  "type": "int"   },
+    "tidpunkt":        { "mandatory": true,  "type": "timestamp" },
+    "senaste ändring": { "mandatory": true,  "type": "timestamp" }
+  }
+}

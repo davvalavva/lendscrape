@@ -3,7 +3,7 @@ const { newPage, closeBrowser, TimeoutError } = require('../helpers/browserManag
 const toMongoDoc = require('../helpers/toMongoDoc')
 const validateMongoDoc = require('../helpers/validateMongoDoc')
 const mappings = require('./mappings.json')
-const schema = require('../schemas.json')['type-1']
+const schema = require('../config/schemas.json')['type-1']
 
 module.exports = () => {
   try {

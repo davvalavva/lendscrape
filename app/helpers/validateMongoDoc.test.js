@@ -1,7 +1,7 @@
 const { test } = require('tap')
 /*
 const validateMongoDoc = require('./validateMongoDoc')
-const schemas = require('../schemas.json')
+const schemas = require('../config/schemas.json')
 const { ValidationError } = require('./customErrors')
 
 test('validateMongoDoc() invoked with valid arguments', (t) => {
