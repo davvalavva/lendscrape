@@ -24,7 +24,7 @@ module.exports = (props, dateTime) => {
       if (obj.value === 'now()') {
         val = dateTime({ showTimeZone: true })
       }
-      return { [obj.keyName]: val }
+      return { [obj.key]: val }
     }
   )
   return mapped.reduce((accObj, currObj) => ({ ...accObj, ...currObj }), {})

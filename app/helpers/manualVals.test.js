@@ -5,10 +5,10 @@ test('manualVals()', (t1) => {
   test('invoked with valid arguments', (t2) => {
     const dateTimeStub = () => '2018-10-30 18:58:18 UTC+1'
     const keysVals = [
-      { keyName: 'löptid (d)', value: 30 },
-      { keyName: 'leverantörsId', value: 1 },
-      { keyName: 'senaste kontroll', value: 'now()' },
-      { keyName: 'senaste ändring', value: 'now()' }
+      { key: 'löptid (d)', value: 30 },
+      { key: 'leverantörsId', value: 1 },
+      { key: 'senaste kontroll', value: 'now()' },
+      { key: 'senaste ändring', value: 'now()' }
     ]
     const wanted = {
       'löptid (d)': 30,
@@ -17,7 +17,7 @@ test('manualVals()', (t1) => {
       'senaste ändring': '2018-10-30 18:58:18 UTC+1'
     }
     const found = manualVals(keysVals, dateTimeStub)
-    t2.same(found, wanted, `returns an object`)
+    t2.same(found, wanted, `manualVals() returns an object`)
     t2.end()
   })
   /*

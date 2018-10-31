@@ -2,19 +2,19 @@
   "documentType": "type-1",
   "keys": {
     "scraped": [
-        { "mappedKeyName": "belopp",         "scrapedKeyName": "Belopp"     },
-        { "mappedKeyName": "uppl.avg",       "scrapedKeyName": "Uppl. avg"  },
-        { "mappedKeyName": "fakt.avg",       "scrapedKeyName": "Fakt. avg"  },
-        { "mappedKeyName": "ränta (kr)",     "scrapedKeyName": "Ränta"      },
-        { "mappedKeyName": "betala totalt",  "scrapedKeyName": "Total"      },
-        { "mappedKeyName": "eff. ränta (%)", "scrapedKeyName": "Eff. ränta" },
-        { "mappedKeyName": "nom. ränta (%)", "scrapedKeyName": "Nom. ränta" }
+      { "mappedKey": "belopp",         "scrapedKey": "Belopp"     },
+      { "mappedKey": "uppl.avg",       "scrapedKey": "Uppl. avg"  },
+      { "mappedKey": "fakt.avg",       "scrapedKey": "Fakt. avg"  },
+      { "mappedKey": "ränta (kr)",     "scrapedKey": "Ränta"      },
+      { "mappedKey": "betala totalt",  "scrapedKey": "Total"      },
+      { "mappedKey": "eff. ränta (%)", "scrapedKey": "Eff. ränta" },
+      { "mappedKey": "nom. ränta (%)", "scrapedKey": "Nom. ränta" }
     ],
-    "custom": [
-      { "keyName": "löptid (d)",       "value": 30      },
-      { "keyName": "leverantörsId",    "value": 1       },
-      { "keyName": "senaste kontroll", "value": "now()" },
-      { "keyName": "senaste ändring",  "value": "now()" }
+    "manual": [
+      { "key": "löptid (d)",       "value": 30      },
+      { "key": "leverantörsId",    "value": 1       },
+      { "key": "senaste kontroll", "value": "now()" },
+      { "key": "senaste ändring",  "value": "now()" }
     ]
   }
 }

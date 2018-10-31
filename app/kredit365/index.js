@@ -1,7 +1,9 @@
 const parseNum = require('parse-num')
-const { newPage, closeBrowser, TimeoutError } = require('../browserManager')
-const transform = require('./transform-to-MongoDB-documents')
+const { newPage, closeBrowser, TimeoutError } = require('../helpers/browserManager')
+const toMongoDoc = require('../helpers/toMongoDoc')
+const validateMongoDoc = require('../helpers/validateMongoDoc')
 const mappings = require('./mappings.json')
+const schema = require('../schemas/type-1.json')
 
 try {
   const scrape = async () => {
@@ -20,7 +22,7 @@ try {
     // Försäkra oss om att inte tabellrubriker förändrats
     const clean = str => str.trim().toLowerCase()
     if (!headers.every(
-      (element, i) => clean(element) === clean(mappings.keys.scraped[i].scrapedKeyName)
+      (element, i) => clean(element) === clean(mappings.keys.scraped[i].scrapedKey)
     )) {
       throw new Error('Unexpected header(s)')
     }
@@ -41,16 +43,18 @@ try {
 
     // Omvandla tabelldata från strängar till nummer
     const data = rows.map(row => row.map(strVal => parseNum(strVal)))
+    console.log(JSON.stringify(data, null, 2))
 
     // Stänga ned headless browser
     await closeBrowser()
 
     // Transformera datan till "rätt" struktur för databaslagring
-    return transform(data)
+    return toMongoDoc(data, mappings)
   }
 
   scrape().then((data) => {
-    console.log(JSON.stringify(data))
+    validateMongoDoc(data, schema)
+    console.log(JSON.stringify(data, null, 2))
     // TODO: Serialize and store data
   })
 } catch (error) {
