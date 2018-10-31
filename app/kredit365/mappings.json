@@ -11,10 +11,10 @@
         { "mappedKeyName": "nom. ränta (%)", "scrapedKeyName": "Nom. ränta" }
     ],
     "custom": [
-      { "mappedKeyName": "löptid (d)",       "value": 30      },
-      { "mappedKeyName": "leverantörsId",    "value": 1       },
-      { "mappedKeyName": "senaste kontroll", "value": "now()" },
-      { "mappedKeyName": "senaste ändring",  "value": "now()" }
+      { "keyName": "löptid (d)",       "value": 30      },
+      { "keyName": "leverantörsId",    "value": 1       },
+      { "keyName": "senaste kontroll", "value": "now()" },
+      { "keyName": "senaste ändring",  "value": "now()" }
     ]
   }
 }
