@@ -1,5 +1,5 @@
 /**
- * @file Tests for file {@link <install_folder>/helpers/manual-insertions.js}
+ * @file Tests for file {@link <install_folder>/helpers/manual-insert.js}
  * @copyright Copyright (C) David Jonsson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -7,9 +7,9 @@
  */
 
 const { test } = require('tap')
-const manualVals = require('./manual-insertions')
+const manualInsert = require('./manual-insert')
 
-test('manualVals() invoked with valid arguments', (t) => {
+test('manualInsert() invoked with valid arguments', (t) => {
   const dateTimeStub = () => '2018-10-30 18:58:18 UTC+1'
   const keysVals = [
     { key: 'löptid (d)', value: 30 },
@@ -23,7 +23,7 @@ test('manualVals() invoked with valid arguments', (t) => {
     'senaste kontroll': '2018-10-30 18:58:18 UTC+1',
     'senaste ändring': '2018-10-30 18:58:18 UTC+1'
   }
-  const found = manualVals(keysVals, dateTimeStub)
-  t.same(found, wanted, `manualVals() returns an object`)
+  const found = manualInsert(keysVals, dateTimeStub)
+  t.same(found, wanted, `manualInsert() returns an object`)
   t.end()
 })

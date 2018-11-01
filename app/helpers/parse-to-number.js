@@ -1,5 +1,5 @@
 /**
- * @file Parses numeric strings to Numbers
+ * @file Parses numeric strings to Numbers.
  * @copyright Copyright (C) David Jonsson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -12,7 +12,7 @@
  *
  * By default, the decimals are truncated. This can be changed with an argument setting.
  *
- * @module helpers/parseNum
+ * @module helpers/parse-to-number
  */
 
 const { ParseError } = require('./custom-errors')
@@ -26,7 +26,7 @@ const { ParseError } = require('./custom-errors')
  *
  * @param {string} str The string to be parsed
  * @param {boolean} keepDecimals Set to true to keep decimals. Default: false
- * @param {string} valdecimalSep The character that is the decimal separator in the string.
+ * @param {string} decimalSep The character that is the decimal separator in the string.
  * If not set it's assumed to be the comma character.
  * @return {number} The number resulting from the parsing
  */

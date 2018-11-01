@@ -10,11 +10,11 @@
  * Transforms data in a table format (array of arrays) to an array of documents (objects)
  * so that it can be stored in a document database (i.e. MongoDB)
  *
- * @module helpers/toMongoDoc
+ * @module helpers/transform-data
  */
 
 const dateTime = require('date-time')
-const manualVals = require('./manual-insertions.js')
+const manualInsert = require('./manual-insert.js')
 
 /**
  * Data in a two dimensional array get transformed to an array of objects (documents)
@@ -46,22 +46,30 @@ const manualVals = require('./manual-insertions.js')
  * the scraped names of the data values to key names in the document object
  *
  *
- * @param {mixed[[]]} tableData Two dimensional array of values to be transformed documents
- * @param {object} mappings Data structure for mapping scraped data names
+ * @param {mixed[[]]} data Two dimensional array of values to be transformed documents
+ * @param {object[]} headersKeysMap Data structure for mapping scraped data names
  * to key names in document objects
+ * @param {mixed[[]]} manualData TODO
  * @return {object[]} Documents that now can be stored in a document database (i.e. MongoDB)
  */
-module.exports = (tableData, mappings) => {
-  const arrValsToOneObj = (obj, val, i) => (
-    { ...obj, [mappings.scraped[i].mapped]: val }
+module.exports = (data, headersKeysMap, manualData) => {
+  const arrayToObject = (obj, val, i) => (
+    {
+      ...obj,
+      [headersKeysMap[i].mapped]: val
+    }
   )
-  const manVals = manualVals(mappings.manual, dateTime)
-  const transformed = tableData.reduce(
-    (arrOfObjects, arr) => arrOfObjects
-      .concat(
-        [arr.reduce(arrValsToOneObj, {})]
-      ), []
-  ).map(document => ({ ...document, ...manVals }))
+
+  const manualDocument = manualInsert(manualData, dateTime)
+
+  const transformed = data.reduce(
+    (arrayOfObjects, arr) => arrayOfObjects.concat(
+      [
+        arr.reduce(arrayToObject, {})
+      ]
+    ),
+    []
+  ).map(document => ({ ...document, ...manualDocument }))
 
   return transformed
 }

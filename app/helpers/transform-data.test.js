@@ -7,25 +7,23 @@
  */
 
 const { test } = require('tap')
-const toMongoDoc = require('./transform-data')
+const transform = require('./transform-data')
 
-const mappings = {
-  scraped: [
-    { mapped: 'belopp', key: 'Belopp' },
-    { mapped: 'uppl.avg', key: 'Uppl. avg' },
-    { mapped: 'fakt.avg', key: 'Fakt. avg' },
-    { mapped: 'ränta (kr)', key: 'Ränta' },
-    { mapped: 'betala totalt', key: 'Total' },
-    { mapped: 'eff. ränta (%)', key: 'Eff. ränta' },
-    { mapped: 'nom. ränta (%)', key: 'Nom. ränta' }
-  ],
-  manual: [
-    { key: 'löptid (d)', value: 30 },
-    { key: 'leverantörsId', value: 1 }
-  ]
-}
-const tableData = [[2000, 350, 45, 64, 2459, 1135, 39], [3000, 350, 45, 96, 3491, 532, 39]]
-const wanted = [
+const headersKeysMap = [
+  { mapped: 'belopp', key: 'Belopp' },
+  { mapped: 'uppl.avg', key: 'Uppl. avg' },
+  { mapped: 'fakt.avg', key: 'Fakt. avg' },
+  { mapped: 'ränta (kr)', key: 'Ränta' },
+  { mapped: 'betala totalt', key: 'Total' },
+  { mapped: 'eff. ränta (%)', key: 'Eff. ränta' },
+  { mapped: 'nom. ränta (%)', key: 'Nom. ränta' }
+]
+const manualData = [
+  { key: 'löptid (d)', value: 30 },
+  { key: 'leverantörsId', value: 1 }
+]
+const data = [[2000, 350, 45, 64, 2459, 1135, 39], [3000, 350, 45, 96, 3491, 532, 39]]
+const expected = [
   {
     belopp: 2000,
     'uppl.avg': 350,
@@ -49,9 +47,8 @@ const wanted = [
     leverantörsId: 1
   }
 ]
-const found = toMongoDoc(tableData, mappings)
 
-test('toMongoDoc(data, mappings)', (t) => {
-  t.same(found, wanted, `returns an array of objects (documents)`)
+test('transform(data, headersKeysMap, manualData)', (t) => {
+  t.same(transform(data, headersKeysMap, manualData), expected, `returns an array of objects (documents)`)
   t.end()
 })

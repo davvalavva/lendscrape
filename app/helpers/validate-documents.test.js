@@ -7,12 +7,12 @@
  */
 
 const { test } = require('tap')
-const validateMongoDoc = require('./validate-documents')
+const validate = require('./validate-documents')
 const schemas = require('../config/schemas.json')
 const { ValidationError } = require('./custom-errors')
 
 const schema = schemas['type-1']
-const mongoDocs = [
+const documents = [
   {
     belopp: 2000,
     'uppl.avg': 350,
@@ -41,10 +41,10 @@ const mongoDocs = [
   }
 ]
 
-test('validateMongoDoc(mongoDocs, schema)', (t) => {
-  t.type(validateMongoDoc(mongoDocs, schema), 'boolean', `Returns a boolen true when given valid arguments (where the first argument is an array of documents)`)
-  t.same(validateMongoDoc(mongoDocs, schema), true, `Returns true when given valid arguments`)
-  mongoDocs[2] = { // missing mandatory key 'belopp'
+test('validate(documents, schema)', (t) => {
+  t.type(validate(documents, schema), 'boolean', `Returns a boolen true when given valid arguments (where the first argument is an array of documents)`)
+  t.same(validate(documents, schema), true, `Returns true when given valid arguments`)
+  documents[2] = { // missing required key 'belopp'
     'uppl.avg': 350,
     'fakt.avg': 45,
     'ränta (kr)': 96,
@@ -54,21 +54,21 @@ test('validateMongoDoc(mongoDocs, schema)', (t) => {
     'löptid (d)': 30,
     leverantörsId: 1
   }
-  t.throws(() => validateMongoDoc(mongoDocs, schema), ValidationError, `Throws ValidationError when missing mandatory key for documents in first argument`)
-  delete mongoDocs[2]
-  t.throws(() => { validateMongoDoc() }, ReferenceError, `Throws ReferenceError when called without arguments`)
-  t.throws(() => { validateMongoDoc(undefined) }, ReferenceError, `Throws ReferenceError when called with undefined as only argument`)
-  t.throws(() => { validateMongoDoc(null) }, ReferenceError, `Throws ReferenceError when called with null as only argument`)
-  t.throws(() => { validateMongoDoc(mongoDocs, null) }, ReferenceError, `Throws ReferenceError when given null as second argument`)
-  t.throws(() => { validateMongoDoc(mongoDocs, undefined) }, ReferenceError, `Throws ReferenceError when given undefined as second argument`)
-  t.throws(() => { validateMongoDoc({ docs: mongoDocs }, schema) }, TypeError, `Throws TypeError when given an object as first argument`)
-  t.throws(() => { validateMongoDoc(() => {}, schema) }, TypeError, `Throws TypeError when given a function as first argument`)
-  t.throws(() => { validateMongoDoc('mongoDocs', schema) }, TypeError, `Throws TypeError when given a string as first argument`)
-  t.throws(() => { validateMongoDoc(31, schema) }, TypeError, `Throws TypeError when given a number as first argument`)
-  t.throws(() => { validateMongoDoc(mongoDocs, [schema]) }, TypeError, `Throws TypeError when given an array as second argument`)
-  t.throws(() => { validateMongoDoc(mongoDocs, () => {}) }, TypeError, `Throws TypeError when given a function as second argument`)
-  t.throws(() => { validateMongoDoc(mongoDocs, 'schema') }, TypeError, `Throws TypeError when given a string as second argument`)
-  t.throws(() => { validateMongoDoc(mongoDocs, 32) }, TypeError, `Throws TypeError when given a number as second argument`)
+  t.throws(() => validate(documents, schema), ValidationError, `Throws ValidationError when missing mandatory key for documents in first argument`)
+  delete documents[2]
+  t.throws(() => { validate() }, ReferenceError, `Throws ReferenceError when called without arguments`)
+  t.throws(() => { validate(undefined) }, ReferenceError, `Throws ReferenceError when called with undefined as only argument`)
+  t.throws(() => { validate(null) }, ReferenceError, `Throws ReferenceError when called with null as only argument`)
+  t.throws(() => { validate(documents, null) }, ReferenceError, `Throws ReferenceError when given null as second argument`)
+  t.throws(() => { validate(documents, undefined) }, ReferenceError, `Throws ReferenceError when given undefined as second argument`)
+  t.throws(() => { validate({ docs: documents }, schema) }, TypeError, `Throws TypeError when given an object as first argument`)
+  t.throws(() => { validate(() => {}, schema) }, TypeError, `Throws TypeError when given a function as first argument`)
+  t.throws(() => { validate('documents', schema) }, TypeError, `Throws TypeError when given a string as first argument`)
+  t.throws(() => { validate(31, schema) }, TypeError, `Throws TypeError when given a number as first argument`)
+  t.throws(() => { validate(documents, [schema]) }, TypeError, `Throws TypeError when given an array as second argument`)
+  t.throws(() => { validate(documents, () => {}) }, TypeError, `Throws TypeError when given a function as second argument`)
+  t.throws(() => { validate(documents, 'schema') }, TypeError, `Throws TypeError when given a string as second argument`)
+  t.throws(() => { validate(documents, 32) }, TypeError, `Throws TypeError when given a number as second argument`)
 
   t.end()
 })

@@ -7,10 +7,10 @@
  */
 
 const { test } = require('tap')
-const parseNum = require('./parse-to-number')
+const parseToNumber = require('./parse-to-number')
 const { ParseError } = require('./custom-errors')
 
-test('parseNum(value, keepDecimals, decimalSep)', (t) => {
+test('parseToNumber(value, keepDecimals, decimalSep)', (t) => {
   const visualTabs = str => str.replace(/\t/g, '\\t') // display tab chars in console as '\t'
   let val
   let found
@@ -18,68 +18,68 @@ test('parseNum(value, keepDecimals, decimalSep)', (t) => {
   let expected
 
   val = '	2 000 kr ' // eslint-disable-line
-  found = parseNum(val)
-  signature = `parseNum("${visualTabs(val)}")`
+  found = parseToNumber(val)
+  signature = `parseToNumber("${visualTabs(val)}")`
   expected = 2000
   t.same(found, expected, `${signature} returns Number(${expected})`)
 
   val = ' 1135.24% '
-  found = parseNum(val)
-  signature = `parseNum("${visualTabs(val)}")`
+  found = parseToNumber(val)
+  signature = `parseToNumber("${visualTabs(val)}")`
   expected = 113524
   t.same(found, expected, `${signature} returns Number(${expected})`)
 
   val = ' 1135.24% '
-  found = parseNum(val, false, '.')
-  signature = `parseNum("${visualTabs(val)}", false, ".")`
+  found = parseToNumber(val, false, '.')
+  signature = `parseToNumber("${visualTabs(val)}", false, ".")`
   expected = 1135
   t.same(found, expected, `${signature} returns Number(${expected})`)
 
   val = ' 1135.24%'
-  found = parseNum(val, true, '.')
-  signature = `parseNum("${visualTabs(val)}", true, ".")`
+  found = parseToNumber(val, true, '.')
+  signature = `parseToNumber("${visualTabs(val)}", true, ".")`
   expected = 1135.24
   t.same(found, expected, `${signature} returns Number(${expected})`)
 
   val = ' 1135,24%'
-  found = parseNum(val, true)
-  signature = `parseNum("${visualTabs(val)}", true)`
+  found = parseToNumber(val, true)
+  signature = `parseToNumber("${visualTabs(val)}", true)`
   expected = 1135.24
   t.same(found, expected, `${signature} returns Number(${expected})`)
 
   val = '			 1 000 252.00	' // eslint-disable-line
-  found = parseNum(val, false, '.')
-  signature = `parseNum("${visualTabs(val)}", false, ".")`
+  found = parseToNumber(val, false, '.')
+  signature = `parseToNumber("${visualTabs(val)}", false, ".")`
   expected = 1000252
   t.same(found, expected, `${signature} returns Number(${expected})`)
 
   val = ''
-  signature = `parseNum("${visualTabs(val)}")`
-  t.throws(() => parseNum(val), ParseError, `${signature} throws ParseError`)
+  signature = `parseToNumber("${visualTabs(val)}")`
+  t.throws(() => parseToNumber(val), ParseError, `${signature} throws ParseError`)
 
   val = '		' // eslint-disable-line
-  signature = `parseNum("${visualTabs(val)}")`
-  t.throws(() => parseNum(val), ParseError, `${signature} throws ParseError`)
+  signature = `parseToNumber("${visualTabs(val)}")`
+  t.throws(() => parseToNumber(val), ParseError, `${signature} throws ParseError`)
 
   val = null
-  signature = `parseNum(NULL)`
-  t.throws(() => parseNum(val), ParseError, `${signature} throws ParseError`)
+  signature = `parseToNumber(NULL)`
+  t.throws(() => parseToNumber(val), ParseError, `${signature} throws ParseError`)
 
   val = 1252
-  found = parseNum(val)
-  signature = `parseNum(${val})`
+  found = parseToNumber(val)
+  signature = `parseToNumber(${val})`
   expected = 1252
   t.same(found, expected, `${signature} returns Number(${expected})`)
 
   val = 1252.72
-  found = parseNum(val)
-  signature = `parseNum(${val})`
+  found = parseToNumber(val)
+  signature = `parseToNumber(${val})`
   expected = 1252
   t.same(found, expected, `${signature} returns Number(${expected})`)
 
   val = 1252.72
-  found = parseNum(val, true)
-  signature = `parseNum(${val}, true)`
+  found = parseToNumber(val, true)
+  signature = `parseToNumber(${val}, true)`
   expected = 1252.72
   t.same(found, expected, `${signature} returns Number(${expected})`)
   t.end()

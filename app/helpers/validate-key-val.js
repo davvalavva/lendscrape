@@ -9,7 +9,7 @@
 /**
  * Validates key/value pairs in a document
  *
- * @module helpers/validateMongoDocVal
+ * @module helpers/validate-key-val
  */
 
 const { ValidationError } = require('./custom-errors')
