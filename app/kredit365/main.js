@@ -3,7 +3,7 @@
  * @copyright Copyright (C) David Jonsson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * @author David Jonsson <david.jonsson@pm.me>
+ * @author David Jonsson
  */
 
 const parseNum = require('../helpers/parse-to-number')
@@ -31,11 +31,6 @@ module.exports = () => {
         return thNodes.map(element => element.innerText)
       })
 
-      // make sure headers haven't been changed
-      if (headersChanged(headers, headersKeysMap)) {
-        throw new Error('Unexpected header(s) in page')
-      }
-
       // extract HTML table rows data into an array (becomes array of arrays)
       const rows = await page.evaluate(() => {
         const rowsArr = []
@@ -50,11 +45,15 @@ module.exports = () => {
         return rowsArr
       })
 
-      // transform data from strings from numbers
-      const data = rows.map(row => row.map(strVal => parseNum(strVal)))
-      console.log(JSON.stringify(data, null, 2))
-
       await closeBrowser()
+
+      // make sure headers haven't been changed
+      if (headersChanged(headers, headersKeysMap)) {
+        throw new Error('Unexpected header(s) in page')
+      }
+
+      // convert numeric strings to numbers in the parsed data
+      const data = rows.map(row => row.map(strVal => parseNum(strVal)))
 
       // transform data to documents
       return transform(data, headersKeysMap, manualData)

@@ -1,18 +1,18 @@
 {
   "name": "lenderscraper",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node app/kredit365/index.js",
     "test": "tap app/**/*test.js --cov --color --reporter=spec --coverage-report=html",
-    "test-shortcut": "tap app/helpers/validateMongoDoc.test.js --color --reporter=spec",
+    "test-shortcut": "tap app/kredit365/headers-changed.test.js --color --reporter=spec",
     "build": "",
     "bash-example": "bash playaround/bash-example.sh",
     "env": "env"
   },
   "author": "",
-  "license": "ISC",
+  "license": "",
   "dependencies": {
     "browser-agents": "^1.0.1",
     "date-time": "^2.1.0",
