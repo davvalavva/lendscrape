@@ -1,5 +1,5 @@
 /**
- * @file Tests for file {@link <install_folder>/helpers/toMongoDoc.js}
+ * @file Tests for file {@link <install_folder>/helpers/transform-data.js}
  * @copyright Copyright (C) David Jonsson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -7,7 +7,7 @@
  */
 
 const { test } = require('tap')
-const toMongoDoc = require('./toMongoDoc')
+const toMongoDoc = require('./transform-data')
 
 const mappings = {
   scraped: [

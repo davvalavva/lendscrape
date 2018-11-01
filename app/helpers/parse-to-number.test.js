@@ -1,5 +1,5 @@
 /**
- * @file Tests for file {@link <install_folder>/helpers/parseNum.js}
+ * @file Tests for file {@link <install_folder>/helpers/parse-to-number.js}
  * @copyright Copyright (C) David Jonsson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -7,8 +7,8 @@
  */
 
 const { test } = require('tap')
-const parseNum = require('./parseNum')
-const { ParseError } = require('./customErrors')
+const parseNum = require('./parse-to-number')
+const { ParseError } = require('./custom-errors')
 
 test('parseNum(value, keepDecimals, decimalSep)', (t) => {
   const visualTabs = str => str.replace(/\t/g, '\\t') // display tab chars in console as '\t'

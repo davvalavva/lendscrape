@@ -13,7 +13,7 @@
  * @module helpers/validateMongoDoc
  */
 
-const { ValidationError } = require('./customErrors')
+const { ValidationError } = require('./custom-errors')
 
 /**
  * Validates that documents conforms to a set of rules according to

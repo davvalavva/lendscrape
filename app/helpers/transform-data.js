@@ -14,7 +14,7 @@
  */
 
 const dateTime = require('date-time')
-const manualVals = require('./manualVals.js')
+const manualVals = require('./manual-insertions.js')
 
 /**
  * Data in a two dimensional array get transformed to an array of objects (documents)

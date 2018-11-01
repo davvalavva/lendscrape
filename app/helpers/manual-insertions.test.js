@@ -1,5 +1,5 @@
 /**
- * @file Tests for file {@link <install_folder>/helpers/manualVals.js}
+ * @file Tests for file {@link <install_folder>/helpers/manual-insertions.js}
  * @copyright Copyright (C) David Jonsson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -7,7 +7,7 @@
  */
 
 const { test } = require('tap')
-const manualVals = require('./manualVals')
+const manualVals = require('./manual-insertions')
 
 test('manualVals() invoked with valid arguments', (t) => {
   const dateTimeStub = () => '2018-10-30 18:58:18 UTC+1'

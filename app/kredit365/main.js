@@ -6,19 +6,20 @@
  * @author David Jonsson <david.jonsson@pm.me>
  */
 
-const parseNum = require('../helpers/parseNum')
-const { newPage, closeBrowser, TimeoutError } = require('../helpers/browserManager')
-const toMongoDoc = require('../helpers/toMongoDoc')
-const validateMongoDoc = require('../helpers/validateMongoDoc')
+const parseNum = require('../helpers/parse-to-number')
+const { newPage, closeBrowser, TimeoutError } = require('../helpers/browser-manager')
+const transform = require('../helpers/transform-data')
+const validate = require('../helpers/validate-documents')
 const mappings = require('./mappings.json')
 const schema = require('../config/schemas.json')['type-1']
+
+const PARSE_TARGET_URL = 'https://www.kredit365.se/priser-p%C3%A5-l%C3%A5n'
 
 module.exports = () => {
   try {
     const scrape = async () => {
       const page = await newPage()
-      await page.goto('https://www.kredit365.se/priser-p%C3%A5-l%C3%A5n',
-        { waitUntil: 'networkidle2', timeout: 20000 })
+      await page.goto(PARSE_TARGET_URL, { waitUntil: 'networkidle2', timeout: 20000 })
       await page.waitForSelector('.content > article > table')
 
       // extrahera tabellrubrikerna till strängar i en array
@@ -58,11 +59,11 @@ module.exports = () => {
       await closeBrowser()
 
       // Transformera datan till "rätt" struktur för databaslagring
-      return toMongoDoc(data, mappings)
+      return transform(data, mappings)
     }
 
     scrape().then((mongoDocs) => {
-      validateMongoDoc(mongoDocs, schema)
+      validate(mongoDocs, schema)
       console.log(JSON.stringify(mongoDocs, null, 2))
       // TODO: Serialize and store data
     })

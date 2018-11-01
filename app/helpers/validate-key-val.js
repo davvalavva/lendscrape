@@ -12,8 +12,8 @@
  * @module helpers/validateMongoDocVal
  */
 
-const { ValidationError } = require('./customErrors')
-const typeMappings = require('../config/docToJSTypeMappings.json')
+const { ValidationError } = require('./custom-errors')
+const typeMappings = require('../config/BSON-to-JS-mappings.json')
 
 /**
  * Validates that key/value pairs in a document conforms to

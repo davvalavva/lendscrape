@@ -15,7 +15,7 @@
  * @module helpers/parseNum
  */
 
-const { ParseError } = require('./customErrors')
+const { ParseError } = require('./custom-errors')
 
 /**
  * Takes a string representing som numeric value and parses it to a Number.

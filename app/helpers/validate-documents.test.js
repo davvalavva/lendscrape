@@ -1,5 +1,5 @@
 /**
- * @file Tests for file {@link <install_folder>/helpers/validateMongoDoc.js}
+ * @file Tests for file {@link <install_folder>/helpers/validate-documents.js}
  * @copyright Copyright (C) David Jonsson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -7,9 +7,9 @@
  */
 
 const { test } = require('tap')
-const validateMongoDoc = require('./validateMongoDoc')
+const validateMongoDoc = require('./validate-documents')
 const schemas = require('../config/schemas.json')
-const { ValidationError } = require('./customErrors')
+const { ValidationError } = require('./custom-errors')
 
 const schema = schemas['type-1']
 const mongoDocs = [

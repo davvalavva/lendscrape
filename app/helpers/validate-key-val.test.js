@@ -1,5 +1,5 @@
 /**
- * @file Tests for file {@link <install_folder>/helpers/validateMongoDocVal.js}
+ * @file Tests for file {@link <install_folder>/helpers/validate-key-val.js}
  * @copyright Copyright (C) David Jonsson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -7,8 +7,8 @@
  */
 
 const { test } = require('tap')
-const validateVal = require('./validateMongoDocVal')
-const { ValidationError } = require('./customErrors')
+const validateVal = require('./validate-key-val')
+const { ValidationError } = require('./custom-errors')
 const schemas = require('../config/schemas.json')
 
 const type = 'type-1'
