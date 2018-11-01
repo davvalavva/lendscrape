@@ -43,7 +43,7 @@ const wanted = [
 ]
 const found = toMongoDoc(tableData, mappings)
 
-test('toMongoDoc() invoked with valid arguments', (t) => {
-  t.same(found, wanted, `returns an array of objects`)
+test('toMongoDoc(data, mappings)', (t) => {
+  t.same(found, wanted, `returns an array of objects (documents)`)
   t.end()
 })
