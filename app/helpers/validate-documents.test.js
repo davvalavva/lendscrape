@@ -17,27 +17,23 @@ const documents = [
     belopp: 2000,
     'uppl.avg': 350,
     'fakt.avg': 45,
-    'ränta (kr)': 64,
-    'betala totalt': 2459,
-    'eff. ränta (%)': 1135,
-    'nom. ränta (%)': 39,
-    'löptid (d)': 30,
-    leverantörsId: 1,
-    'senaste kontroll': '2018-10-31 08:01:13 UTC+1',
-    'senaste ändring': '2018-10-30 18:58:18 UTC+1'
+    'ränta(kr)': 64,
+    'betala-totalt': 2459,
+    'eff.-ränta(%)': 1135,
+    'nom.-ränta(%)': 39,
+    'löptid(d)': 30,
+    leverantörsId: 1
   },
   {
     belopp: 3000,
     'uppl.avg': 550,
     'fakt.avg': 45,
-    'ränta (kr)': 93,
-    'betala totalt': 3688,
-    'eff. ränta (%)': 861,
-    'nom. ränta (%)': 26,
-    'löptid (d)': 30,
-    leverantörsId: 1,
-    'senaste kontroll': '2018-10-31 08:01:13 UTC+1',
-    'senaste ändring': '2018-10-30 18:58:18 UTC+1'
+    'ränta(kr)': 93,
+    'betala-totalt': 3688,
+    'eff.-ränta(%)': 861,
+    'nom.-ränta(%)': 26,
+    'löptid(d)': 30,
+    leverantörsId: 1
   }
 ]
 
@@ -47,14 +43,14 @@ test('validate(documents, schema)', (t) => {
   documents[2] = { // missing required key 'belopp'
     'uppl.avg': 350,
     'fakt.avg': 45,
-    'ränta (kr)': 96,
-    'betala totalt': 3491,
-    'eff. ränta (%)': 532,
-    'nom. ränta (%)': 39,
-    'löptid (d)': 30,
+    'ränta(kr)': 96,
+    'betala-totalt': 3491,
+    'eff.-ränta(%)': 532,
+    'nom.-ränta(%)': 39,
+    'löptid(d)': 30,
     leverantörsId: 1
   }
-  t.throws(() => validate(documents, schema), ValidationError, `Throws ValidationError when missing mandatory key for documents in first argument`)
+  t.throws(() => validate(documents, schema), ValidationError, `Throws ValidationError when missing required key for documents in first argument`)
   delete documents[2]
   t.throws(() => { validate() }, ReferenceError, `Throws ReferenceError when called without arguments`)
   t.throws(() => { validate(undefined) }, ReferenceError, `Throws ReferenceError when called with undefined as only argument`)

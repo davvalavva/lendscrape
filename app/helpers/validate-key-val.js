@@ -13,7 +13,7 @@
  */
 
 const { ValidationError } = require('./custom-errors')
-const typeMappings = require('../config/BSON-to-JS-mappings.json')
+const map = require('../config/BSON-to-JS-mappings.json')
 
 /**
  * Validates that key/value pairs in a document conforms to
@@ -37,17 +37,9 @@ module.exports = (key, value, schema) => {
   if (schema && schema[key] === undefined) {
     throw new ValidationError('Given key in first argument doesn\'t exist in given schema given as third argument')
   }
-  const docType = schema[key].type
-  const mapped = typeMappings[docType]
-  const JSTypeExpected = mapped.JStype
-  if (typeof value !== JSTypeExpected) { // eslint-disable-line
+  const expectedType = map[schema[key]['BSON-type']].JStype
+  if (typeof value !== expectedType) { // eslint-disable-line
     throw new TypeError('Invalid type in second argument')
-  }
-  if (mapped.regex) {
-    const r = new RegExp(mapped.regex)
-    if (!r.test(value)) {
-      throw new ValidationError('Wrong format of string value given in second argument')
-    }
   }
   return true
 }
