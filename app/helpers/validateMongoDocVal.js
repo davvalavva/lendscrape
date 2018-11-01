@@ -7,7 +7,7 @@
  */
 
 /**
- * TODO Short description
+ * Validates key/value pairs in a document
  *
  * @module helpers/validateMongoDocVal
  */
@@ -16,11 +16,12 @@ const { ValidationError } = require('./customErrors')
 const typeMappings = require('../config/docToJSTypeMappings.json')
 
 /**
- * TODO Detailed description
+ * Validates that key/value pairs in a document conforms to
+ * the schema passed as the third argument.
  *
- * @param {string} key TODO description
- * @param {mixed} value TODO description
- * @param {object} schema TODO description
+ * @param {string} key The key of the key/value pair to be tested
+ * @param {mixed} value The value of the key/value pair to be tested
+ * @param {object} schema The schema with rules to test against
  * @return {boolean} Returns true if validation succeeds, otherwise an error is thrown
  */
 module.exports = (key, value, schema) => {

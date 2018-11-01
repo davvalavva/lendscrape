@@ -7,8 +7,6 @@
  */
 
 /**
- *
- *
  * This module offers methods for instantiating a headless browser.
  * It also sets the most common configuration settings before
  * returning the browser handle to the caller. It uses 3rd party
@@ -28,9 +26,9 @@ const getBrowser = async () => {
 }
 
 /**
- * TODO Detailed description
+ * Returns an instance of Page
  *
- * @return {object} Returns a Page instance
+ * @return {object} Returns an instance of Page
  */
 const newPage = async () => {
   const browser = await getBrowser()
@@ -43,13 +41,13 @@ const newPage = async () => {
 }
 
 /**
- * TODO Detailed description
+ * Closes the browser. Throws an error if no browser instance exits
  *
- * @return {undefined} TODO description
+ * @return {undefined}
  */
 const closeBrowser = async () => {
   if (browserInstance) return browserInstance.close()
-  throw new Error(`Can't close non-existing browser`)
+  throw new ReferenceError(`Can't close non-existing browser`)
 }
 
 module.exports = { newPage, closeBrowser, TimeoutError }

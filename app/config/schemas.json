@@ -1,15 +1,15 @@
 {
   "type-1": {
-    "leverantörsId":    { "mandatory": true,  "type": "int"   },
-    "belopp":           { "mandatory": true,  "type": "int"   },
-    "uppl.avg":         { "mandatory": false, "type": "int"   },
-    "fakt.avg":         { "mandatory": false, "type": "int"   },
-    "ränta (kr)":       { "mandatory": false, "type": "int"   },
-    "betala totalt":    { "mandatory": false, "type": "int"   },
-    "eff. ränta (%)":   { "mandatory": false, "type": "int"   },
-    "nom. ränta (%)":   { "mandatory": false, "type": "int"   },
-    "löptid (d)":       { "mandatory": true,  "type": "int"   },
-    "senaste kontroll": { "mandatory": true,  "type": "timestamp" },
-    "senaste ändring":  { "mandatory": true,  "type": "timestamp" }
+    "leverantörsId":    { "required": true,  "type": "int"   },
+    "belopp":           { "required": true,  "type": "int"   },
+    "uppl.avg":         { "required": false, "type": "int"   },
+    "fakt.avg":         { "required": false, "type": "int"   },
+    "ränta (kr)":       { "required": false, "type": "int"   },
+    "betala totalt":    { "required": false, "type": "int"   },
+    "eff. ränta (%)":   { "required": false, "type": "int"   },
+    "nom. ränta (%)":   { "required": false, "type": "int"   },
+    "löptid (d)":       { "required": true,  "type": "int"   },
+    "senaste kontroll": { "required": true,  "type": "timestamp" },
+    "senaste ändring":  { "required": true,  "type": "timestamp" }
   }
 }
