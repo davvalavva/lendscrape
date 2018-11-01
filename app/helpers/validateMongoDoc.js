@@ -1,5 +1,18 @@
+/**
+ * TODO Short description
+ *
+ * @module helpers/validateMongoDoc
+ */
+
 const { ValidationError } = require('./customErrors')
 
+/**
+ * TODO Detailed description
+ *
+ * @param {object[]} mongoDocs TODO description
+ * @param {object} schema TODO description
+ * @return {boolean} Returns true if validation succeeds, otherwise an error is thrown
+ */
 module.exports = (mongoDocs, schema) => {
   if (mongoDocs == null || schema == null) {
     throw new ReferenceError('undefined or null not allowed as arguments')

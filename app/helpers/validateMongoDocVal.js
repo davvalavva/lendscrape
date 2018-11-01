@@ -1,6 +1,20 @@
+/**
+ * TODO Short description
+ *
+ * @module helpers/validateMongoDocVal
+ */
+
 const { ValidationError } = require('./customErrors')
 const typeMappings = require('../config/docToJSTypeMappings.json')
 
+/**
+ * TODO Detailed description
+ *
+ * @param {string} key TODO description
+ * @param {mixed} value TODO description
+ * @param {object} schema TODO description
+ * @return {boolean} Returns true if validation succeeds, otherwise an error is thrown
+ */
 module.exports = (key, value, schema) => {
   if (key == null || value == null || schema == null) {
     throw new ReferenceError('undefined or null not allowed as arguments')
