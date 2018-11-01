@@ -3,13 +3,13 @@ const typeMappings = require('../config/docToJSTypeMappings.json')
 
 module.exports = (key, value, schema) => {
   if (key == null || value == null || schema == null) {
-    throw new ReferenceError('undefined or null not allowed in arguments')
+    throw new ReferenceError('undefined or null not allowed as arguments')
   }
   if (typeof key !== 'string') {
     throw new TypeError('Invalid type in first argument')
   }
   if (key.trim() === '') {
-    throw new ValidationError('Empty string is not allowed in first argument')
+    throw new ValidationError('Empty string is not allowed as first argument')
   }
   if (schema && schema[key] === undefined) {
     throw new ValidationError('Given key in first argument doesn\'t exist in given schema given as third argument')
