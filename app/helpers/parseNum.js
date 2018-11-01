@@ -1,4 +1,12 @@
 /**
+ * @file Parses numeric strings to Numbers
+ * @copyright Copyright (C) David Jonsson - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * @author David Jonsson <david.jonsson@pm.me>
+ */
+
+/**
  * Parses numeric strings to Numbers. Strips out any non numeric characters in strings
  * except minus character and, depending on arguments, also decimal separator.
  *

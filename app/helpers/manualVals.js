@@ -1,4 +1,12 @@
 /**
+ * @file Transforms array of objects to one object
+ * @copyright Copyright (C) David Jonsson - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * @author David Jonsson <david.jonsson@pm.me>
+ */
+
+/**
  * Creates an object with manually entered values (as opposed to scraped ones)
  * to be merged with objects (documents) being prepared for database storage
  *

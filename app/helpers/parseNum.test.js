@@ -1,3 +1,11 @@
+/**
+ * @file Tests for file {@link <install_folder>/helpers/parseNum.js}
+ * @copyright Copyright (C) David Jonsson - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * @author David Jonsson <david.jonsson@pm.me>
+ */
+
 const { test } = require('tap')
 const parseNum = require('./parseNum')
 const { ParseError } = require('./customErrors')
