@@ -12,7 +12,8 @@
  * @module helpers/validate-key-val
  */
 
-const { ValidationError } = require('./custom-errors')
+const path = require('path')
+const { ValidationError } = require('../config/custom-errors')
 const map = require('../config/BSON-to-JS-mappings.json')
 
 /**
@@ -25,21 +26,36 @@ const map = require('../config/BSON-to-JS-mappings.json')
  * @return {boolean} Returns true if validation succeeds, otherwise an error is thrown
  */
 module.exports = (key, value, schema) => {
-  if (key == null || value == null || schema == null) {
-    throw new ReferenceError('undefined or null not allowed as arguments')
-  }
-  if (typeof key !== 'string') {
-    throw new TypeError('Invalid type in first argument')
-  }
-  if (key.trim() === '') {
-    throw new ValidationError('Empty string is not allowed as first argument')
-  }
-  if (schema && schema[key] === undefined) {
-    throw new ValidationError('Given key in first argument doesn\'t exist in given schema given as third argument')
-  }
-  const expectedType = map[schema[key]['BSON-type']].JStype
-  if (typeof value !== expectedType) { // eslint-disable-line
-    throw new TypeError('Invalid type in second argument')
+  try {
+    if (key == null || value == null || schema == null) {
+      throw new ReferenceError('undefined or null not allowed as arguments')
+    }
+    if (typeof key !== 'string') {
+      throw new TypeError('Invalid type in first argument')
+    }
+    if (key.trim() === '') {
+      throw new ValidationError(100, 'Empty string is not allowed as first argument', path.win32.basename(__filename))
+    }
+    if (schema && schema[key] === undefined) {
+      throw new ValidationError(100, 'Given key in first argument doesn\'t exist in given schema given as third argument', path.win32.basename(__filename), { key })
+    }
+    const expectedType = map[schema[key]['BSON-type']].JStype
+    if (typeof value !== expectedType) { // eslint-disable-line
+      throw new TypeError('Invalid type in second argument', 'validate-key-val.js', 42)
+    }
+  } catch (e) {
+    if (e instanceof ValidationError) {
+      console.log('******************************************************************************************************************\n')
+      console.log(`${e.name}: ${e.message}\n`)
+      console.log(`keyName: ${e.scope.key}\n`)
+      console.log(`Filename: ${e.fileName}\n`)
+      console.log('******************************************************************************************************************\n')
+    } else if (e instanceof TypeError) {
+      console.log('******************************************************************************************************************\n')
+      console.log(`${e.name}:::: ${e.message}\n`)
+      console.log('******************************************************************************************************************\n')
+    }
+    throw e
   }
   return true
 }

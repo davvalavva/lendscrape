@@ -9,7 +9,7 @@
 const { test } = require('tap')
 const validate = require('./validate-documents')
 const schemas = require('../config/schemas.json')
-const { ValidationError } = require('./custom-errors')
+const { ValidationError } = require('../config/custom-errors')
 
 const schema = schemas['type-1']
 const documents = [

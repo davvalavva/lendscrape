@@ -8,7 +8,7 @@
 
 const { test } = require('tap')
 const validateKeyVal = require('./validate-key-val')
-const { ValidationError } = require('./custom-errors')
+const { ValidationError } = require('../config/custom-errors')
 const schemas = require('../config/schemas.json')
 
 const type = 'type-1'

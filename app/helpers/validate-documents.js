@@ -13,7 +13,9 @@
  * @module helpers/validate-documents
  */
 
-const { ValidationError } = require('./custom-errors')
+const path = require('path')
+const { ValidationError } = require('../config/custom-errors')
+const validateKeyVal = require('./validate-key-val')
 
 /**
  * Validates that documents conforms to a set of rules according to
@@ -41,9 +43,11 @@ module.exports = (documents, schema) => {
   documents.forEach((doc) => {
     requiredKeys.forEach((obj) => {
       if (doc[obj.name] == null) {
-        throw new ValidationError(`Required key "${obj.name}" is missing in document object`)
+        throw new ValidationError(100, `Required key "${obj.name}" is missing in document object`, path.win32.basename(__filename))
       }
     })
+    Object.keys(doc).forEach(key => validateKeyVal(key, doc[key], schema))
   })
+
   return true
 }

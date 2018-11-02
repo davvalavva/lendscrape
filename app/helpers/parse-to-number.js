@@ -15,7 +15,7 @@
  * @module helpers/parse-to-number
  */
 
-const { ParseError } = require('./custom-errors')
+const { ParseError } = require('../config/custom-errors')
 
 /**
  * Takes a string representing som numeric value and parses it to a Number.

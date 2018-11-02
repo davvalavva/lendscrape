@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app/kredit365/index.js",
     "test": "tap app/**/*test.js --cov --color --reporter=spec --coverage-report=html",
-    "test-shortcut": "tap app/kredit365/headers-changed.test.js --color --reporter=spec",
+    "tt": "tap app/config/custom-errors.test.js --color --reporter=spec",
     "build": "",
     "bash-example": "bash playaround/bash-example.sh",
     "env": "env"
@@ -17,7 +17,8 @@
     "browser-agents": "^1.0.1",
     "date-time": "^2.1.0",
     "mongodb": "^3.1.8",
-    "puppeteer": "^1.9.0"
+    "puppeteer": "^1.9.0",
+    "type-name": "^2.0.2"
   },
   "devDependencies": {
     "eslint": "^5.8.0",

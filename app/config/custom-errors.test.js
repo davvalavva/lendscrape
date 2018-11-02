@@ -1,0 +1,46 @@
+const { test } = require('tap')
+const { ValidationError, FormatError } = require('./custom-errors')
+
+// This line from preventing a bug where throwing a RangeError (a JS-built in) isn't recognized
+// by the t.throws method. By declaring RangerError like this I circumvent the bug ()
+
+test('ValidationError(code, message, fileName, scope)', (t) => {
+  /* eslint-disable */
+  t.throws(() => { new ValidationError() }, TypeError, `Throws TypeError when no arguments given`)
+  t.throws(() => { new ValidationError(100) }, TypeError, `Throws TypeError when 2nd argument not given`)
+  t.throws(() => { new ValidationError(100, 'message') }, TypeError, `Throws TypeError when 3rd argument not given`)
+  t.throws(() => { new ValidationError(null, 'message', 'filename.js', { a: 1 }) }, TypeError, `Throws TypeError when 1st argument is null`)
+  t.throws(() => { new ValidationError(undefined, 'message', 'filename.js', { a: 1 }) }, TypeError, `Throws TypeError when 1st argument is undefined`)
+  t.throws(() => { new ValidationError('100', 'message', 'filename.js', { a: 1 }) }, TypeError, `Throws TypeError when 1st argument is a String`)
+  t.throws(() => { new ValidationError([], 'message', 'filename.js', { a: 1 }) }, TypeError, `Throws TypeError when 1st argument is an Array`)
+  t.throws(() => { new ValidationError({}, 'message', 'filename.js', { a: 1 }) }, TypeError, `Throws TypeError when 1st argument is an Object`)
+  t.throws(() => { new ValidationError(() => {}, 'message', 'filename.js', { a: 1 }) }, TypeError, `Throws TypeError when 1st argument is a Function`)
+  t.throws(() => { new ValidationError(Promise.resolve(1), 'message', 'filename.js', { a: 1 }) }, TypeError, `Throws TypeError when 1st argument is a Promise`)
+  t.throws(() => { new ValidationError(100, null, 'filename.js', { a: 1 }) }, TypeError, `Throws TypeError when 2nd argument is null`)
+  t.throws(() => { new ValidationError(100, undefined, 'filename.js', { a: 1 }) }, TypeError, `Throws TypeError when 2nd argument is undefined`)
+  t.throws(() => { new ValidationError(100, 100, 'filename.js', { a: 1 }) }, TypeError, `Throws TypeError when 2nd argument is a Number`)
+  t.throws(() => { new ValidationError(100, [], 'filename.js', { a: 1 }) }, TypeError, `Throws TypeError when 2nd argument is an Array`)
+  t.throws(() => { new ValidationError(100, {}, 'filename.js', { a: 1 }) }, TypeError, `Throws TypeError when 2nd argument is an Object`)
+  t.throws(() => { new ValidationError(100, () => {}, 'filename.js', { a: 1 }) }, TypeError, `Throws TypeError when 2nd argument is a Function`)
+  t.throws(() => { new ValidationError(100, Promise.resolve(1), 'filename.js', { a: 1 }) }, TypeError, `Throws TypeError when 2nd argument is a Promise`)
+  t.throws(() => { new ValidationError(100, 'message', null, { a: 1 }) }, TypeError, `Throws TypeError when 3rd argument is null`)
+  t.throws(() => { new ValidationError(100, 'message', undefined, { a: 1 }) }, TypeError, `Throws TypeError when 3rd argument is undefined`)
+  t.throws(() => { new ValidationError(100, 'message', 100, { a: 1 }) }, TypeError, `Throws TypeError when 3rd argument is a Number`)
+  t.throws(() => { new ValidationError(100, 'message', [], { a: 1 }) }, TypeError, `Throws TypeError when 3rd argument is an Array`)
+  t.throws(() => { new ValidationError(100, 'message', {}, { a: 1 }) }, TypeError, `Throws TypeError when 3rd argument is an Object`)
+  t.throws(() => { new ValidationError(100, 'message', () => {}, { a: 1 }) }, TypeError, `Throws TypeError when 3rd argument is a Function`)
+  t.throws(() => { new ValidationError(100, 'message', Promise.resolve(1), { a: 1 }) }, TypeError, `Throws TypeError when 3rd argument is a Promise`)
+  t.throws(() => { new ValidationError(100, 'message', 'filename.js', null) }, TypeError, `Throws TypeError when 4th argument is null`)
+  t.throws(() => { new ValidationError(100, 'message', 'filename.js', 100) }, TypeError, `Throws TypeError when 4th argument is a Number`)
+  t.throws(() => { new ValidationError(100, 'message', 'filename.js', '100') }, TypeError, `Throws TypeError when 4th argument is a String`)
+  t.throws(() => { new ValidationError(100, 'message', 'filename.js', []) }, TypeError, `Throws TypeError when 4th argument is an Array`)
+  t.throws(() => { new ValidationError(100, 'message', 'filename.js', () => {}) }, TypeError, `Throws TypeError when 4th argument is a Function`)
+  t.throws(() => { new ValidationError(100, 'message', 'filename.js', Promise.resolve(1)) }, TypeError, `Throws TypeError when 4th argument is a Promise`)
+  // In the following line I wanted to check for a thrown RangeError, but t.throws() method doesn't recognize it which result in a test failure
+  // even though it shouldn't. To circumvent this I only check for a thrown Error which works since RangeError inherits from Error.
+  t.throws(() => { new ValidationError(-983, 'message', 'filename.js', { a: 1 }) }, Error, `Throws Error (i.e. RangeError, read comments) when 1st argument is given a Number of a non-existing code`)
+  t.throws(() => { new ValidationError(100, 'OK', 'filename.js', { a: 1 }) }, FormatError, `Throws FormatError when 2nd argument is given a string less than 3 characters`)
+  t.throws(() => { new ValidationError(100, 'message', '', { a: 1 }) }, FormatError, `Throws FormatError when 3rd argument is given an empty string`)
+  /* eslint-enable */
+  t.end()
+})

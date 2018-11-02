@@ -2,8 +2,8 @@
   { "mapped": "belopp",         "key": "Belopp"     },
   { "mapped": "uppl.avg",       "key": "Uppl. avg"  },
   { "mapped": "fakt.avg",       "key": "Fakt. avg"  },
-  { "mapped": "ränta (kr)",     "key": "Ränta"      },
-  { "mapped": "betala totalt",  "key": "Total"      },
-  { "mapped": "eff. ränta (%)", "key": "Eff. ränta" },
-  { "mapped": "nom. ränta (%)", "key": "Nom. ränta" }
+  { "mapped": "ränta(kr)",     "key": "Ränta"      },
+  { "mapped": "betala-totalt",  "key": "Total"      },
+  { "mapped": "eff.-ränta(%)", "key": "Eff. ränta" },
+  { "mapped": "nom.-ränta(%)", "key": "Nom. ränta" }
 ]

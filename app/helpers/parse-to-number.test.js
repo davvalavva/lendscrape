@@ -8,7 +8,7 @@
 
 const { test } = require('tap')
 const parseToNumber = require('./parse-to-number')
-const { ParseError } = require('./custom-errors')
+const { ParseError } = require('../config/custom-errors')
 
 test('parseToNumber(value, keepDecimals, decimalSep)', (t) => {
   const visualTabs = str => str.replace(/\t/g, '\\t') // display tab chars in console as '\t'
