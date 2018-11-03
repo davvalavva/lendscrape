@@ -13,7 +13,7 @@
  */
 
 const typeName = require('type-name')
-const _env = require('../config/env.json')
+const _env = require('../config/env.json') // eslint-disable-line
 
 /**
  * Prints error messages to terminal
@@ -25,25 +25,25 @@ module.exports = (errData, env = _env) => {
   if (arguments.length === 0) {
     throw new TypeError(`Missing argument, expected exactly 1 argument`)
   }
-  if (typeName(errData).toLocaleLowerCase() !== 'object') {
+  if (typeName(errData) !== 'Object') {
     throw new TypeError(`Expected first argument to be an object, found type '${typeName(errData)}'`)
   }
   if (Object.keys(errData).length === 0 && errData.constructor === Object) {
     throw new TypeError(`Empty object as argument isn't allowed`)
   }
-  if (typeName(errData.name).toLocaleLowerCase() !== 'string') {
+  if (typeName(errData.name) !== 'string') {
     throw new TypeError(`Expected property 'name' in argument to be a string, found type '${typeName(errData.name)}'`)
   }
-  if (typeName(errData.code).toLocaleLowerCase() !== 'number') {
+  if (typeName(errData.code) !== 'number') {
     throw new TypeError(`Expected property 'code' in argument to be a number, found type '${typeName(errData.code)}'`)
   }
-  if (typeName(errData.message).toLocaleLowerCase() !== 'string') {
+  if (typeName(errData.message) !== 'string') {
     throw new TypeError(`Expected property 'message' in argument to be a string, found type '${typeName(errData.message)}'`)
   }
-  if (typeName(errData.fileName).toLocaleLowerCase() !== 'string') {
+  if (typeName(errData.fileName) !== 'string') {
     throw new TypeError(`Expected property 'fileName' in argument to be a string, found type '${typeName(errData.fileName)}'`)
   }
-  if (errData.reason && typeName(errData.reason).toLocaleLowerCase() !== 'string') {
+  if (errData.reason && typeName(errData.reason) !== 'string') {
     throw new TypeError(`If set, property 'reason' in argument must be a string, found type '${typeName(errData.reason)}'`)
   }
   if (env.rulerLen == null) {
@@ -52,10 +52,10 @@ module.exports = (errData, env = _env) => {
   if (env.rulerChar == null) {
     throw new ReferenceError(`Environment setting 'rulerChar' is missing`)
   }
-  if (typeName(env.rulerLen).toLocaleLowerCase() !== 'number') {
+  if (typeName(env.rulerLen) !== 'number') {
     throw new TypeError(`Environment setting 'rulerLen' must be a number, found type '${typeName(env.rulerLen)}'`)
   }
-  if (typeName(env.rulerChar).toLocaleLowerCase() !== 'string') {
+  if (typeName(env.rulerChar) !== 'string') {
     throw new TypeError(`Environment setting 'rulerChar' must be a string, found type '${typeName(env.rulerChar)}'`)
   }
   const rulerLen = errData.rulerLen ? errData.rulerLen : env.rulerLen

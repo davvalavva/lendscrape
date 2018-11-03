@@ -63,7 +63,7 @@ test('parseToNumber(value, keepDecimals, decimalSep)', (t) => {
 
   val = null
   signature = `parseToNumber(NULL)`
-  t.throws(() => parseToNumber(val), ParseError, `${signature} throws ParseError`)
+  t.throws(() => parseToNumber(val), TypeError, `${signature} throws TypeError`)
 
   val = 1252
   found = parseToNumber(val)

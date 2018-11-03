@@ -14,6 +14,7 @@
  */
 
 const path = require('path')
+const typeName = require('type-name')
 const { ValidationError } = require('../config/custom-errors')
 const validateKeyVal = require('./validate-key-val')
 
@@ -30,11 +31,11 @@ module.exports = (documents, schema) => {
   if (documents == null || schema == null) {
     throw new TypeError('undefined or null not allowed as arguments')
   }
-  if ((documents instanceof Array) === false) {
-    throw new TypeError('Invalid type for first argument')
+  if (typeName(documents) !== 'Array') {
+    throw new TypeError(`Expected first argument to be an array, found type '${typeName(documents)}'`)
   }
-  if (schema.constructor !== Object) {
-    throw new TypeError('Invalid type for second argument')
+  if (typeName(schema) !== 'Object') {
+    throw new TypeError(`Expected second argument to be an object, found type '${typeName(schema)}'`)
   }
   const requiredKeys = Object.keys(schema)
     .map(keyStr => ({ name: keyStr, ...schema[keyStr] }))

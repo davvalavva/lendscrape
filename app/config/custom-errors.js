@@ -21,16 +21,16 @@ class ValidationError extends Error {
     if (arguments.length < 3) {
       throw new TypeError(`Expected 3 or 4 arguments, got ${arguments.length} arguments`)
     }
-    if (typeName(code).toLocaleLowerCase() !== 'number') {
+    if (typeName(code) !== 'number') {
       throw new TypeError(`Expected first argument to be a number, found type '${typeName(code)}'`)
     }
-    if (typeName(message).toLocaleLowerCase() !== 'string') {
+    if (typeName(message) !== 'string') {
       throw new TypeError(`Expected second argument to be a string, found type '${typeName(message)}'`)
     }
-    if (typeName(fileName).toLocaleLowerCase() !== 'string') {
+    if (typeName(fileName) !== 'string') {
       throw new TypeError(`Expected third argument to be a string, found type '${typeName(fileName)}'`)
     }
-    if (typeName(scope).toLocaleLowerCase() !== 'object') {
+    if (typeName(scope) !== 'Object') {
       throw new TypeError(`Expected 4th argument to be an object, found type '${typeName(scope)}'`)
     }
     if (!errorCodes.includes(code)) {

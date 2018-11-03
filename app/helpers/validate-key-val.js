@@ -13,6 +13,7 @@
  */
 
 const path = require('path')
+const typeName = require('type-name')
 const { ValidationError } = require('../config/custom-errors')
 const printError = require('./print-error')
 const map = require('../config/BSON-to-JS-mappings.json')
@@ -36,13 +37,13 @@ module.exports = (key, value, schema) => {
     if (key == null || value == null || schema == null) {
       throw new TypeError('undefined or null not allowed as arguments')
     }
-    if (typeof key !== 'string') {
-      throw new TypeError('Invalid type in first argument')
+    if (typeName(key) !== 'string') {
+      throw new TypeError(`Expected first argument to be a string, found type '${typeName(key)}'`)
     }
     if (key.trim() === '') {
       throw new ValidationError(101, 'Invalid key', filename, { key })
     }
-    if (schema && schema[key] === undefined) {
+    if (!schema[key] || schema[key] == null || schema[key] === 0 || schema[key] === '') {
       throw new ValidationError(100, 'Invalid key', filename, { key })
     }
     const expectedType = map[schema[key]['BSON-type']].JStype
@@ -57,10 +58,10 @@ module.exports = (key, value, schema) => {
 
       if (debug) {
         printError({
-          name: [e.name],
-          code: [e.code],
-          message: [e.message],
-          fileName: [e.fileName],
+          name: e.name,
+          code: e.code,
+          message: e.message,
+          fileName: e.fileName,
           reason
         })
       }
