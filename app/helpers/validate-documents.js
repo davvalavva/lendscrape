@@ -28,7 +28,7 @@ const validateKeyVal = require('./validate-key-val')
  */
 module.exports = (documents, schema) => {
   if (documents == null || schema == null) {
-    throw new ReferenceError('undefined or null not allowed as arguments')
+    throw new TypeError('undefined or null not allowed as arguments')
   }
   if ((documents instanceof Array) === false) {
     throw new TypeError('Invalid type for first argument')

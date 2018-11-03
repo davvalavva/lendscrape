@@ -14,7 +14,13 @@
 
 const path = require('path')
 const { ValidationError } = require('../config/custom-errors')
+const printError = require('./print-error')
 const map = require('../config/BSON-to-JS-mappings.json')
+const env = require('../config/env.json')
+const runtime = require('../config/runtime.json')
+
+const filename = env.OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
+const { debug } = runtime
 
 /**
  * Validates that key/value pairs in a document conforms to
@@ -28,16 +34,16 @@ const map = require('../config/BSON-to-JS-mappings.json')
 module.exports = (key, value, schema) => {
   try {
     if (key == null || value == null || schema == null) {
-      throw new ReferenceError('undefined or null not allowed as arguments')
+      throw new TypeError('undefined or null not allowed as arguments')
     }
     if (typeof key !== 'string') {
       throw new TypeError('Invalid type in first argument')
     }
     if (key.trim() === '') {
-      throw new ValidationError(100, 'Empty string is not allowed as first argument', path.win32.basename(__filename))
+      throw new ValidationError(101, 'Invalid key', filename, { key })
     }
     if (schema && schema[key] === undefined) {
-      throw new ValidationError(100, 'Given key in first argument doesn\'t exist in given schema given as third argument', path.win32.basename(__filename), { key })
+      throw new ValidationError(100, 'Invalid key', filename, { key })
     }
     const expectedType = map[schema[key]['BSON-type']].JStype
     if (typeof value !== expectedType) { // eslint-disable-line
@@ -45,11 +51,19 @@ module.exports = (key, value, schema) => {
     }
   } catch (e) {
     if (e instanceof ValidationError) {
-      console.log('******************************************************************************************************************\n')
-      console.log(`${e.name}: ${e.message}\n`)
-      console.log(`keyName: ${e.scope.key}\n`)
-      console.log(`Filename: ${e.fileName}\n`)
-      console.log('******************************************************************************************************************\n')
+      let reason
+      if (e.code === 100) reason = `Reason: Non-existing key '${e.scope.key}' in schema`
+      if (e.code === 101) reason = `Reason: Key is empty string`
+
+      if (debug) {
+        printError({
+          name: [e.name],
+          code: [e.code],
+          message: [e.message],
+          fileName: [e.fileName],
+          reason
+        })
+      }
     } else if (e instanceof TypeError) {
       console.log('******************************************************************************************************************\n')
       console.log(`${e.name}:::: ${e.message}\n`)

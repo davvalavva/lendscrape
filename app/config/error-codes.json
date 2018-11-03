@@ -1,4 +1,5 @@
 [
-  [100, "ValidationError", "Description goes here"],
-  [101, "ValidationError", "Description goes here"]
+  [100, "ValidationError", "Thrown when a key in a document doesn't exist in the schema for that document type"],
+  [101, "ValidationError", "Thrown when a key is an empty string"],
+  [199, "ValidationError", "All other kinds of validation errors"]
 ]

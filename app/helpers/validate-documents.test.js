@@ -52,11 +52,11 @@ test('validate(documents, schema)', (t) => {
   }
   t.throws(() => validate(documents, schema), ValidationError, `Throws ValidationError when missing required key for documents in first argument`)
   delete documents[2]
-  t.throws(() => { validate() }, ReferenceError, `Throws ReferenceError when called without arguments`)
-  t.throws(() => { validate(undefined) }, ReferenceError, `Throws ReferenceError when called with undefined as only argument`)
-  t.throws(() => { validate(null) }, ReferenceError, `Throws ReferenceError when called with null as only argument`)
-  t.throws(() => { validate(documents, null) }, ReferenceError, `Throws ReferenceError when given null as second argument`)
-  t.throws(() => { validate(documents, undefined) }, ReferenceError, `Throws ReferenceError when given undefined as second argument`)
+  t.throws(() => { validate() }, TypeError, `Throws TypeError when called without arguments`)
+  t.throws(() => { validate(undefined) }, TypeError, `Throws TypeError when called with undefined as only argument`)
+  t.throws(() => { validate(null) }, TypeError, `Throws TypeError when called with null as only argument`)
+  t.throws(() => { validate(documents, null) }, TypeError, `Throws TypeError when given null as second argument`)
+  t.throws(() => { validate(documents, undefined) }, TypeError, `Throws TypeError when given undefined as second argument`)
   t.throws(() => { validate({ docs: documents }, schema) }, TypeError, `Throws TypeError when given an object as first argument`)
   t.throws(() => { validate(() => {}, schema) }, TypeError, `Throws TypeError when given a function as first argument`)
   t.throws(() => { validate('documents', schema) }, TypeError, `Throws TypeError when given a string as first argument`)

@@ -30,7 +30,6 @@ const { ParseError } = require('../config/custom-errors')
  * If not set it's assumed to be the comma character.
  * @return {number} The number resulting from the parsing
  */
-
 module.exports = (str, keepDecimals = false, decimalSep = ',') => {
   if (str == null) {
     throw new ParseError('Can\'t parse non-strings')
