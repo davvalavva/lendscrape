@@ -1,5 +1,5 @@
 [
-  [100, "ValidationError", "Thrown when a key in a document doesn't exist in the schema for that document type"],
-  [101, "ValidationError", "Thrown when a key is an empty string"],
-  [199, "ValidationError", "All other kinds of validation errors"]
+  [100, "Key in document doesn't exist in schema"],
+  [101, "Empty string or only whitespace(s) not allowed as key in document"],
+  [199, "Unknown error"]
 ]

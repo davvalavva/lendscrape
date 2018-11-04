@@ -1,5 +1,5 @@
 const { test } = require('tap')
-const { ValidationError, FormatError } = require('./custom-errors')
+const { ValidationError } = require('./custom-errors')
 
 // This line from preventing a bug where throwing a RangeError (a JS-built in) isn't recognized
 // by the t.throws method. By declaring RangerError like this I circumvent the bug ()
@@ -39,8 +39,8 @@ test('ValidationError(code, message, fileName, scope)', (t) => {
   // In the following line I wanted to check for a thrown RangeError, but t.throws() method doesn't recognize it which result in a test failure
   // even though it shouldn't. To circumvent this I only check for a thrown Error which works since RangeError inherits from Error.
   t.throws(() => { new ValidationError(-983, 'message', 'filename.js', { a: 1 }) }, Error, `Throws Error (i.e. RangeError, read comments) when 1st argument is given a Number of a non-existing code`)
-  t.throws(() => { new ValidationError(100, 'OK', 'filename.js', { a: 1 }) }, FormatError, `Throws FormatError when 2nd argument is given a string less than 3 characters`)
-  t.throws(() => { new ValidationError(100, 'message', '', { a: 1 }) }, FormatError, `Throws FormatError when 3rd argument is given an empty string`)
+  t.throws(() => { new ValidationError(100, 'OK', 'filename.js', { a: 1 }) }, Error, `Throws Error when 2nd argument is given a string less than 3 characters`)
+  t.throws(() => { new ValidationError(100, 'message', '', { a: 1 }) }, Error, `Throws Error when 3rd argument is given an empty string`)
   /* eslint-enable */
   t.end()
 })

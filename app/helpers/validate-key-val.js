@@ -50,27 +50,13 @@ module.exports = (key, value, schema) => {
     if (typeof value !== expectedType) { // eslint-disable-line
       throw new TypeError('Invalid type in second argument', 'validate-key-val.js', 42)
     }
-  } catch (e) {
-    if (e instanceof ValidationError) {
-      let reason
-      if (e.code === 100) reason = `Reason: Non-existing key '${e.scope.key}' in schema`
-      if (e.code === 101) reason = `Reason: Key is empty string`
-
-      if (debug) {
-        printError({
-          name: e.name,
-          code: e.code,
-          message: e.message,
-          fileName: e.fileName,
-          reason
-        })
-      }
-    } else if (e instanceof TypeError) {
-      console.log('******************************************************************************************************************\n')
-      console.log(`${e.name}:::: ${e.message}\n`)
-      console.log('******************************************************************************************************************\n')
+  } catch (err) {
+    if (debug) {
+      printError(err)
+      throw err
+    } else {
+      // TODO: Write to log? Rethrow?
     }
-    throw e
   }
   return true
 }

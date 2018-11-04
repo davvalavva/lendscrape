@@ -9,13 +9,6 @@
 const typeName = require('type-name')
 const errorCodes = require('./error-codes').map(arr => arr[0])
 
-class FormatError extends Error {
-  constructor(message) {
-    super(message)
-    this.name = 'FormatError'
-  }
-}
-
 class ValidationError extends Error {
   constructor(code, message, fileName, scope = {}) {
     if (arguments.length < 3) {
@@ -37,10 +30,10 @@ class ValidationError extends Error {
       throw new RangeError(`Number ${code} given as first argument isn't a valid error code.`)
     }
     if (message.length < 3) {
-      throw new FormatError(`Expected length of string ${message} given as 2nd argument to be 3 characters or longer`)
+      throw new Error(`Expected length of string ${message} given as 2nd argument to be 3 characters or longer`)
     }
     if (fileName === '') {
-      throw new FormatError(`Empty string is not allowed as 3rd argument`)
+      throw new Error(`Empty string is not allowed as 3rd argument`)
     }
     super(message)
     this.name = 'ValidationError'
@@ -57,4 +50,18 @@ class ParseError extends Error {
   }
 }
 
-module.exports = { ValidationError, ParseError }
+class xTypeError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'xTypeError'
+  }
+}
+
+class xRangeError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'xRangeError'
+  }
+}
+
+module.exports = { ValidationError, ParseError, xTypeError, xRangeError }
