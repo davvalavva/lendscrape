@@ -14,7 +14,8 @@
 
 const path = require('path')
 const typeName = require('type-name')
-const { ValidationError } = require('../config/custom-errors')
+const ValidationError = require('../config/ValidationError')
+const XTypeError = require('../config/XTypeError')
 const printError = require('./print-error')
 const map = require('../config/BSON-to-JS-mappings.json')
 const env = require('../config/env.json')
@@ -28,17 +29,25 @@ const { debug } = runtime
  * the schema passed as the third argument.
  *
  * @param {string} key The key of the key/value pair to be tested
- * @param {mixed} value The value of the key/value pair to be tested
+ * @param {string|number|array} value The value of the key/value pair to be tested
  * @param {object} schema The schema with rules to test against
  * @return {boolean} Returns true if validation succeeds, otherwise an error is thrown
  */
 module.exports = (key, value, schema) => {
   try {
+    /*
     if (key == null || value == null || schema == null) {
-      throw new TypeError('undefined or null not allowed as arguments')
+      throw new XTypeError('undefined or null not allowed as arguments')
     }
+    */
     if (typeName(key) !== 'string') {
-      throw new TypeError(`Expected first argument to be a string, found type '${typeName(key)}'`)
+      throw new XTypeError(300, `Expected a string as first argument`, filename, 'string', typeName(key))
+    }
+    if (typeName(schema) !== 'Object') {
+      throw new XTypeError(300, `Expected an object as third argument`, filename, 'Object', typeName(schema))
+    }
+    if (['string', 'number', 'Array'].indexOf(typeName(value)) === -1) {
+      throw new XTypeError(300, `Expected a string, number or an array as second argument`, filename, ['string', 'number', 'Array'], typeName(value))
     }
     if (key.trim() === '') {
       throw new ValidationError(101, 'Invalid key', filename, { key })
@@ -47,8 +56,8 @@ module.exports = (key, value, schema) => {
       throw new ValidationError(100, 'Invalid key', filename, { key })
     }
     const expectedType = map[schema[key]['BSON-type']].JStype
-    if (typeof value !== expectedType) { // eslint-disable-line
-      throw new TypeError('Invalid type in second argument', 'validate-key-val.js', 42)
+    if (typeName(value) !== expectedType) {
+      throw new XTypeError(300, 'Invalid type in second argument', filename, expectedType, typeName(key))
     }
   } catch (err) {
     if (debug) {

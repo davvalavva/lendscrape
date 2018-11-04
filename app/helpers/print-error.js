@@ -15,7 +15,7 @@
 const typeName = require('type-name')
 const _env = require('../config/env.json') // eslint-disable-line
 const errorCodes = require('../config/error-codes.json')
-const { ValidationError } = require('../config/custom-errors')
+const ValidationError = require('../config/ValidationError')
 
 /**
  * Prints error messages to terminal

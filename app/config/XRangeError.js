@@ -1,5 +1,5 @@
 /**
- * @file Custom Error classes
+ * @file A type Error class. An Error class for customized errors.
  * @copyright Copyright (C) David Jonsson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -9,11 +9,12 @@
 const typeName = require('type-name')
 const errorCodes = require('./error-codes').map(arr => arr[0])
 
-class ValidationError extends Error {
-  constructor(code, message, fileName, scope = {}) {
-    if (arguments.length < 3) {
-      throw new TypeError(`Expected 3 or 4 arguments, got ${arguments.length} arguments`)
-    }
+class XRangeError extends Error {
+  constructor(...args) {
+    const [code, message, fileName] = args
+
+    super(message)
+
     if (typeName(code) !== 'number') {
       throw new TypeError(`Expected first argument to be a number, found type '${typeName(code)}'`)
     }
@@ -22,9 +23,6 @@ class ValidationError extends Error {
     }
     if (typeName(fileName) !== 'string') {
       throw new TypeError(`Expected third argument to be a string, found type '${typeName(fileName)}'`)
-    }
-    if (typeName(scope) !== 'Object') {
-      throw new TypeError(`Expected 4th argument to be an object, found type '${typeName(scope)}'`)
     }
     if (!errorCodes.includes(code)) {
       throw new RangeError(`Number ${code} given as first argument isn't a valid error code.`)
@@ -35,33 +33,11 @@ class ValidationError extends Error {
     if (fileName === '') {
       throw new Error(`Empty string is not allowed as 3rd argument`)
     }
-    super(message)
-    this.name = 'ValidationError'
+
+    this.name = 'XRangeError'
     this.fileName = fileName
     this.code = code
-    this.scope = scope
   }
 }
 
-class ParseError extends Error {
-  constructor(message) {
-    super(message)
-    this.name = 'ParseError'
-  }
-}
-
-class xTypeError extends Error {
-  constructor(message) {
-    super(message)
-    this.name = 'xTypeError'
-  }
-}
-
-class xRangeError extends Error {
-  constructor(message) {
-    super(message)
-    this.name = 'xRangeError'
-  }
-}
-
-module.exports = { ValidationError, ParseError, xTypeError, xRangeError }
+module.exports = XRangeError

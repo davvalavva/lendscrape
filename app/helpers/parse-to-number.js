@@ -15,8 +15,13 @@
  * @module helpers/parse-to-number
  */
 
+const path = require('path')
 const typeName = require('type-name')
-const { ParseError } = require('../config/custom-errors')
+const env = require('../config/env.json')
+const ParseError = require('../config/ParseError')
+const XTypeError = require('../config/XTypeError')
+
+const filename = env.OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
 
 /**
  * Takes a string representing som numeric value and parses it to a Number.
@@ -33,10 +38,16 @@ const { ParseError } = require('../config/custom-errors')
  */
 module.exports = (str, keepDecimals = false, decimalSep = ',') => {
   if (typeName(str) !== 'string' && typeName(str) !== 'number') {
-    throw new TypeError(`Expected first argument to be a string or a number, found type '${typeName(str)}'`)
+    throw new XTypeError(
+      300,
+      `Expected first argument to be a string or a number, found type '${typeName(str)}'`,
+      filename,
+      ['string', 'number'],
+      typeName(str)
+    )
   }
   if (str.trim && str.trim() === '') {
-    throw new ParseError(`Can't parse empty strings or strings containing only whitespaces`)
+    throw new ParseError(200, 'Empty string', filename)
   }
 
   // Return the value as-is if it's already a number (also strip decimals if keepDecimals === false)

@@ -8,7 +8,7 @@
 
 const { test } = require('tap')
 const printError = require('./print-error')
-const { ValidationError } = require('../config/custom-errors')
+const ValidationError = require('../config/ValidationError')
 
 test('printError(errorInstance, env /* env injection is only for testing purposes */)', (t) => {
   t.throws(() => { printError() }, TypeError, `Throws TypeError when no argument given`)

@@ -15,8 +15,12 @@
 
 const path = require('path')
 const typeName = require('type-name')
-const { ValidationError } = require('../config/custom-errors')
+const ValidationError = require('../config/ValidationError')
+const XTypeError = require('../config/XTypeError')
 const validateKeyVal = require('./validate-key-val')
+const env = require('../config/env.json')
+
+const filename = env.OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
 
 /**
  * Validates that documents conforms to a set of rules according to
@@ -28,14 +32,11 @@ const validateKeyVal = require('./validate-key-val')
  * @return {boolean} Returns true if validation succeeds, otherwise an error is thrown
  */
 module.exports = (documents, schema) => {
-  if (documents == null || schema == null) {
-    throw new TypeError('undefined or null not allowed as arguments')
-  }
   if (typeName(documents) !== 'Array') {
-    throw new TypeError(`Expected first argument to be an array, found type '${typeName(documents)}'`)
+    throw new XTypeError(300, `Expected an array as first argument`, filename, 'Array', typeName(documents))
   }
   if (typeName(schema) !== 'Object') {
-    throw new TypeError(`Expected second argument to be an object, found type '${typeName(schema)}'`)
+    throw new XTypeError(300, `Expected an object as second argument`, filename, 'Object', typeName(schema))
   }
   const requiredKeys = Object.keys(schema)
     .map(keyStr => ({ name: keyStr, ...schema[keyStr] }))
@@ -44,7 +45,7 @@ module.exports = (documents, schema) => {
   documents.forEach((doc) => {
     requiredKeys.forEach((obj) => {
       if (doc[obj.name] == null) {
-        throw new ValidationError(100, `Required key "${obj.name}" is missing in document object`, path.win32.basename(__filename))
+        throw new ValidationError(100, `Required key "${obj.name}" is missing in document object`, filename)
       }
     })
     Object.keys(doc).forEach(key => validateKeyVal(key, doc[key], schema))

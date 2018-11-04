@@ -8,7 +8,8 @@
 
 const { test } = require('tap')
 const parseToNumber = require('./parse-to-number')
-const { ParseError } = require('../config/custom-errors')
+const ParseError = require('../config/ParseError')
+const XTypeError = require('../config/XTypeError')
 
 test('parseToNumber(value, keepDecimals, decimalSep)', (t) => {
   const visualTabs = str => str.replace(/\t/g, '\\t') // display tab chars in console as '\t'
@@ -63,7 +64,7 @@ test('parseToNumber(value, keepDecimals, decimalSep)', (t) => {
 
   val = null
   signature = `parseToNumber(NULL)`
-  t.throws(() => parseToNumber(val), TypeError, `${signature} throws TypeError`)
+  t.throws(() => parseToNumber(val), XTypeError, `${signature} throws XTypeError`)
 
   val = 1252
   found = parseToNumber(val)

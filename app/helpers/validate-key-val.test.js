@@ -8,7 +8,8 @@
 
 const { test } = require('tap')
 const validateKeyVal = require('./validate-key-val')
-const { ValidationError } = require('../config/custom-errors')
+const ValidationError = require('../config/ValidationError')
+const XTypeError = require('../config/XTypeError')
 const schemas = require('../config/schemas.json')
 
 const type = 'type-1'
@@ -21,13 +22,13 @@ test('validateKeyVal(key, value, schema)', (t) => {
   t.throws(() => { validateKeyVal('nonexisting key', 4, schema) }, ValidationError, `Throws ValidationError when given key in first argument doesn't exist for given schema in 3rd argument`)
   t.throws(() => { validateKeyVal('', 5, schema) }, ValidationError, `Throws ValidationError when first argument is an empty string`)
   t.throws(() => { validateKeyVal('	 ', 6, schema) }, ValidationError, `Throws ValidationError when first argument consists only of white space`) // eslint-disable-line
-  t.throws(() => { validateKeyVal('belopp', '7', schema) }, TypeError, `Throws TypeError when second value is of wrong type for given key in first argument`)
-  t.throws(() => { validateKeyVal(8, 9, schema) }, TypeError, `Throws TypeError when first argument is a number instead of a string`)
-  t.throws(() => { validateKeyVal() }, TypeError, `Throws TypeError when called without arguments`)
-  t.throws(() => { validateKeyVal(null) }, TypeError, `Throws TypeError when called with null as only argument`)
-  t.throws(() => { validateKeyVal('belopp', null, schema) }, TypeError, `Throws TypeError when given null as second argument`)
-  t.throws(() => { validateKeyVal('belopp', 10, null) }, TypeError, `Throws TypeError when given null as third argument`)
-  t.throws(() => { validateKeyVal('belopp') }, TypeError, `Throws TypeError when called with only one argument`)
-  t.throws(() => { validateKeyVal('belopp', 111) }, TypeError, `Throws TypeError when called with only two arguments`)
+  t.throws(() => { validateKeyVal('belopp', '7', schema) }, XTypeError, `Throws XTypeError when second value is of wrong type for given key in first argument`)
+  t.throws(() => { validateKeyVal(8, 9, schema) }, XTypeError, `Throws XTypeError when first argument is a number instead of a string`)
+  t.throws(() => { validateKeyVal() }, XTypeError, `Throws XTypeError when called without arguments`)
+  t.throws(() => { validateKeyVal(null) }, XTypeError, `Throws XTypeError when called with null as only argument`)
+  t.throws(() => { validateKeyVal('belopp', null, schema) }, XTypeError, `Throws XTypeError when given null as second argument`)
+  t.throws(() => { validateKeyVal('belopp', 10, null) }, XTypeError, `Throws XTypeError when given null as third argument`)
+  t.throws(() => { validateKeyVal('belopp') }, XTypeError, `Throws XTypeError when called with only one argument`)
+  t.throws(() => { validateKeyVal('belopp', 111) }, XTypeError, `Throws XTypeError when called with only two arguments`)
   t.end()
 })

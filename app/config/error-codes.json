@@ -1,5 +1,6 @@
 [
-  [100, "Key in document doesn't exist in schema"],
-  [101, "Empty string or only whitespace(s) not allowed as key in document"],
-  [199, "Unknown error"]
+  [100, "Key in document doesn't exist in schema", "ValidationError"],
+  [101, "Empty string or only whitespace(s) not allowed as key in document", "ParseError"],
+  [200, "Empty string or only whitespace(s) not allowed in parse target", "ParseError"],
+  [300, "Argument given is of wrong type", "XTypeError"]
 ]
