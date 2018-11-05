@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 /**
- * @file Tests for file {@link <install_folder>/config/XRangeError.js}
+ * @file Tests for file {@link <install_folder>/error_types/xrange-error.js}
  * @copyright Copyright (C) David Jonsson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -8,7 +8,7 @@
  */
 
 const { test } = require('tap')
-const XRangeError = require('./XRangeError')
+const XRangeError = require('./xrange-error')
 
 test('XRangeError(code, message, fileName, type, range)', (t) => {
   t.type(new XRangeError(100, 'message', 'file.js', 'minmax', [0, 100]), XRangeError, `Returns instance of XRangeError when thrown with correctly set args`)

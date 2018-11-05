@@ -6,11 +6,11 @@
  * @author David Jonsson
  */
 
-const parseNum = require('../helpers/parse-to-number')
-const { newPage, closeBrowser, TimeoutError } = require('../helpers/browser-manager')
-const transform = require('../helpers/transform-data')
+const parseNum = require('../libs/parse-to-number')
+const { newPage, closeBrowser, TimeoutError } = require('../libs/browser-manager')
+const transform = require('../libs/transform-data')
 const headersChanged = require('./headers-changed')
-const validate = require('../helpers/validate-documents')
+const validate = require('../libs/validate-documents')
 const schema = require('../config/schemas.json')['type-1']
 const headersKeysMap = require('./headers-keys-map.json')
 const manualData = require('./manual-data.json')

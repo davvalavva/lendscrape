@@ -7,7 +7,7 @@
  */
 
 const typeName = require('type-name')
-const errorCodes = require('./error-codes').map(arr => arr[0])
+const errorCodes = require('../config/error-codes').map(arr => arr[0])
 
 class ParseError extends Error {
   constructor(...args) {

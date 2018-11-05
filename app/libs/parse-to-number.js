@@ -18,8 +18,8 @@
 const path = require('path')
 const typeName = require('type-name')
 const env = require('../config/env.json')
-const ParseError = require('../config/ParseError')
-const XTypeError = require('../config/XTypeError')
+const ParseError = require('../error_types/parse-error')
+const XTypeError = require('../error_types/xtype-error')
 
 const filename = env.OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
 

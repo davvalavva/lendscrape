@@ -7,7 +7,7 @@
  */
 
 const typeName = require('type-name')
-const errorCodes = require('./error-codes').map(arr => arr[0])
+const errorCodes = require('../config/error-codes').map(arr => arr[0])
 
 /**
  * A Custom Error class to be used when a variable or parameter is outside of its valid range.

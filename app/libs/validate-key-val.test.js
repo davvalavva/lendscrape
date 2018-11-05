@@ -1,5 +1,5 @@
 /**
- * @file Tests for file {@link <install_folder>/helpers/validate-key-val.js}
+ * @file Tests for file {@link <install_folder>/libs/validate-key-val.js}
  * @copyright Copyright (C) David Jonsson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -8,8 +8,8 @@
 
 const { test } = require('tap')
 const validateKeyVal = require('./validate-key-val')
-const ValidationError = require('../config/ValidationError')
-const XTypeError = require('../config/XTypeError')
+const ValidationError = require('../error_types/validation-error')
+const XTypeError = require('../error_types/xtype-error')
 const schemas = require('../config/schemas.json')
 
 const type = 'type-1'

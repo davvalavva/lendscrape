@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 /**
- * @file Tests for file {@link <install_folder>/config/XTypeError.js}
+ * @file Tests for file {@link <install_folder>/error_types/xtype-error.js}
  * @copyright Copyright (C) David Jonsson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -8,7 +8,7 @@
  */
 
 const { test } = require('tap')
-const XTypeError = require('./XTypeError')
+const XTypeError = require('./xtype-error')
 
 test('XTypeError(code, message, fileName, expected, found)', (t) => {
   t.type(new XTypeError(100, 'message', 'file.js', 'string', 'Array'), XTypeError, `1] Returns instance of XTypeError when thrown with correctly set arguments`)

@@ -15,8 +15,8 @@
 
 const path = require('path')
 const typeName = require('type-name')
-const ValidationError = require('../config/ValidationError')
-const XTypeError = require('../config/XTypeError')
+const ValidationError = require('../error_types/validation-error')
+const XTypeError = require('../error_types/xtype-error')
 const validateKeyVal = require('./validate-key-val')
 const env = require('../config/env.json')
 
@@ -45,7 +45,7 @@ module.exports = (documents, schema) => {
   documents.forEach((doc) => {
     requiredKeys.forEach((obj) => {
       if (doc[obj.name] == null) {
-        throw new ValidationError(100, `Required key "${obj.name}" is missing in document object`, filename)
+        throw new ValidationError(`Required key "${obj.name}" is missing in document object`, filename)
       }
     })
     Object.keys(doc).forEach(key => validateKeyVal(key, doc[key], schema))

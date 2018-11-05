@@ -7,8 +7,8 @@
  */
 
 const typeName = require('type-name')
-const { builtInTypes } = require('./env.json')
-const errorCodes = require('./error-codes').map(arr => arr[0])
+const { builtInTypes } = require('../config/env.json')
+const errorCodes = require('../config/error-codes').map(arr => arr[0])
 
 class XTypeError extends Error {
   constructor(...args) {

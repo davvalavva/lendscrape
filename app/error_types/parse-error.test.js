@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 /**
- * @file Tests for file {@link <install_folder>/config/ParseError.js}
+ * @file Tests for file {@link <install_folder>/error_types/parse-error.js}
  * @copyright Copyright (C) David Jonsson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -8,7 +8,7 @@
  */
 
 const { test } = require('tap')
-const ParseError = require('./ParseError')
+const ParseError = require('./parse-error')
 
 test('ParseError(code, message, fileName, target)', (t) => {
   t.type(new ParseError(300, 'message', 'file.js', '1 200kr'), ParseError, `Returns instance of ParseError when thrown with correctly set arguments`)
