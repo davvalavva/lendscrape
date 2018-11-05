@@ -32,6 +32,7 @@ class XTypeError extends Error {
 
     super(message)
 
+
     if (typeName(message) !== 'string' || message.trim() === '') {
       throw new TypeError(`Expected second argument to be a non-empty string, found type '${typeName(message)}'`)
     }
