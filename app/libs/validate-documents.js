@@ -15,8 +15,8 @@
 
 const path = require('path')
 const typeName = require('type-name')
-const ValidationError = require('../error_types/validation-error')
-const XTypeError = require('../error_types/xtype-error')
+const ValidationError = require('../errors/validation-error')
+const XTypeError = require('../errors/xtype-error')
 const validateKeyVal = require('./validate-key-val')
 const env = require('../config/env.json')
 
