@@ -33,10 +33,10 @@ const filename = env.OS === 'win' ? path.win32.basename(__filename) : path.posix
  */
 module.exports = (documents, schema) => {
   if (typeName(documents) !== 'Array') {
-    throw new XTypeError(300, `Expected an array as first argument`, filename, 'Array', typeName(documents))
+    throw new XTypeError(`Expected an array as first argument`, filename)
   }
   if (typeName(schema) !== 'Object') {
-    throw new XTypeError(300, `Expected an object as second argument`, filename, 'Object', typeName(schema))
+    throw new XTypeError(`Expected an object as second argument`, filename)
   }
   const requiredKeys = Object.keys(schema)
     .map(keyStr => ({ name: keyStr, ...schema[keyStr] }))

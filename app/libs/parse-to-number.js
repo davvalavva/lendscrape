@@ -38,13 +38,7 @@ const filename = env.OS === 'win' ? path.win32.basename(__filename) : path.posix
  */
 module.exports = (str, keepDecimals = false, decimalSep = ',') => {
   if (typeName(str) !== 'string' && typeName(str) !== 'number') {
-    throw new XTypeError(
-      300,
-      `Expected first argument to be a string or a number, found type '${typeName(str)}'`,
-      filename,
-      ['string', 'number'],
-      typeName(str)
-    )
+    throw new XTypeError(`Expected first argument to be a string or a number, found type '${typeName(str)}'`, filename)
   }
   if (str.trim && str.trim() === '') {
     throw new ParseError('Empty string', filename)

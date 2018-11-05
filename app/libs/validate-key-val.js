@@ -32,13 +32,13 @@ const filename = env.OS === 'win' ? path.win32.basename(__filename) : path.posix
  */
 module.exports = (key, value, schema) => {
   if (typeName(key) !== 'string') {
-    throw new XTypeError(300, `Expected a string as first argument`, filename, 'string', typeName(key))
+    throw new XTypeError(`Expected a string as first argument`, filename)
   }
   if (typeName(schema) !== 'Object') {
-    throw new XTypeError(300, `Expected an object as third argument`, filename, 'Object', typeName(schema))
+    throw new XTypeError(`Expected an object as third argument`, filename)
   }
   if (['string', 'number', 'Array'].indexOf(typeName(value)) === -1) {
-    throw new XTypeError(300, `Expected a string, number or an array as second argument`, filename, ['string', 'number', 'Array'], typeName(value))
+    throw new XTypeError(`Expected a string, number or an array as second argument`, filename)
   }
   if (key.trim() === '') {
     throw new ValidationError('Invalid key', filename)
@@ -48,7 +48,7 @@ module.exports = (key, value, schema) => {
   }
   const expectedType = map[schema[key]['BSON-type']].JStype
   if (typeName(value) !== expectedType) {
-    throw new XTypeError(300, 'Invalid type in second argument', filename, expectedType, typeName(key))
+    throw new XTypeError('Invalid type in second argument', filename)
   }
   return true
 }
