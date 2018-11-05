@@ -9,6 +9,7 @@
     "parse-to-number": "tap app/helpers/parse-to-number.test.js --color --reporter=spec",
     "validate-documents": "tap app/helpers/validate-documents.test.js --color --reporter=spec",
     "validate-key-val": "tap app/helpers/validate-key-val.test.js --color --reporter=spec",
+    "ParseError": "tap app/config/ParseError.test.js --color --reporter=spec",
     "build": "",
     "bash-example": "bash playaround/bash-example.sh",
     "env": "env"

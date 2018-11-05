@@ -11,7 +11,7 @@ const errorCodes = require('./error-codes').map(arr => arr[0])
 
 class ParseError extends Error {
   constructor(...args) {
-    const [code, message, fileName] = args
+    const [code, message, fileName, target] = args
 
     super(message)
 
@@ -23,6 +23,9 @@ class ParseError extends Error {
     }
     if (typeName(fileName) !== 'string') {
       throw new TypeError(`Expected third argument to be a string, found type '${typeName(fileName)}'`)
+    }
+    if (['null', 'function', 'undefined', 'boolean', 'Date', 'Error', 'Math', 'JSON', 'Arguments', 'symbol', 'Promise'].indexOf(typeName(target)) !== -1) {
+      throw new TypeError(`Unexpected type '${typeName(target)}' found for 4th argument '${typeName(fileName)}'`)
     }
     if (!errorCodes.includes(code)) {
       throw new RangeError(`Number ${code} given as first argument isn't a valid error code.`)
@@ -38,6 +41,7 @@ class ParseError extends Error {
     this.name = 'ParseError'
     this.fileName = fileName
     this.code = code
+    this.target = target
   }
 }
 

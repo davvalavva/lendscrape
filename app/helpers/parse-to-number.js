@@ -47,7 +47,7 @@ module.exports = (str, keepDecimals = false, decimalSep = ',') => {
     )
   }
   if (str.trim && str.trim() === '') {
-    throw new ParseError(200, 'Empty string', filename)
+    throw new ParseError(200, 'Empty string', filename, str)
   }
 
   // Return the value as-is if it's already a number (also strip decimals if keepDecimals === false)
