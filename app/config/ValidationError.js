@@ -9,7 +9,21 @@
 const typeName = require('type-name')
 const errorCodes = require('./error-codes').map(arr => arr[0])
 
+/**
+ * A Custom Error class to be thrown when an invalid variable or property is encountered.
+ * TODO: More detailed description
+ *
+ * @extends Error
+ */
 class ValidationError extends Error {
+  /**
+   * Creates an ValidationError instance
+   *
+   * @param {number} code - The error code
+   * @param {string} message - The error message
+   * @param {string} fileName - The filename where the error is thrown
+   * @param {object} scope - TODO: Description
+   */
   constructor(...args) {
     const [code, message, fileName, scope = {}] = args
 
