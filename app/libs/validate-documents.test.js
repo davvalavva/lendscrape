@@ -8,11 +8,10 @@
 
 const { test } = require('tap')
 const validate = require('./validate-documents')
-const schemas = require('../config/schemas.json')
+const schema = require('../schema/payday-simple-1.json')
 const ValidationError = require('../errors/validation-error')
 const XTypeError = require('../errors/xtype-error')
 
-const schema = schemas['type-1']
 const documents = [
   {
     belopp: 2000,

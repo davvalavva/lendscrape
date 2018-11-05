@@ -16,7 +16,7 @@ const path = require('path')
 const typeName = require('type-name')
 const ValidationError = require('../errors/validation-error')
 const XTypeError = require('../errors/xtype-error')
-const map = require('../config/BSON-to-JS-mappings.json')
+const map = require('../schema/BSON-JS-map.json')
 const env = require('../config/env.json')
 
 const filename = env.OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
@@ -46,7 +46,7 @@ module.exports = (key, value, schema) => {
   if (!schema[key] || schema[key] == null || schema[key] === 0 || schema[key] === '') {
     throw new ValidationError('Invalid key', filename)
   }
-  const expectedType = map[schema[key]['BSON-type']].JStype
+  const expectedType = map[schema[key]['BSON-type']]
   if (typeName(value) !== expectedType) {
     throw new XTypeError('Invalid type in second argument', filename)
   }

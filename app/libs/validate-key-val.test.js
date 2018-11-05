@@ -10,10 +10,7 @@ const { test } = require('tap')
 const validateKeyVal = require('./validate-key-val')
 const ValidationError = require('../errors/validation-error')
 const XTypeError = require('../errors/xtype-error')
-const schemas = require('../config/schemas.json')
-
-const type = 'type-1'
-const schema = schemas[type]
+const schema = require('../schema/payday-simple-1.json')
 
 test('validateKeyVal(key, value, schema)', (t) => {
   t.type(validateKeyVal('belopp', 1, schema), 'boolean', `[01] Returns a boolean when given valid arguments`)

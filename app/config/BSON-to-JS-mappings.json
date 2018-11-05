@@ -1,6 +1,0 @@
-{
-  "int": {
-    "JStype": "number",
-    "description": "no decimals, only whole numbers (integers)"
-  }
-}
