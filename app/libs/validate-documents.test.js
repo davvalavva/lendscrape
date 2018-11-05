@@ -9,8 +9,8 @@
 const { test } = require('tap')
 const validate = require('./validate-documents')
 const schemas = require('../config/schemas.json')
-const ValidationError = require('../error_types/validation-error')
-const XTypeError = require('../error_types/xtype-error')
+const ValidationError = require('../errors/validation-error')
+const XTypeError = require('../errors/xtype-error')
 
 const schema = schemas['type-1']
 const documents = [

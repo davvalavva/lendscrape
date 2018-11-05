@@ -8,80 +8,34 @@
 
 const { test } = require('tap')
 const parseToNumber = require('./parse-to-number')
-const ParseError = require('../error_types/parse-error')
-const XTypeError = require('../error_types/xtype-error')
+const ParseError = require('../errors/parse-error')
+const XTypeError = require('../errors/xtype-error')
 
 test('parseToNumber(value, keepDecimals, decimalSep)', (t) => {
   const visualTabs = str => str.replace(/\t/g, '\\t') // display tab chars in console as '\t'
-  let val
-  let found
-  let signature
-  let expected
+  let val = '	2 000 kr ' // eslint-disable-line
 
-  val = '	2 000 kr ' // eslint-disable-line
-  found = parseToNumber(val)
-  signature = `parseToNumber("${visualTabs(val)}")`
-  expected = 2000
-  t.same(found, expected, `${signature} returns Number(${expected})`)
-
+  t.same(parseToNumber(val), 2000, `[01] parseToNumber("${visualTabs(val)}") returns Number(2000)`)
   val = ' 1135.24% '
-  found = parseToNumber(val)
-  signature = `parseToNumber("${visualTabs(val)}")`
-  expected = 113524
-  t.same(found, expected, `${signature} returns Number(${expected})`)
-
-  val = ' 1135.24% '
-  found = parseToNumber(val, false, '.')
-  signature = `parseToNumber("${visualTabs(val)}", false, ".")`
-  expected = 1135
-  t.same(found, expected, `${signature} returns Number(${expected})`)
-
-  val = ' 1135.24%'
-  found = parseToNumber(val, true, '.')
-  signature = `parseToNumber("${visualTabs(val)}", true, ".")`
-  expected = 1135.24
-  t.same(found, expected, `${signature} returns Number(${expected})`)
-
+  t.same(parseToNumber(val), 113524, `[02] parseToNumber("${visualTabs(val)}") returns Number(113524)`)
+  t.same(parseToNumber(val, false, '.'), 1135, `[03] parseToNumber("${visualTabs(val)}", false, ".") returns Number(1135)`)
+  t.same(parseToNumber(val, true, '.'), 1135.24, `[04] parseToNumber("${visualTabs(val)}", true, ".") returns Number(1135.24)`)
   val = ' 1135,24%'
-  found = parseToNumber(val, true)
-  signature = `parseToNumber("${visualTabs(val)}", true)`
-  expected = 1135.24
-  t.same(found, expected, `${signature} returns Number(${expected})`)
-
+  t.same(parseToNumber(val, true), 1135.24, `[05] parseToNumber("${visualTabs(val)}", true) returns Number(1135.24)`)
   val = '			 1 000 252.00	' // eslint-disable-line
-  found = parseToNumber(val, false, '.')
-  signature = `parseToNumber("${visualTabs(val)}", false, ".")`
-  expected = 1000252
-  t.same(found, expected, `${signature} returns Number(${expected})`)
-
+  t.same(parseToNumber(val, false, '.'), 1000252, `[06] parseToNumber("${visualTabs(val)}", false, ".") returns Number(1000252)`)
   val = ''
-  signature = `parseToNumber("${visualTabs(val)}")`
-  t.throws(() => parseToNumber(val), ParseError, `${signature} throws ParseError`)
-
+  t.throws(() => parseToNumber(val), ParseError, `[07] parseToNumber("${visualTabs(val)}") throws ParseError`)
   val = '		' // eslint-disable-line
-  signature = `parseToNumber("${visualTabs(val)}")`
-  t.throws(() => parseToNumber(val), ParseError, `${signature} throws ParseError`)
-
+  t.throws(() => parseToNumber(val), ParseError, `[08] parseToNumber("${visualTabs(val)}") throws ParseError`)
   val = null
-  signature = `parseToNumber(NULL)`
-  t.throws(() => parseToNumber(val), XTypeError, `${signature} throws XTypeError`)
-
+  t.throws(() => parseToNumber(val), XTypeError, `[09] parseToNumber(null) throws XTypeError`)
   val = 1252
-  found = parseToNumber(val)
-  signature = `parseToNumber(${val})`
-  expected = 1252
-  t.same(found, expected, `${signature} returns Number(${expected})`)
-
+  t.same(parseToNumber(val), 1252, `[10] parseToNumber(${val}) returns Number(1252)`)
   val = 1252.72
-  found = parseToNumber(val)
-  signature = `parseToNumber(${val})`
-  expected = 1252
-  t.same(found, expected, `${signature} returns Number(${expected})`)
-
+  t.same(parseToNumber(val), 1252, `[11] parseToNumber(${val}) returns Number(1252)`)
   val = 1252.72
-  found = parseToNumber(val, true)
-  signature = `parseToNumber(${val}, true)`
-  expected = 1252.72
-  t.same(found, expected, `${signature} returns Number(${expected})`)
+  t.same(parseToNumber(val, true), 1252.72, `[12] parseToNumber(${val}, true) returns Number(1252.72)`)
+
   t.end()
 })

@@ -9,9 +9,9 @@
     "parse-to-number": "tap app/libs/parse-to-number.test.js --color --reporter=spec",
     "validate-documents": "tap app/libs/validate-documents.test.js --color --reporter=spec",
     "validate-key-val": "tap app/libs/validate-key-val.test.js --color --reporter=spec",
-    "parse-error": "tap app/error_types/parse-error.test.js --color --reporter=spec",
-    "xrange-error": "tap app/error_types/xrange-error.test.js --color --reporter=spec",
-    "validation-error": "tap app/error_types/validation-error.test.js --color --reporter=spec",
+    "parse-error": "tap app/errors/parse-error.test.js --color --reporter=spec",
+    "xrange-error": "tap app/errors/xrange-error.test.js --color --reporter=spec",
+    "validation-error": "tap app/errors/validation-error.test.js --color --reporter=spec",
     "build": "",
     "bash-example": "bash playaround/bash-example.sh",
     "env": "env"

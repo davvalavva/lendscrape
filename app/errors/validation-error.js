@@ -9,7 +9,7 @@
 /**
  * An error class for validation errors. Use only when no better suited subclass is found.
  *
- * @module error_types/validation-error
+ * @module errors/validation-error
  */
 
 const typeName = require('type-name')

@@ -18,8 +18,8 @@
 const path = require('path')
 const typeName = require('type-name')
 const env = require('../config/env.json')
-const ParseError = require('../error_types/parse-error')
-const XTypeError = require('../error_types/xtype-error')
+const ParseError = require('../errors/parse-error')
+const XTypeError = require('../errors/xtype-error')
 
 const filename = env.OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
 
@@ -47,7 +47,7 @@ module.exports = (str, keepDecimals = false, decimalSep = ',') => {
     )
   }
   if (str.trim && str.trim() === '') {
-    throw new ParseError(200, 'Empty string', filename, str)
+    throw new ParseError('Empty string', filename)
   }
 
   // Return the value as-is if it's already a number (also strip decimals if keepDecimals === false)

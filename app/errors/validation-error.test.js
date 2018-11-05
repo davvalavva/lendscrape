@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 /**
- * @file Tests for file {@link <install_folder>/error_types/validation-error.js}
+ * @file Tests for file {@link <install_folder>/errors/validation-error.js}
  * @copyright Copyright (C) David Jonsson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
