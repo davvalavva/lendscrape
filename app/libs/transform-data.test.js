@@ -49,6 +49,6 @@ const expected = [
 ]
 
 test('transform(data, headersKeysMap, manualData)', (t) => {
-  t.same(transform(data, headersKeysMap, manualData), expected, `returns an array of objects (documents)`)
+  t.same(transform(data, headersKeysMap, manualData), expected, `[01] returns an array of objects (documents)`)
   t.end()
 })

@@ -7,9 +7,9 @@
  */
 
 /**
- * An error class for parsing errors. Use only when no better suited subclass is found.
+ * An error class for parse errors. Use only when no better suited subclass is found.
  *
- * @module errors/validation-error
+ * @module errors/parse-error
  */
 
 const typeName = require('type-name')

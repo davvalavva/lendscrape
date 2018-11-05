@@ -24,6 +24,6 @@ test('manualInsert() invoked with valid arguments', (t) => {
     'senaste ändring': '2018-10-30 18:58:18 UTC+1'
   }
   const found = manualInsert(keysVals, dateTimeStub)
-  t.same(found, wanted, `manualInsert() returns an object`)
+  t.same(found, wanted, `[01] manualInsert() returns an object`)
   t.end()
 })

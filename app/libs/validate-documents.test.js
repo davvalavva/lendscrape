@@ -39,8 +39,8 @@ const documents = [
 ]
 
 test('validate(documents, schema)', (t) => {
-  t.type(validate(documents, schema), 'boolean', `Returns a boolen true when given valid arguments (where the first argument is an array of documents)`)
-  t.same(validate(documents, schema), true, `Returns true when given valid arguments`)
+  t.type(validate(documents, schema), 'boolean', `[01] Returns a boolen true when given valid arguments (where the first argument is an array of documents)`)
+  t.same(validate(documents, schema), true, `[02] Returns true when given valid arguments`)
   documents[2] = { // missing required key 'belopp'
     'uppl.avg': 350,
     'fakt.avg': 45,
@@ -51,21 +51,21 @@ test('validate(documents, schema)', (t) => {
     'löptid(d)': 30,
     leverantörsId: 1
   }
-  t.throws(() => validate(documents, schema), ValidationError, `Throws ValidationError when missing required key for documents in first argument`)
+  t.throws(() => validate(documents, schema), ValidationError, `[03] Throws ValidationError when missing required key for documents in first argument`)
   delete documents[2]
-  t.throws(() => { validate() }, Error, `Throws XTypeError when called without arguments`)
-  t.throws(() => { validate(undefined) }, XTypeError, `Throws XTypeError when called with undefined as only argument`)
-  t.throws(() => { validate(null) }, XTypeError, `Throws XTypeError when called with null as only argument`)
-  t.throws(() => { validate(documents, null) }, XTypeError, `Throws XTypeError when given null as second argument`)
-  t.throws(() => { validate(documents, undefined) }, XTypeError, `Throws XTypeError when given undefined as second argument`)
-  t.throws(() => { validate({ docs: documents }, schema) }, XTypeError, `Throws XTypeError when given an object as first argument`)
-  t.throws(() => { validate(() => {}, schema) }, XTypeError, `Throws XTypeError when given a function as first argument`)
-  t.throws(() => { validate('documents', schema) }, XTypeError, `Throws XTypeError when given a string as first argument`)
-  t.throws(() => { validate(31, schema) }, XTypeError, `Throws XTypeError when given a number as first argument`)
-  t.throws(() => { validate(documents, [schema]) }, XTypeError, `Throws XTypeError when given an array as second argument`)
-  t.throws(() => { validate(documents, () => {}) }, XTypeError, `Throws XTypeError when given a function as second argument`)
-  t.throws(() => { validate(documents, 'schema') }, XTypeError, `Throws XTypeError when given a string as second argument`)
-  t.throws(() => { validate(documents, 32) }, XTypeError, `Throws XTypeError when given a number as second argument`)
+  t.throws(() => { validate() }, Error, `[04] Throws XTypeError when called without arguments`)
+  t.throws(() => { validate(undefined) }, XTypeError, `[05] Throws XTypeError when called with undefined as only argument`)
+  t.throws(() => { validate(null) }, XTypeError, `[06] Throws XTypeError when called with null as only argument`)
+  t.throws(() => { validate(documents, null) }, XTypeError, `[07] Throws XTypeError when given null as second argument`)
+  t.throws(() => { validate(documents, undefined) }, XTypeError, `[08] Throws XTypeError when given undefined as second argument`)
+  t.throws(() => { validate({ docs: documents }, schema) }, XTypeError, `[09] Throws XTypeError when given an object as first argument`)
+  t.throws(() => { validate(() => {}, schema) }, XTypeError, `[10] Throws XTypeError when given a function as first argument`)
+  t.throws(() => { validate('documents', schema) }, XTypeError, `[11] Throws XTypeError when given a string as first argument`)
+  t.throws(() => { validate(31, schema) }, XTypeError, `[12] Throws XTypeError when given a number as first argument`)
+  t.throws(() => { validate(documents, [schema]) }, XTypeError, `[13] Throws XTypeError when given an array as second argument`)
+  t.throws(() => { validate(documents, () => {}) }, XTypeError, `[14] Throws XTypeError when given a function as second argument`)
+  t.throws(() => { validate(documents, 'schema') }, XTypeError, `[15] Throws XTypeError when given a string as second argument`)
+  t.throws(() => { validate(documents, 32) }, XTypeError, `[16] Throws XTypeError when given a number as second argument`)
 
   t.end()
 })
