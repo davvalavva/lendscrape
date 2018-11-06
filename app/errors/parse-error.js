@@ -42,7 +42,9 @@ class ParseError extends Error {
       const thrownStr = `This error was thrown in '${filepath}'`
 
       if (typeName(message) !== 'string') {
-        throw new TypeError(`Erroneous throwing of ParseError.\nExpected first argument to be a string, found type '${typeName(message)}'.\n${thrownStr}`)
+        throw new TypeError(
+          `Erroneous throwing of ParseError.\nExpected first argument to be a string, found type '${typeName(message)}'.\n${thrownStr}`
+        )
       }
       if (message.trim() === '') {
         throw new Error(`Erroneous throwing of ParseError.\nString is empty or only whitespaces in first argument.\n${thrownStr}`)

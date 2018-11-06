@@ -16,7 +16,7 @@ test('ParseError(message, fileName)', (t) => {
   t.throws(() => { new ParseError(null, 'file.js') }, TypeError, `[03] Throws TypeError when 1st argument is null`)
   t.throws(() => { new ParseError(undefined, 'file.js') }, TypeError, `[04] Throws TypeError when 1st argument is undefined`)
   t.throws(() => { new ParseError(301, 'file.js') }, TypeError, `[05] Throws TypeError when 1st argument is a Number`)
-  t.throws(() => { new ParseError([], 'file.js') }, TypeError, `[06] Throws TypeError when 1st argument is an Array`)
+  t.throws(() => { new ParseError([12, 13], 'file.js') }, TypeError, `[06] Throws TypeError when 1st argument is an Array`)
   t.throws(() => { new ParseError({}, 'file.js') }, TypeError, `[07] Throws TypeError when 1st argument is an Object`)
   t.throws(() => { new ParseError(() => {}, 'file.js') }, TypeError, `[08] Throws TypeError when 1st argument is a Function`)
   t.throws(() => { new ParseError(Promise.resolve(1), 'file.js') }, TypeError, `[09] Throws TypeError when 1st argument is a Promise`)

@@ -12,7 +12,6 @@ const path = require('path')
 const typeName = require('type-name')
 const getOutput = require('./get-output')
 const { OS, projectRoot: dir } = require('../../config/env.json')
-let { debugMode } = require('../../config/runtime.json')
 
 const filename = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
 const filepath = `${dir}${filename}`
@@ -24,27 +23,15 @@ const filepath = `${dir}${filename}`
  * @param {Error} errObj The thrown Error to be printed to terminal
  * @returns {boolean} Returns true if no error happens
  */
-module.exports = (errObj, injectedMode = null /* used for testing only */) => {
+module.exports = (errObj) => {
   try {
     if (!(errObj instanceof Error)) {
       throw new TypeError(`Expected argument to be of type Error but found type '${typeName(errObj)}' This error was thrown in file ${filepath}`)
     }
-
-    if (typeof injectedMode === 'number') debugMode = injectedMode
-    if (debugMode === 1) {
-      const output = getOutput(errObj)
-      console.log(output)
-    }
+    console.log(getOutput(errObj))
   } catch (e) {
-    if (debugMode) {
-      if (debugMode === 1) {
-        console.log(getOutput(e))
-      }
-      throw e
-    } else {
-      console.log(`A non recoverable error has caused this program to stop!`)
-      process.exit(1)
-    }
+    console.log(getOutput(e))
+    throw e
   }
   return true
 }
