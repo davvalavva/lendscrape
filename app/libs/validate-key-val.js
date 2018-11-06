@@ -9,7 +9,7 @@
 /**
  * Validates key/value pairs in a document
  *
- * @module helpers/validate-key-val
+ * @module libs/validate-key-val
  */
 
 const path = require('path')

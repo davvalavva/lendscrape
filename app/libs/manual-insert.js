@@ -10,7 +10,7 @@
  * Creates an object with manually entered values (as opposed to scraped ones)
  * to be merged with objects (documents) being prepared for database storage
  *
- * @module helpers/manual-insert
+ * @module libs/manual-insert
  */
 
 /**

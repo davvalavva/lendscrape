@@ -13,7 +13,9 @@
     "xrange-error": "tap app/errors/xrange-error.test.js --color --reporter=spec",
     "xtype-error": "tap app/errors/xtype-error.test.js --color --reporter=spec",
     "validation-error": "tap app/errors/validation-error.test.js --color --reporter=spec",
-    "print-error": "tap app/errors/print-error.test.js --color --reporter=spec",
+    "print-error": "tap app/errors/print-error/index.test.js --color --reporter=spec",
+    "get-output-standard": "tap app/errors/print-error/get-output-standard.test.js --color --reporter=spec",
+    "get-output": "tap app/errors/print-error/get-output.test.js --color --reporter=spec",
     "build": "",
     "bash-example": "bash playaround/bash-example.sh",
     "env": "env"

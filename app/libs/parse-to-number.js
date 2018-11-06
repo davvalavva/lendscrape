@@ -12,7 +12,7 @@
  *
  * By default, the decimals are truncated. This can be changed with an argument setting.
  *
- * @module helpers/parse-to-number
+ * @module libs/parse-to-number
  */
 
 const path = require('path')

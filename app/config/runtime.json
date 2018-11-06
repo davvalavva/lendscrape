@@ -3,7 +3,7 @@
   "debugMode": 2,
 
   "/* about outputStacktrace */": "outputStacktrace only works when debugMode = 1",
-  "outputStacktrace": true,
+  "outputStacktrace": false,
   "/* about enableLogging */": "When debugMode = 2 then logging is always turned off, no matter what this setting says",
   "enableLogging": true
 }

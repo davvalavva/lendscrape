@@ -10,7 +10,7 @@
  * Transforms data in a table format (array of arrays) to an array of documents (objects)
  * so that it can be stored in a document database (i.e. MongoDB)
  *
- * @module helpers/transform-data
+ * @module libs/transform-data
  */
 
 const dateTime = require('date-time')

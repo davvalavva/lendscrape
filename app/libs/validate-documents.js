@@ -10,7 +10,7 @@
  * Validates that documents conforms to a set of rules
  * according to a schema passed as the second argument
  *
- * @module helpers/validate-documents
+ * @module libs/validate-documents
  */
 
 const path = require('path')
