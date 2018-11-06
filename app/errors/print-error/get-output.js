@@ -26,21 +26,22 @@ module.exports = (errObj) => { // eslint-disable-line
     const thrownStr = `This error was thrown in '${filepath}'`
     throw new TypeError(`Expected the argument to be of type Error, found type '${typeName(errObj)}'.\n${thrownStr}`)
   }
-
-  switch (errObj.name) {
-    case 'ValidationError':
-      // return getOutputVariantX()
-      break
-    case 'ParseError':
-      // return getOutputVariantX()
-      break
-    case 'XTypeError':
-      // return getOutputVariantX()
-      break
-    case 'XRangeError':
-      // return getOutputVariantX()
-      break
-    default:
-      return getOutputStandard(errObj)
-  }
+  // TODO: When/if customized outputs needed for new custom Error classes
+  // switch (errObj.name) {
+  //   case 'ValidationError':
+  //     // return getOutputVariantX()
+  //     break
+  //   case 'ParseError':
+  //     // return getOutputVariantX()
+  //     break
+  //   case 'XTypeError':
+  //     // return getOutputVariantX()
+  //     break
+  //   case 'XRangeError':
+  //     // return getOutputVariantX()
+  //     break
+  //   default:
+  //     return getOutputStandard(errObj)
+  // }
+  return getOutputStandard(errObj)
 }

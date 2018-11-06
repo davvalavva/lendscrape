@@ -12,7 +12,7 @@
  * @module errors/xtype-error
  */
 
-const typeName = require('type-name')
+const AbstractError = require('./abstract-error')
 
 /**
  * An general error class for type errors that have no better
@@ -20,28 +20,15 @@ const typeName = require('type-name')
  *
  * @extends Error
  */
-class XTypeError extends Error {
+class XTypeError extends AbstractError {
   /**
-   * Creates an XTypeError instance
-   *
    * @param {string} message
    * @param {string} fileName
    */
   constructor(...args) {
     const [message, fileName] = args
-
-    super(message)
-
-
-    if (typeName(message) !== 'string' || message.trim() === '') {
-      throw new TypeError(`Expected second argument to be a non-empty string, found type '${typeName(message)}'`)
-    }
-    if (typeName(fileName) !== 'string' || fileName.trim() === '') {
-      throw new TypeError(`Expected third argument to be a non-empty string, found type '${typeName(fileName)}'`)
-    }
-
-    this.name = 'XTypeError'
-    this.fileName = fileName
+    const errorName = 'ParseError'
+    super(message, fileName, errorName)
   }
 }
 
