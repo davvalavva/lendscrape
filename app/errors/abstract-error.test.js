@@ -75,7 +75,12 @@ test('AbstractError(message, fileName, errorName)', (t) => {
 
   t.type(new ValidationError('validation error', 'file.js'), AbstractError, `[24] ValidationError calls constructor of AbstractError, i.e. inherits from AbstractError`)
   t.type(new ParseError('parse error', 'file.js'), AbstractError, `[25] ParseError calls constructor of AbstractError, i.e. inherits from AbstractError`)
+<<<<<<< HEAD
   t.type(new XTypeError('xtype error', 'file.js'), AbstractError, `[26] XTypeError calls constructor of AbstractError, i.e. inherits from AbstractError`)
   t.type(new XRangeError('xrange error', 'file.js'), AbstractError, `[27] XRangeError calls constructor of AbstractError, i.e. inherits from AbstractError`)
+=======
+  t.type(new XTypeError('xtype error', 'file.js'), AbstractError, `[26] XTypeError calls constructor of AbstractError, i.e. inherits from AbstractError`, { todo: true })
+  t.type(new XRangeError('xrange error', 'file.js'), AbstractError, `[27] XRangeError calls constructor of AbstractError, i.e. inherits from AbstractError`, { todo: true })
+>>>>>>> a4cdce5c544567eddcb5d9953ef650655afdff83
   t.end()
 })
