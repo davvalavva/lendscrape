@@ -1,5 +1,4 @@
 /* eslint-disable no-new */
-
 const { test } = require('tap')
 const ParseError = require('./parse-error')
 
