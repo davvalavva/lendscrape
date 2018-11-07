@@ -23,16 +23,22 @@ const filepath = `${dir}${fName}`
  * @param {Error} errObj
  */
 module.exports = (errObj) => {
-  if (!(errObj instanceof Error)) {
-    const thrownStr = `This error was thrown in '${filepath}'`
-    throw new TypeError(`Expected the argument to be of type Error, found type '${typeName(errObj)}'.\n${thrownStr}`)
-  }
+  let output
+  try {
+    if (!(errObj instanceof Error)) {
+      const thrownStr = `This error was thrown in '${filepath}'`
+      throw new TypeError(`Expected the argument to be of type Error, found type '${typeName(errObj)}'.\n${thrownStr}`)
+    }
 
-  let output = `\n${hr}\n******** ${errObj.name} ********\n\n\n${sep}\nWith message:\n${errObj.message}\n\n`
-  if (printStacktrace) {
-    output += `${sep}\nStacktrace:\n${errObj.stack}\n`
+    output = `\n${hr}\n******** ${errObj.name} ********\n\n\n${sep}\nWith message:\n${errObj.message}\n\n`
+    if (printStacktrace) {
+      output += `${sep}\nStacktrace:\n${errObj.stack}\n`
+    }
+    output += `\n${hr}\n`
+  } catch (e) {
+    console.error(e)
+    throw e
   }
-  output += `\n${hr}\n`
 
   return output
 }

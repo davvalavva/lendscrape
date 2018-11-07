@@ -28,9 +28,9 @@ module.exports = (errObj) => {
     if (!(errObj instanceof Error)) {
       throw new TypeError(`Expected argument to be of type Error but found type '${typeName(errObj)}' This error was thrown in file ${filepath}`)
     }
-    console.log(getOutput(errObj))
+    console.error(getOutput(errObj))
   } catch (e) {
-    console.log(getOutput(e))
+    console.error(getOutput(e))
     throw e
   }
   return true
