@@ -1,81 +1,84 @@
 /* eslint-disable no-new */
-/**
- * @file Tests for file {@link <install_folder>/errors/abstract-error.js}
- * @copyright Copyright (C) David Jonsson - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * @author David Jonsson
- */
-
 const { test } = require('tap')
 const AbstractError = require('./abstract-error')
-const ValidationError = require('./validation-error')
-const ParseError = require('./parse-error')
-const XTypeError = require('./xtype-error')
-const XRangeError = require('./xrange-error')
 
-test('AbstractError(message, fileName, errorName)', (t) => {
-  class MyError1 extends AbstractError {
-    /* eslint-disable no-useless-constructor */
-    constructor() {
-      // calling constructor without arguments should throw Error in AbstractError
-      super()
-    }
-    /* eslint-enable no-useless-constructor */
-  }
-  t.throws(() => { new MyError1() }, Error, `[01] Throws Error when calling constructor of AbstractError without arguments`)
+test('AbstractError(message, props)', (t) => {
+  let ChildError
+  // [01] *****************************************************************************************
+  t.throws(() => { new AbstractError('not allowed', { name: 'name' }) }, SyntaxError, `[01] Throws SyntaxError when trying to instantiate this abstract class`)
 
-  class MyError2 extends AbstractError {
-    constructor(...args) {
-      const [message] = args
-      // calling constructor without 2nd argument should throw Error in AbstractError
-      super(message)
-    }
-  }
-  t.throws(() => { new MyError2('error') }, Error, `[02] Throws Error when calling constructor of AbstractError without 2nd argument`)
+  // [02] *****************************************************************************************
+  // eslint-disable-next-line no-useless-constructor
+  ChildError = class extends AbstractError { constructor() { super() } }
+  t.throws(() => { new ChildError() }, ReferenceError, `[02] Throws ReferenceError when calling constructor without any arguments`)
 
-  class MyError3 extends AbstractError {
-    constructor(...args) {
-      const [message, fileName] = args
-      // calling constructor without 3rd argument should throw Error in AbstractError
-      super(message, fileName)
-    }
-  }
-  t.throws(() => { new MyError3('error', 'file.js') }, Error, `[03] Throws Error when calling constructor of AbstractError without 3rd argument`)
+  // [03] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super(null, { name: 'name' }) } }
+  t.throws(() => { new ChildError() }, TypeError, `[03] Throws TypeError when passed null as first argument to constructor`)
 
-  class MyError4 extends AbstractError {
-    constructor(...args) {
-      const [message, fileName, errorName] = args
-      // This is a valid call to constructor of AbstractError,
-      // it should return an instance which class' is inherited from AbstractError
-      super(message, fileName, errorName)
-    }
-  }
-  t.type(new MyError4('error', 'file.js', 'MyError4'), AbstractError, `[04] Returns error instance where the instances class is inherited from AbstractError`)
+  // [04] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super([], { name: 'name' }) } }
+  t.throws(() => { new ChildError() }, TypeError, `[04] Throws TypeError when passed an array as first argument to constructor`)
 
-  t.throws(() => { new MyError4(null, 'file.js', 'MyError4') }, TypeError, `[05] Throws TypeError when calling 1st arg. of AbstractError with a null value`)
-  t.throws(() => { new MyError4([], 'file.js', 'MyError4') }, TypeError, `[06] Throws TypeError when calling 1st arg. of AbstractError with an Array`)
-  t.throws(() => { new MyError4({}, 'file.js', 'MyError4') }, TypeError, `[07] Throws TypeError when calling 1st arg. of AbstractError with an Object`)
-  t.throws(() => { new MyError4(1, 'file.js', 'MyError4') }, TypeError, `[09] Throws TypeError when calling 1st arg. of AbstractError with a number`)
-  t.throws(() => { new MyError4(() => {}, 'file.js', 'MyError4') }, TypeError, `[10] Throws TypeError when calling 1st arg. of AbstractError with a function`)
+  // [05] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super({}, { name: 'name' }) } }
+  t.throws(() => { new ChildError() }, TypeError, `[05] Throws TypeError when passed an object as first argument to constructor`)
 
-  t.throws(() => { new MyError4('error', null, 'MyError4') }, TypeError, `[11] Throws TypeError when calling 2nd arg. of AbstractError with a null value`)
-  t.throws(() => { new MyError4('error', [], 'MyError4') }, TypeError, `[12] Throws TypeError when calling 2nd arg. of AbstractError with an Array`)
-  t.throws(() => { new MyError4('error', {}, 'MyError4') }, TypeError, `[13] Throws TypeError when calling 2nd arg. of AbstractError with an Object`)
-  t.throws(() => { new MyError4('error', 1, 'MyError4') }, TypeError, `[15] Throws TypeError when calling 2nd arg. of AbstractError with a number`)
-  t.throws(() => { new MyError4('error', () => {}, 'MyError4') }, TypeError, `[16] Throws TypeError when calling 2nd arg. of AbstractError with a function`)
+  // [06] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super(() => {}, { name: 'name' }) } }
+  t.throws(() => { new ChildError() }, TypeError, `[06] Throws TypeError when passed a function as first argument to constructor`)
 
-  t.throws(() => { new MyError4('error', 'file.js', null) }, TypeError, `[17] Throws TypeError when calling 3rd arg. of AbstractError with a null value`)
-  t.throws(() => { new MyError4('error', 'file.js', []) }, TypeError, `[18] Throws TypeError when calling 3rd arg. of AbstractError with an Array`)
-  t.throws(() => { new MyError4('error', 'file.js', {}) }, TypeError, `[19] Throws TypeError when calling 3rd arg. of AbstractError with an Object`)
-  t.throws(() => { new MyError4('error', 'file.js', 1) }, TypeError, `[21] Throws TypeError when calling 3rd arg. of AbstractError with a number`)
-  t.throws(() => { new MyError4('error', 'file.js', () => {}) }, TypeError, `[22] Throws TypeError when calling 3rd arg. of AbstractError with a function`)
+  // [07] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super(12, { name: 'name' }) } }
+  t.throws(() => { new ChildError() }, TypeError, `[07] Throws TypeError when passed a number as first argument to constructor`)
 
-  t.throws(() => { new AbstractError('Illegal instantiation', 'file.js', 'MyCustomError') }, Error, `[23] Throws Error when trying to instantiate an abstract class`)
+  // [08] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super('error') } }
+  t.throws(() => { new ChildError() }, ReferenceError, `[08] Throws ReferenceError when calling constructor without 2nd argument`)
 
-  t.type(new ValidationError('validation error', 'file.js'), AbstractError, `[24] ValidationError calls constructor of AbstractError, i.e. inherits from AbstractError`)
-  t.type(new ParseError('parse error', 'file.js'), AbstractError, `[25] ParseError calls constructor of AbstractError, i.e. inherits from AbstractError`)
-  t.type(new XTypeError('xtype error', 'file.js'), AbstractError, `[26] XTypeError calls constructor of AbstractError, i.e. inherits from AbstractError`)
-  t.type(new XRangeError('xrange error', 'file.js'), AbstractError, `[27] XRangeError calls constructor of AbstractError, i.e. inherits from AbstractError`)
+  // [09] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super('error', null) } }
+  t.throws(() => { new ChildError() }, TypeError, `[09] Throws TypeError when passed null as second argument to constructor`)
+
+  // [10] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super('error', []) } }
+  t.throws(() => { new ChildError() }, TypeError, `[10] Throws TypeError when passed an array as second argument to constructor`)
+
+  // [10] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super('error', () => {}) } }
+  t.throws(() => { new ChildError() }, TypeError, `[10] Throws TypeError when passed a function as second argument to constructor`)
+
+  // [12] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super('error', 12) } }
+  t.throws(() => { new ChildError() }, TypeError, `[12] Throws TypeError when passed a number as second argument to constructor`)
+
+  // [13] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super('error', '12') } }
+  t.throws(() => { new ChildError() }, TypeError, `[13] Throws TypeError when passed a string as second argument to constructor`)
+
+  // [14] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super('error', {}) } }
+  t.throws(() => { new ChildError() }, ReferenceError, `[14] Throws ReferenceError when object passed as 2nd arg. to constructor doesn't have a name property`)
+
+  // [15] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super('error', { name: null }) } }
+  t.throws(() => { new ChildError() }, TypeError, `[15] Throws TypeError when value of name property in object passed as 2nd arg. to constructor is null`)
+
+  // [16] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super('error', { name: 12 }) } }
+  t.throws(() => { new ChildError() }, TypeError, `[16] Throws TypeError when value of name property in object passed as 2nd arg. to constructor is a number`)
+
+  // [17] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super('error', { name: [] }) } }
+  t.throws(() => { new ChildError() }, TypeError, `[17] Throws TypeError when value of name property in object passed as 2nd arg. to constructor is an array`)
+
+  // [18] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super('error', { name: {} }) } }
+  t.throws(() => { new ChildError() }, TypeError, `[18] Throws TypeError when value of name property in object passed as 2nd arg. to constructor is an object`)
+
+  // [19] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super('error', { name: () => {} }) } }
+  t.throws(() => { new ChildError() }, TypeError, `[19] Throws TypeError when value of name property in object passed as 2nd arg. to constructor is a function`)
+
   t.end()
 })
