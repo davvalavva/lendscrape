@@ -13,14 +13,9 @@
  * @module libs/validate-documents
  */
 
-const path = require('path')
 const typeName = require('type-name')
 const ValidationError = require('../errors/validation-error')
-const XTypeError = require('../errors/xtype-error')
 const validateKeyVal = require('./validate-key-val')
-const env = require('../config/env.json')
-
-const filename = env.OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
 
 /**
  * Validates that documents conforms to a set of rules according to
@@ -33,10 +28,10 @@ const filename = env.OS === 'win' ? path.win32.basename(__filename) : path.posix
  */
 module.exports = (documents, schema) => {
   if (typeName(documents) !== 'Array') {
-    throw new XTypeError(`Expected an array as first argument`, filename)
+    throw new TypeError(`Expected an array as first argument`)
   }
   if (typeName(schema) !== 'Object') {
-    throw new XTypeError(`Expected an object as second argument`, filename)
+    throw new TypeError(`Expected an object as second argument`)
   }
   const requiredKeys = Object.keys(schema)
     .map(keyStr => ({ name: keyStr, ...schema[keyStr] }))
@@ -45,7 +40,7 @@ module.exports = (documents, schema) => {
   documents.forEach((doc) => {
     requiredKeys.forEach((obj) => {
       if (doc[obj.name] == null) {
-        throw new ValidationError(`Required key "${obj.name}" is missing in document object`, filename)
+        throw new ValidationError(`Required key "${obj.name}" is missing in document object`)
       }
     })
     Object.keys(doc).forEach(key => validateKeyVal(key, doc[key], schema))

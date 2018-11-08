@@ -15,7 +15,6 @@
 const path = require('path')
 const typeName = require('type-name')
 const ValidationError = require('../errors/validation-error')
-const XTypeError = require('../errors/xtype-error')
 const map = require('../schema/BSON-JS-map.json')
 const env = require('../config/env.json')
 
@@ -32,23 +31,23 @@ const filename = env.OS === 'win' ? path.win32.basename(__filename) : path.posix
  */
 module.exports = (key, value, schema) => {
   if (typeName(key) !== 'string') {
-    throw new XTypeError(`Expected a string as first argument`, filename)
+    throw new TypeError(`Expected a string as first argument`)
   }
   if (typeName(schema) !== 'Object') {
-    throw new XTypeError(`Expected an object as third argument`, filename)
+    throw new TypeError(`Expected an object as third argument`)
   }
   if (['string', 'number', 'Array'].indexOf(typeName(value)) === -1) {
-    throw new XTypeError(`Expected a string, number or an array as second argument`, filename)
+    throw new TypeError(`Expected a string, number or an array as second argument`)
   }
   if (key.trim() === '') {
-    throw new ValidationError('Invalid key', filename)
+    throw new ValidationError('Invalid key')
   }
   if (!schema[key] || schema[key] == null || schema[key] === 0 || schema[key] === '') {
-    throw new ValidationError('Invalid key', filename)
+    throw new ValidationError('Invalid key')
   }
   const expectedType = map[schema[key]['BSON-type']]
   if (typeName(value) !== expectedType) {
-    throw new XTypeError('Invalid type in second argument', filename)
+    throw new TypeError('Invalid type in second argument')
   }
   return true
 }
