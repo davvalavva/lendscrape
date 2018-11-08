@@ -8,13 +8,6 @@ const { OS, projectRoot: dir } = require('../../config/env.json')
 const filename = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
 const filepath = `${dir}${filename}`
 
-/**
- * Prints error messages to terminal
- * (2nd arg. only for injecting environment when testing)
- *
- * @param {Error} errObj The thrown Error to be printed to terminal
- * @returns {boolean} Returns true if no error happens
- */
 module.exports = (errObj) => {
   try {
     if (!(errObj instanceof Error)) {

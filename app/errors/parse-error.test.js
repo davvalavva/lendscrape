@@ -2,7 +2,7 @@
 const { test } = require('tap')
 const ParseError = require('./parse-error')
 
-test('ParseError(message, fileName)', (t) => {
+test('ParseError(message)', (t) => {
   t.type(new ParseError('message'), ParseError, `[01] Returns instance of ParseError when thrown with correctly set arguments`)
   t.throws(() => { new ParseError() }, ReferenceError, `[02] Throws ReferenceError when no arguments given`)
   t.throws(() => { new ParseError(null) }, TypeError, `[03] Throws TypeError argument is null`)
@@ -11,7 +11,5 @@ test('ParseError(message, fileName)', (t) => {
   t.throws(() => { new ParseError({}) }, TypeError, `[06] Throws TypeError when argument is an Object`)
   t.throws(() => { new ParseError(() => {}) }, TypeError, `[07] Throws TypeError when argument is a Function`)
   t.throws(() => { new ParseError(Promise.resolve(1)) }, TypeError, `[08] Throws TypeError when argument is a Promise`)
-  t.throws(() => { new ParseError('') }, Error, `[09] Throws Error when argument is an empty string`)
-  t.throws(() => { new ParseError('   ') }, Error, `[10] Throws Error when argument is a string with whitspaces only`)
   t.end()
 })

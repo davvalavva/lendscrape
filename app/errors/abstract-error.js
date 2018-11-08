@@ -1,3 +1,5 @@
+/** @module errors/validation-error */
+
 const ExtendableError = require('es6-error')
 const typeName = require('type-name')
 const path = require('path')
