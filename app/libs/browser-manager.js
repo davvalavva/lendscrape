@@ -1,12 +1,4 @@
 /**
- * @file Instantiates and configures a headless browser
- * @copyright Copyright (C) David Jonsson - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * @author David Jonsson
- */
-
-/**
  * This module offers methods for instantiating a headless browser.
  * It also sets the most common configuration settings before
  * returning the browser handle to the caller. It uses 3rd party

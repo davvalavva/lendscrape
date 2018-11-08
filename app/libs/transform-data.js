@@ -1,12 +1,4 @@
 /**
- * @file Transforms scraped data to documents for database storage
- * @copyright Copyright (C) David Jonsson - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * @author David Jonsson
- */
-
-/**
  * Transforms data in a table format (array of arrays) to an array of documents (objects)
  * so that it can be stored in a document database (i.e. MongoDB)
  *

@@ -1,12 +1,4 @@
 /**
- * @file Validates keys and values from documents
- * @copyright Copyright (C) David Jonsson - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * @author David Jonsson
- */
-
-/**
  * Validates key/value pairs in a document
  *
  * @module libs/validate-key-val

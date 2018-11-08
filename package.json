@@ -9,6 +9,7 @@
     "parse-to-number": "tap app/libs/parse-to-number.test.js --color --reporter=spec",
     "validate-documents": "tap app/libs/validate-documents.test.js --color --reporter=spec",
     "validate-key-val": "tap app/libs/validate-key-val.test.js --color --reporter=spec",
+    "manual-insert": "tap app/libs/manual-insert.test.js --color --reporter=spec",
     "parse-error": "tap app/errors/parse-error.test.js --color --reporter=spec",
     "xrange-error": "tap app/errors/xrange-error.test.js --color --reporter=spec",
     "xtype-error": "tap app/errors/xtype-error.test.js --color --reporter=spec",

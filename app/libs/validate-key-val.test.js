@@ -1,11 +1,3 @@
-/**
- * @file Tests for file {@link <install_folder>/libs/validate-key-val.js}
- * @copyright Copyright (C) David Jonsson - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * @author David Jonsson
- */
-
 const { test } = require('tap')
 const validateKeyVal = require('./validate-key-val')
 const ValidationError = require('../errors/validation-error')

@@ -1,11 +1,3 @@
-/**
- * @file Tests for file {@link <install_folder>/errors/print-error/get-output-standard.js}
- * @copyright Copyright (C) David Jonsson - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * @author David Jonsson
- */
-
 const { test } = require('tap')
 const getOutputStandard = require('./get-output-standard')
 

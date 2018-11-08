@@ -1,11 +1,3 @@
-/**
- * @file Bootstraps web scraping of website kredit365.se
- * @copyright Copyright (C) David Jonsson - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * @author David Jonsson
- */
-
 const parseNum = require('../../libs/parse-to-number')
 const { newPage, closeBrowser, TimeoutError } = require('../../libs/browser-manager')
 const transform = require('../../libs/transform-data')

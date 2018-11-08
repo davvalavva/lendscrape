@@ -1,12 +1,4 @@
 /**
- * @file Verifies that data headers haven't beens changed in target
- * @copyright Copyright (C) David Jonsson - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * @author David Jonsson
- */
-
-/**
  * Verifies that data headers haven't beens changed in target
  *
  * @param {string[]} headers The headers scraped from the web page

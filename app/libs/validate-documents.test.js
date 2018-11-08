@@ -1,11 +1,3 @@
-/**
- * @file Tests for file {@link <install_folder>/libs/validate-documents.js}
- * @copyright Copyright (C) David Jonsson - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * @author David Jonsson
- */
-
 const { test } = require('tap')
 const validate = require('./validate-documents')
 const schema = require('../schema/payday-simple-1.json')

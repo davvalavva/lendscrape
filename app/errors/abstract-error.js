@@ -31,18 +31,17 @@ class AbstractError extends ExtendableError {
       let err
 
       if (this.constructor === AbstractError) {
-        err = new SyntaxError(`Trying to instantiate an abstract class. Class name: '${constrName}'. ${thrownStr}`)
+        err = new SyntaxError(`Trying to instantiate the abstract class '${constrName}'. ${thrownStr}`)
         changeName = constrName
       } else if (message === undefined) {
         err = new ReferenceError(
           `Missing required 1st argument 'message' for constructor of class '${constrName}'. ${thrownStr}`
         )
-        // So that this.name reflects that the error was thrown by this class and not the child class.
-        changeName = constrName
       } else if (props === undefined) {
         err = new ReferenceError(
           `Missing required 2nd argument 'props' for constructor of class '${constrName}'. ${thrownStr}`
         )
+        // So that this.name reflects that the error was thrown by this class and not the child class.
         changeName = constrName
       } else if (typeName(message) !== 'string') {
         err = new TypeError(
