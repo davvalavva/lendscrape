@@ -1,5 +1,35 @@
 /** @module libs/validate-key-val */
 
+/* eslint-disable max-len */
+/**
+ * @function
+ * This function controls a key/value pair against a schema containing rules.
+ * It takes the key given as first argument and looks for it in the schema, an
+ * object given as the third argument. If it finds it, it checks to see what
+ * type the value in the key/value pair is expected to have. The types found
+ * in the schema are BSON types, which the function interprets. For example,
+ * if the BSON-type is "int", the function will not only check that the given
+ * value (2nd arg.) is of the Number type in JS, but also that it doesn't have
+ * any decimals. If no errors are found when validating the key/value pair,
+ * true is returned, otherwise an Error will be thrown.
+ *
+ * Note 2018-11-09: I might add application specific types to the schemas later on,
+ * maybe an enumerable or something else.
+ *
+ * PARAMETERS:
+ * in order   Type                  Name      Required  Description
+ * ============================================================================================================================
+ * @param     {String}              key       yes       A string representing a key in an object (i.e. a document in MongoDB)
+ *
+ * @param     {String|Number|Array} value     yes       The value of the key
+ *
+ * @param     {Object}              value     yes       An object representing the schema
+ *
+ * RETURNS:
+ * @return {Boolean} Returns true if no errors in validation, throws an Error otherwise.
+ */
+/* eslint-enable max-len */
+
 const path = require('path')
 const typeName = require('type-name')
 const ValidationError = require('../errors/validation-error')

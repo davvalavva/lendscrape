@@ -30,7 +30,7 @@
  *
  * ARGUMENT   TYPE        NAME              REQUIRED  DESCRIPTION
  * ==================================================================================================================================
- * @param     {object[]}  propDescriptions  yes       An array of objects, with each object in the array having
+ * @param     {Object[]}  propDescriptions  yes       An array of objects, with each object in the array having
  *                                                    two properties, namely the 'key' and 'value' properties.
  *                                                    The value of these two properties for every object in the
  *                                                    array will be found in the returned object where the value
@@ -38,7 +38,7 @@
  *                                                    object and the value of 'value' will be that properties value.
  *
  * RETURNS:
- * @return {object} A object (=== document) reduced from the passed array of objects
+ * @return {Object} An object (=== document) reduced from the passed array of objects
  *
  * OPERATIONAL ERRORS
  *    @todo
