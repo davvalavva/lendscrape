@@ -1,22 +1,56 @@
 const { test } = require('tap')
 const validateKeyVal = require('./validate-key-val')
 const ValidationError = require('../errors/validation-error')
-const schema = require('../schema/payday-simple-1.json')
+
+const json = `
+{
+  "leverantörsId":  { "required": true,  "BSON": "int"    },
+  "uppl.avg":       { "required": true,  "BSON": "int"    },
+  "valuta":         { "required": true,  "BSON": "string" },
+  "belopp":         { "required": true,  "BSON": "array", "elements-BSON": "int" },
+  "veckodagar":     { "required": true,  "BSON": "array", "elements-BSON": "string" },
+  "årsränta":       { "required": true,  "BSON": "array", "elements-BSON": "double" },
+  "eff.-ränta(%)":  { "required": false, "BSON": "int"    },
+  "statsränta":     { "required": false, "BSON": "double" },
+  "":               { "required": false, "BSON": "int"    },
+  "   ":            { "required": false, "BSON": "int"    }
+}`
+
+// about empty and whitespace keys: It's not responsibility of this function
+// to set the rules of how a schema may be configured, just that the rules
+// have been adhered to by the data. If that functionality is needed,
+// either write a new module or use schema feature in MongoDB
+
+const schema = JSON.parse(json)
 
 test('validateKeyVal(key, value, schema)', (t) => {
-  t.type(validateKeyVal('belopp', 1, schema), 'boolean', `[01] Returns a boolean when given valid arguments`)
-  t.same(validateKeyVal('belopp', 2, schema), true, `[02] Returns true when given valid arguments alongside first argument "leverantörsId"`)
-  t.same(validateKeyVal('belopp', 3, schema), true, `[03] Returns true when given valid arguments alongside first argument "uppl.avg"`)
-  t.throws(() => { validateKeyVal('nonexisting key', 4, schema) }, ValidationError, `[04] Throws ValidationError when given key in first argument doesn't exist for given schema in 3rd argument`)
-  t.throws(() => { validateKeyVal('', 5, schema) }, ValidationError, `[05] Throws ValidationError when first argument is an empty string`)
-  t.throws(() => { validateKeyVal('	 ', 6, schema) }, ValidationError, `[06] Throws ValidationError when first argument consists only of white space`) // eslint-disable-line
-  t.throws(() => { validateKeyVal('belopp', '7', schema) }, TypeError, `[07] Throws TypeError when second value is of wrong type for given key in first argument`)
-  t.throws(() => { validateKeyVal(8, 9, schema) }, TypeError, `[08] Throws TypeError when first argument is a number instead of a string`)
-  t.throws(() => { validateKeyVal() }, TypeError, `[09] Throws TypeError when called without arguments`)
-  t.throws(() => { validateKeyVal(null) }, TypeError, `[10] Throws TypeError when called with null as only argument`)
-  t.throws(() => { validateKeyVal('belopp', null, schema) }, TypeError, `[11] Throws TypeError when given null as second argument`)
-  t.throws(() => { validateKeyVal('belopp', 10, null) }, TypeError, `[12] Throws TypeError when given null as third argument`)
-  t.throws(() => { validateKeyVal('belopp') }, TypeError, `[13] Throws TypeError when called with only one argument`)
-  t.throws(() => { validateKeyVal('belopp', 111) }, TypeError, `[14] Throws TypeError when called with only two arguments`)
+  t.type(validateKeyVal('leverantörsId', 1, schema), 'boolean', `[01] Returns a boolean when given arguments in a correct way`)
+  t.same(validateKeyVal('uppl.avg', 2, schema), true, `[02] Returns true when given arguments in a correct way`)
+  t.throws(() => { validateKeyVal() }, ReferenceError, `[03] Throws ReferenceError when called without arguments`)
+  t.throws(() => { validateKeyVal(null, 4, schema) }, TypeError, `[04] Throws TypeError when value of 1st arg. ('key') is null`)
+  t.throws(() => { validateKeyVal(12, 4, schema) }, TypeError, `[05] Throws TypeError when value of 1st arg. ('key') is a number`)
+  t.throws(() => { validateKeyVal([], 4, schema) }, TypeError, `[06] Throws TypeError when value of 1st arg. ('key') is an array`)
+  t.throws(() => { validateKeyVal({}, 4, schema) }, TypeError, `[07] Throws TypeError when value of 1st arg. ('key') is an object`)
+  t.throws(() => { validateKeyVal(() => {}, 4, schema) }, TypeError, `[08] Throws TypeError when value of 1st arg. ('key') is a function`)
+  t.throws(() => { validateKeyVal('nonexisting key', 4, schema) }, ValidationError, `[09] Throws ValidationError when value of 1st arg. ('key') doesn't exist in schema`)
+  t.throws(() => { validateKeyVal('leverantörsId', '7', schema) }, ValidationError, `[10] Throws ValidationError when value of 2nd arg. is a string when expected an integer`)
+  t.throws(() => { validateKeyVal('valuta', 7, schema) }, ValidationError, `[11] Throws ValidationError when value of 2nd arg. is a number when expected a string`)
+  t.throws(() => { validateKeyVal('leverantörsId', null, schema) }, TypeError, `[12] Throws TypeError when given null as second argument`)
+  t.throws(() => { validateKeyVal('leverantörsId', 10, null) }, TypeError, `[13] Throws TypeError when given null as third argument`)
+  t.throws(() => { validateKeyVal('leverantörsId') }, ReferenceError, `[14] Throws ReferenceError when called with only one argument`)
+  t.throws(() => { validateKeyVal('leverantörsId', 111) }, ReferenceError, `[15] Throws ReferenceError when called with only two arguments`)
+  t.throws(() => { validateKeyVal('belopp', 7, schema) }, ValidationError, `[16] Throws ValidationError when value of 2nd arg. is a number when expected an array of numbers`)
+  t.throws(() => { validateKeyVal('veckodagar', 7, schema) }, ValidationError, `[17] Throws ValidationError when value of 2nd arg. is a number when expected an array of strings`)
+  t.throws(() => { validateKeyVal('belopp', ['12', '13'], schema) }, ValidationError, `[18] Throws ValidationError when array in 2nd arg. contains strings when expected numbers`)
+  t.throws(() => { validateKeyVal('veckodagar', [12, 13], schema) }, ValidationError, `[19] Throws ValidationError when array in 2nd arg. contains numbers when expected strings`)
+  t.same(validateKeyVal('belopp', [12, 13], schema), true, `[20] Returns true when given an array of numbers (ints only) as 2nd argument when expected by schema in 3rd arg.`)
+  t.same(validateKeyVal('årsränta', [12.73, 13], schema), true, `[21] Returns true when given an array of numbers (both ints & floats) as 2nd argument when expected array of "double" by schema in 3rd arg.`)
+  t.same(validateKeyVal('veckodagar', ['12', '13'], schema), true, `[22] Returns true when given an array of numbers as 2nd argument when expected by schema in 3rd arg.`)
+  t.same(validateKeyVal('statsränta', 1.23, schema), true, `[23] Returns true when given a float number when expected by schema in 3rd arg.`)
+  t.same(validateKeyVal('statsränta', 12, schema), true, `[24] Returns true when given an integer when expected a double by schema in 3rd arg.`)
+  t.throws(() => { validateKeyVal('belopp', [1.43, 12], schema) }, ValidationError, `[25] Throws ValidationError when array in 2nd arg. contains a float number when expected an integer`)
+  t.throws(() => { validateKeyVal('uppl.avg', 1.43, schema) }, ValidationError, `[26] Throws ValidationError when value of 2nd arg. is a float number when expected an integer`)
+
   t.end()
 })
+// tal med decimaler

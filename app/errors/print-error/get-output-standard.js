@@ -2,7 +2,6 @@
 
 const path = require('path')
 const typeName = require('type-name')
-const { hr, sep } = require('./config')
 const { OS, projectRoot: dir } = require('../../config/env.json')
 const { outputStacktrace: printStacktrace } = require('../../config/runtime.json')
 
@@ -22,14 +21,22 @@ module.exports = (errObj) => {
       throw new TypeError(`Expected the argument to be of type Error, found type '${typeName(errObj)}'.\n${thrownStr}`)
     }
 
-    output = `\n${hr}\n******** ${errObj.name} ********\n\n\n${sep}\nMessage: ${errObj.message}\n\n`
+    output = `\n\n========================================================================`
+    output += `\n${errObj.name}\n\n${errObj.message}`
     if (errObj.path) {
-      output += `${sep}\nThrown in file: '${errObj.path}'\n\n`
+      output += `\n\nThrown in file:\n${errObj.path}`
+    }
+    if (errObj.signature) {
+      output += `\n\nSyntax:\n${errObj.signature}`
+    }
+    if (errObj.args) {
+      output += `\n\nArguments debug info:\n`
+      output += JSON.stringify(errObj.args, null, 2)
     }
     if (printStacktrace) {
-      output += `${sep}\nStacktrace:\n\n${errObj.stack}\n`
+      output += `\n\nStacktrace:\n\n${errObj.stack}\n`
     }
-    output += `\n\n${hr}\n\n`
+    output += `\n\n\n`
   } catch (e) {
     console.error(e)
     throw e

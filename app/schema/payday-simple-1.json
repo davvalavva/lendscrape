@@ -1,11 +1,11 @@
 {
-  "leverantörsId": { "required": true,  "BSON-type": "int" },
-  "belopp":        { "required": true,  "BSON-type": "int" },
-  "uppl.avg":      { "required": false, "BSON-type": "int" },
-  "fakt.avg":      { "required": false, "BSON-type": "int" },
-  "ränta(kr)":     { "required": false, "BSON-type": "int" },
-  "betala-totalt": { "required": false, "BSON-type": "int" },
-  "eff.-ränta(%)": { "required": false, "BSON-type": "int" },
-  "nom.-ränta(%)": { "required": false, "BSON-type": "int" },
-  "löptid(d)":     { "required": true,  "BSON-type": "int" }
+  "leverantörsId": { "required": true,  "BSON": "int" },
+  "belopp":        { "required": true,  "BSON": "int" },
+  "uppl.avg":      { "required": false, "BSON": "int" },
+  "fakt.avg":      { "required": false, "BSON": "int" },
+  "ränta(kr)":     { "required": false, "BSON": "int" },
+  "betala-totalt": { "required": false, "BSON": "int" },
+  "eff.-ränta(%)": { "required": false, "BSON": "int" },
+  "nom.-ränta(%)": { "required": false, "BSON": "int" },
+  "löptid(d)":     { "required": true,  "BSON": "int" }
 }

@@ -1,3 +1,6 @@
 {
-  "int": "number"
+  "int": "number",
+  "double": "number",
+  "string": "string",
+  "array": "Array"
 }
