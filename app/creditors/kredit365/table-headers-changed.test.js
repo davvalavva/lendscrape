@@ -1,5 +1,5 @@
 const { test } = require('tap')
-const headersChanged = require('./headers-changed')
+const headersChanged = require('./table-headers-changed')
 
 const headers = [
   'Belopp',

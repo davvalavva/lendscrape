@@ -1,5 +1,5 @@
 const { test } = require('tap')
-const transform = require('./transform-data')
+const transform = require('./table-to-docs')
 
 const headersKeysMap = [
   { mapped: 'belopp', key: 'Belopp' },

@@ -1,0 +1,9 @@
+[
+  { "key": "Belopp",     "mapped": "belopp"        },
+  { "key": "Uppl. avg",  "mapped": "uppl.avg"      },
+  { "key": "Fakt. avg",  "mapped": "fakt.avg"      },
+  { "key": "Ränta",      "mapped": "ränta(kr)"     },
+  { "key": "Total",      "mapped": "betala-totalt" },
+  { "key": "Eff. ränta", "mapped": "eff.-ränta(%)" },
+  { "key": "Nom. ränta", "mapped": "nom.-ränta(%)" }
+]
