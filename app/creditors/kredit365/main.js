@@ -1,9 +1,9 @@
 const path = require('path')
-const parseNum = require('../../libs/parse-to-number')
+const parseNum = require('../../libs/parse-number')
 const { newPage, closeBrowser } = require('../../libs/browser-manager')
 const tableToDocs = require('../../libs/table-to-docs')
 const tableHeadersChanged = require('./table-headers-changed')
-const validate = require('../../libs/validate-documents')
+const validateDoc = require('../../libs/validate-document')
 const schema = require('../../schema/payday-simple-1.json')
 const keyMap = require('./key-map.json')
 const fieldInclusions = require('./field-inclusions.json')
@@ -77,7 +77,7 @@ module.exports = () => {
   try {
     scrape()
       .then((documents) => {
-        validate(documents, schema)
+        documents.forEach(document => validateDoc(document, schema))
         console.log(JSON.stringify(documents, null, 2))
         // TODO: Serialize and store data
       })

@@ -1,4 +1,4 @@
-/** @module libs/validate-key-val */
+/** @module libs/validate-field */
 
 /* eslint-disable max-len */
 /**

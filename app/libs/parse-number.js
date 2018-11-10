@@ -1,4 +1,4 @@
-/** @module libs/parse-to-number */
+/** @module libs/parse-number */
 
 /* eslint-disable max-len */
 /**
@@ -43,7 +43,7 @@ const {
 } = require('../config/runtime.json')
 const ParseError = require('../errors/parse-error')
 const printError = require('../errors/print-error')
-const logError = require('../libs/log-error')
+const logError = require('./log-error')
 
 const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
 const filepath = `${projectRoot}${fName}`
