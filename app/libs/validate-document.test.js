@@ -1,61 +1,49 @@
 const { test } = require('tap')
 const validateDoc = require('./validate-document')
-const schema = require('../schema/payday-simple-1.json')
 const ValidationError = require('../errors/validation-error')
 
-const documents = [
-  {
-    belopp: 2000,
-    'uppl.avg': 350,
-    'fakt.avg': 45,
-    'ränta(kr)': 64,
-    'betala-totalt': 2459,
-    'eff.-ränta(%)': 1135,
-    'nom.-ränta(%)': 39,
-    'löptid(d)': 30,
-    leverantörsId: 1
-  },
-  {
-    belopp: 3000,
-    'uppl.avg': 550,
-    'fakt.avg': 45,
-    'ränta(kr)': 93,
-    'betala-totalt': 3688,
-    'eff.-ränta(%)': 861,
-    'nom.-ränta(%)': 26,
-    'löptid(d)': 30,
-    leverantörsId: 1
-  }
-]
+const schema = JSON.parse(`{
+  "leverantörsId": { "required": true,  "BSON": "int" },
+  "belopp":        { "required": true,  "BSON": "int" },
+  "uppl.avg":      { "required": false, "BSON": "int" },
+  "fakt.avg":      { "required": false, "BSON": "int" },
+  "ränta(kr)":     { "required": false, "BSON": "int" },
+  "betala-totalt": { "required": false, "BSON": "int" },
+  "eff.-ränta(%)": { "required": false, "BSON": "int" },
+  "nom.-ränta(%)": { "required": false, "BSON": "int" },
+  "löptid(d)":     { "required": true,  "BSON": "int" }
+}`)
 
-test('validateDoc(documents, schema)', (t) => {
-  t.type(validateDoc(documents, schema), 'boolean', `[01] Returns a boolen true when given valid arguments (where the first argument is an array of documents)`)
-  t.same(validateDoc(documents, schema), true, `[02] Returns true when given valid arguments`)
-  documents[2] = { // missing required key 'belopp'
-    'uppl.avg': 350,
-    'fakt.avg': 45,
-    'ränta(kr)': 96,
-    'betala-totalt': 3491,
-    'eff.-ränta(%)': 532,
-    'nom.-ränta(%)': 39,
-    'löptid(d)': 30,
-    leverantörsId: 1
-  }
-  t.throws(() => validateDoc(documents, schema), ValidationError, `[03] Throws ValidationError when missing required key for documents in first argument`)
-  delete documents[2]
-  t.throws(() => { validateDoc() }, Error, `[04] Throws TypeError when called without arguments`)
-  t.throws(() => { validateDoc(undefined) }, TypeError, `[05] Throws TypeError when called with undefined as only argument`)
-  t.throws(() => { validateDoc(null) }, TypeError, `[06] Throws TypeError when called with null as only argument`)
-  t.throws(() => { validateDoc(documents, null) }, TypeError, `[07] Throws TypeError when given null as second argument`)
-  t.throws(() => { validateDoc(documents, undefined) }, TypeError, `[08] Throws TypeError when given undefined as second argument`)
-  t.throws(() => { validateDoc({ docs: documents }, schema) }, TypeError, `[09] Throws TypeError when given an object as first argument`)
-  t.throws(() => { validateDoc(() => {}, schema) }, TypeError, `[10] Throws TypeError when given a function as first argument`)
-  t.throws(() => { validateDoc('documents', schema) }, TypeError, `[11] Throws TypeError when given a string as first argument`)
-  t.throws(() => { validateDoc(31, schema) }, TypeError, `[12] Throws TypeError when given a number as first argument`)
-  t.throws(() => { validateDoc(documents, [schema]) }, TypeError, `[13] Throws TypeError when given an array as second argument`)
-  t.throws(() => { validateDoc(documents, () => {}) }, TypeError, `[14] Throws TypeError when given a function as second argument`)
-  t.throws(() => { validateDoc(documents, 'schema') }, TypeError, `[15] Throws TypeError when given a string as second argument`)
-  t.throws(() => { validateDoc(documents, 32) }, TypeError, `[16] Throws TypeError when given a number as second argument`)
+const document = JSON.parse(`{
+  "belopp":        2000,
+  "uppl.avg":      350,
+  "fakt.avg":      45,
+  "ränta(kr)":     64,
+  "betala-totalt": 2459,
+  "eff.-ränta(%)": 1135,
+  "nom.-ränta(%)": 39,
+  "löptid(d)":     30,
+  "leverantörsId": 1
+}`)
+
+test('validateDoc(document, schema)', (t) => {
+  // t.type(validateDoc(document, schema), 'boolean', `[01] Returns a boolen true when given valid arguments (where the 1st argument is an array of document)`)
+  // t.same(validateDoc(document, schema), true, `[02] Returns true when given valid arguments`)
+  // t.throws(() => { validateDoc(undefined) }, ReferenceError, `[03] Throws ReferenceError when called without any arguments`)
+  // t.throws(() => { validateDoc(null, schema) }, TypeError, `[04] Throws TypeError when 1st argument is null`)
+  // t.throws(() => { validateDoc([], schema) }, TypeError, `[05] Throws TypeError when 1st argument is an array`)
+  // t.throws(() => { validateDoc(() => {}, schema) }, TypeError, `[06] Throws TypeError when 1st argument is a function`)
+  // t.throws(() => { validateDoc('document', schema) }, TypeError, `[07] Throws TypeError when 1st argument is a string`)
+  // t.throws(() => { validateDoc(31, schema) }, TypeError, `[08] Throws TypeError when 1st argument is a number`)
+  // t.throws(() => { validateDoc(document) }, ReferenceError, `[09] Throws ReferenceError when called without 2nd argument`)
+  // t.throws(() => { validateDoc(document, null) }, TypeError, `[10] Throws TypeError when 2nd argument is null`)
+  // t.throws(() => { validateDoc(document, [schema]) }, TypeError, `[11] Throws TypeError when 2nd argument is an array`)
+  // t.throws(() => { validateDoc(document, () => {}) }, TypeError, `[12] Throws TypeError when 2nd argument is a function`)
+  // t.throws(() => { validateDoc(document, 'schema') }, TypeError, `[13] Throws TypeError when 2nd argument is a string`)
+  // t.throws(() => { validateDoc(document, 32) }, TypeError, `[14] Throws TypeError when 2nd argument is a number`)
+  const faultyDoc = { ...document }
+  delete faultyDoc.belopp
+  t.throws(() => validateDoc(faultyDoc, schema), ValidationError, `[15] Throws ValidationError when missing a required property for object given in 1st argument`)
 
   t.end()
 })
