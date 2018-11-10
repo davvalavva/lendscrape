@@ -74,19 +74,18 @@ const scrape = async () => {
 }
 
 module.exports = () => {
-  try {
-    scrape()
-      .then((documents) => {
-        documents.forEach(document => validateDoc(document, schema))
-        console.log(JSON.stringify(documents, null, 2))
-        // TODO: Serialize and store data
-      })
-  } catch (e) {
-    e.path = filepath
-    if (debug) {
-      if (debug === 1) printError(e)
-      if (log) logError(e)
-    }
-    throw e
-  }
+  scrape()
+    .then((documents) => {
+      documents.forEach(document => validateDoc(document, schema))
+      console.log(JSON.stringify(documents, null, 2))
+      // TODO: Serialize and store data
+    })
+    .catch((e) => {
+      e.path = filepath
+      if (debug) {
+        if (debug === 1) printError(e)
+        if (log) logError(e)
+      }
+      throw e
+    })
 }

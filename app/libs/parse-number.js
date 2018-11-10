@@ -52,8 +52,13 @@ const filepath = `${projectRoot}${fName}`
 const debug = debugMode // 0 = no debug, 1 = normal, 2 = testing
 const log = enableLogging // true|false
 
-module.exports = (str, { keepDec = false, decSep = ',' } = {}) => {
+module.exports = (str, cfg = {}) => {
+  let keepDec
+  let decSep
   let parsed
+  if (typeName(cfg) === 'Object') {
+    ({ keepDec = false, decSep = ',' } = cfg)
+  }
   try {
     let err
     // return str as is, if it's a number
@@ -66,6 +71,15 @@ module.exports = (str, { keepDec = false, decSep = ',' } = {}) => {
       err = new ParseError(`Can't parse empty string or string with only whitespaces`)
     }
     if (err) {
+      err.signature = 'function(str, cfg)'
+      err.args = [
+        {
+          position: 0, required: true, expectedType: 'string|number', foundType: typeName(str), foundValue: str
+        },
+        {
+          position: 1, required: false, expectedType: 'Object', foundType: typeName(cfg), foundValue: cfg
+        }
+      ]
       err.path = filepath
       throw err
     }

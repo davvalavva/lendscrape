@@ -10,6 +10,17 @@
 const puppeteer = require('puppeteer')
 const { TimeoutError } = require('puppeteer/Errors')
 const browserAgents = require('browser-agents')
+const path = require('path')
+const printError = require('../errors/print-error')
+const logError = require('./log-error')
+const {
+  OS,
+  projectRoot
+} = require('../config/env.json')
+const {
+  debugMode: debug,
+  enableLogging: log
+} = require('../config/runtime.json')
 
 let browserInstance
 const getBrowser = async () => {
@@ -17,18 +28,31 @@ const getBrowser = async () => {
   return browserInstance
 }
 
+const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
+const filepath = `${projectRoot}${fName}`
+
 /**
  * Returns an instance of Page
  *
  * @return {object} Returns an instance of Page
  */
 const newPage = async () => {
-  const browser = await getBrowser()
-  const page = await browser.newPage()
-  await page.setUserAgent(browserAgents.random())
-  await page.setViewport({ width: 1920, height: 1080 })
-  await page.setCacheEnabled(false)
-  await page.setExtraHTTPHeaders({ Referer: 'https://google.com/' })
+  let page
+  try {
+    const browser = await getBrowser()
+    page = await browser.newPage()
+    await page.setUserAgent(browserAgents.random())
+    await page.setViewport({ width: 1920, height: 1080 })
+    await page.setCacheEnabled(false)
+    await page.setExtraHTTPHeaders({ Referer: 'https://google.com/' })
+  } catch (e) {
+    if (debug) {
+      e.path = filepath
+      if (debug === 1) printError(e)
+      if (log) logError(e)
+    }
+    throw e
+  }
   return page
 }
 
