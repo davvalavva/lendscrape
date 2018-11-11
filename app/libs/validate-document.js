@@ -39,7 +39,7 @@ const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basena
 const filepath = `${projectRoot}${fName}`
 
 // override config in 'runtime.json'
-const debug = 1 // 0 = no debug, 1 = normal, 2 = testing
+const debug = debugMode // 0 = no debug, 1 = normal, 2 = testing
 const log = enableLogging // true|false
 
 const requiredKeys = schema => Object.keys(schema)

@@ -1,5 +1,11 @@
 *tmp.txt
-*tmp.js
+*tmp.js# BrowserSync local server #
+
+
+# BrowserSync local server #
+############################
+server/
+
 
 # playaround and try out things #
 #################################

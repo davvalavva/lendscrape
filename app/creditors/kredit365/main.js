@@ -25,7 +25,7 @@ const filepath = `${projectRoot}${fName}`
 const debug = debugMode // 0 = no debug, 1 = normal, 2 = testing
 const log = enableLogging // true|false
 
-const PARSE_TARGET_URL = 'https://www.kredit365.se/priser-p%C3%A5-l%C3%A5n'
+const PARSE_TARGET_URL = 'http://localhost:3000/'
 
 const scrape = async () => {
   const page = await newPage()

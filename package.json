@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node app/creditors/kredit365/index.js",
     "test": "tap app/**/*test.js --cov --color --reporter=spec --coverage-report=html",
+    "server": "node server/browser-sync.js",
     "parse-number": "tap app/libs/parse-number.test.js --color --reporter=spec",
     "validate-document": "tap app/libs/validate-document.test.js --color --reporter=spec",
     "validate-field": "tap app/libs/validate-field.test.js --color --reporter=spec",
@@ -32,6 +33,7 @@
     "type-name": "^2.0.2"
   },
   "devDependencies": {
+    "browser-sync": "^2.26.3",
     "eslint": "^5.8.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
