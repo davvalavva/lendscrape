@@ -4,10 +4,10 @@ const path = require('path')
 const ValidationError = require('../../errors/validation-error')
 const parseNum = require('../../libs/parse-number')
 const tableToDocs = require('../../libs/table-to-docs')
-const tableHeadersChanged = require('./table-headers-changed')
+const labelsChanged = require('../../libs/labels-changed')
 const validateDoc = require('../../libs/validate-document')
 const schema = require('../../schema/payday-simple-1.json')
-const keyMap = require('./key-map.json')
+const labelMap = require('./label-map.json')
 const fieldInject = require('./field-inject.json')
 const printError = require('../../errors/print-error')
 const logError = require('../../libs/log-error')
@@ -41,7 +41,7 @@ const options = {
   const strRows = $('.content > article > table > tbody > tr').toArray()
     .map(trArr => toStringsArray($(trArr).children('td')))
 
-  if (tableHeadersChanged(headers, keyMap)) throw new ValidationError('Unexpected header(s) in page')
+  if (labelsChanged(headers, labelMap)) throw new ValidationError('Unexpected header(s) in page')
 
   // strings to numbers
   const rows = strRows
@@ -49,7 +49,7 @@ const options = {
       .map(strVal => parseNum(strVal)))
 
   // array of arrays to array of objects (BSON documents)
-  const docsPartial = tableToDocs({ rows, keyMap })
+  const docsPartial = tableToDocs({ rows, labelMap })
 
   // inject manual fields into every object
   const docs = docsPartial.map(document => ({ ...document, ...fieldInject }))

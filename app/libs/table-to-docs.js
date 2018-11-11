@@ -11,13 +11,13 @@
  *    [2000, 350, 45, 64, 2459],
  *    [3000, 350, 45, 96, 3491]
  * ]
- * // SECOND ARGUMENT ('keyMap')
+ * // SECOND ARGUMENT ('labelMap')
  * [
- *    { "key": "Belopp",     "mapped": "belopp"        },
- *    { "key": "Uppl. avg",  "mapped": "uppl.avg"      },
- *    { "key": "Fakt. avg",  "mapped": "fakt.avg"      },
- *    { "key": "Ränta",      "mapped": "ränta(kr)"     },
- *    { "key": "Total",      "mapped": "betala-totalt" },
+ *    { "key": "Belopp",     "field": "belopp"        },
+ *    { "key": "Uppl. avg",  "field": "uppl.avg"      },
+ *    { "key": "Fakt. avg",  "field": "fakt.avg"      },
+ *    { "key": "Ränta",      "field": "ränta(kr)"     },
+ *    { "key": "Total",      "field": "betala-totalt" },
  * ]
  * // RETURNED
  * [
@@ -43,7 +43,7 @@
  * @param     {Number[[]]}  rows    yes       An array of arrays with numbers which will become the
  *                                            property values in the objects that are returned in an array.
  *
- * @param     {Object[]}    keyMap  yes       An array of objects having two properties 'key' and 'mapped'. The order
+ * @param     {Object[]}    labelMap  yes       An array of objects having two properties 'key' and 'field'. The order
  *                                            is the objects correlates to the order of the values in each array inside
  *                                            the 'rows' argument.
  *
@@ -80,28 +80,28 @@ const log = enableLogging // true|false
  * @param {Number[]} row
  */
 const valueToObject = (acc, val, index, row) => {
-  const { mapped } = acc.keyMap[index]
+  const { field } = acc.labelMap[index]
 
   // Before return the object after last element have been traversed,
-  // get rid of the keyMap that was passed from the calling reduce function.
+  // get rid of the labelMap that was passed from the calling reduce function.
   if (index === row.length - 1) {
-    delete acc.keyMap
+    delete acc.labelMap
   }
   return {
     ...acc,
-    [mapped]: val
+    [field]: val
   }
 }
 
-const docsFrom = (rows, keyMap) => {
-  const rowToDoc = row => row.reduce(valueToObject, { keyMap })
+const docsFrom = (rows, labelMap) => {
+  const rowToDoc = row => row.reduce(valueToObject, { labelMap })
 
   return rows.map(row => rowToDoc(row))
 }
 
 module.exports = (data) => {
   let rows
-  let keyMap
+  let labelMap
   try {
     let err
     if (data === undefined) {
@@ -110,27 +110,27 @@ module.exports = (data) => {
       err = new TypeError(`Expected an object as argument, found type '${typeName(data)}'`)
     } else if (data.rows === undefined) {
       err = new ReferenceError(`Missing property 'rows' in object passed to function.`)
-    } else if (data.keyMap === undefined) {
-      err = new ReferenceError(`Missing property 'keyMap' in object passed to function.`)
+    } else if (data.labelMap === undefined) {
+      err = new ReferenceError(`Missing property 'labelMap' in object passed to function.`)
     } else if (typeName(data.rows) !== 'Array') {
       err = new TypeError(`Property 'rows' in object passed to function must be an array, found type '${typeName(data.rows)}'`)
     } else if (data.rows.length === 0) {
       err = new ValidationError(`Property 'rows' of array in object passed to function can't be empty`)
     } else if (!data.rows.every(row => typeName(row) === 'Array')) {
       err = new TypeError(`Property 'rows' of array in object passed to function must only contain arrays`)
-    } else if (typeName(data.keyMap) !== 'Array') {
-      err = new TypeError(`Property 'keyMap' in object passed to function must be an array, found type '${typeName(data.keyMap)}'`)
-    } else if (data.keyMap.length === 0) {
-      err = new ValidationError(`Property 'keyMap' of array in object passed to function can't be empty`)
-    } else if (!data.keyMap.every(obj => typeName(obj) === 'Object')) {
-      err = new TypeError(`Property 'keyMap' of array in object passed to function must only contain objects`)
-    } else if (!data.keyMap.every(obj => obj.mapped !== undefined)) {
-      err = new ReferenceError(`All objects found in array of property 'keyMap' of array in object passed to function must have a property 'mapped'`)
-    } else if (!data.keyMap.every(obj => typeName(obj.mapped) === 'string')) {
-      err = new TypeError(`Property 'mapped' of objects found in array of property 'keyMap' of array in object passed to function must be of type 'string'`)
+    } else if (typeName(data.labelMap) !== 'Array') {
+      err = new TypeError(`Property 'labelMap' in object passed to function must be an array, found type '${typeName(data.labelMap)}'`)
+    } else if (data.labelMap.length === 0) {
+      err = new ValidationError(`Property 'labelMap' of array in object passed to function can't be empty`)
+    } else if (!data.labelMap.every(obj => typeName(obj) === 'Object')) {
+      err = new TypeError(`Property 'labelMap' of array in object passed to function must only contain objects`)
+    } else if (!data.labelMap.every(obj => obj.field !== undefined)) {
+      err = new ReferenceError(`All objects found in array of property 'labelMap' of array in object passed to function must have a property 'field'`)
+    } else if (!data.labelMap.every(obj => typeName(obj.field) === 'string')) {
+      err = new TypeError(`Property 'field' of objects found in array of property 'labelMap' of array in object passed to function must be of type 'string'`)
     }
     if (!err) {
-      ({ rows, keyMap } = data)
+      ({ rows, labelMap } = data)
     } else {
       err.signature = 'function(data)'
       err.args = [
@@ -149,5 +149,5 @@ module.exports = (data) => {
     throw e
   }
 
-  return docsFrom(rows, keyMap)
+  return docsFrom(rows, labelMap)
 }
