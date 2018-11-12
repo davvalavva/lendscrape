@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node app/creditors/kredit365/index.js",
+    "start": "node app/index.js",
     "test": "tap app/**/*test.js --cov --color --reporter=spec --coverage-report=html",
     "server": "node server/browser-sync.js",
     "parse-number": "tap app/libs/parse-number.test.js --color --reporter=spec",

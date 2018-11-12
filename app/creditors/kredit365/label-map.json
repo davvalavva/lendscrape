@@ -1,9 +1,0 @@
-[
-  { "label": "Belopp",     "field": "belopp"        },
-  { "label": "Uppl. avg",  "field": "uppl.avg"      },
-  { "label": "Fakt. avg",  "field": "fakt.avg"      },
-  { "label": "Ränta",      "field": "ränta(kr)"     },
-  { "label": "Total",      "field": "betala-totalt" },
-  { "label": "Eff. ränta", "field": "eff.-ränta(%)" },
-  { "label": "Nom. ränta", "field": "nom.-ränta(%)" }
-]
