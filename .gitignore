@@ -1,5 +1,7 @@
+# Temp files #
+##############
 *tmp.txt
-*tmp.js# BrowserSync local server #
+*tmp.js
 
 
 # BrowserSync local server #
@@ -13,6 +15,7 @@ server/
 /playaround/*
 /playaround/**/*
 /trying_out_stuff
+/trying_out_stuff_with_ESLint
 
 # Compiled source #
 ###################
