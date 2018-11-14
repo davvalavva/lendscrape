@@ -1,5 +1,6 @@
 const cheerio = require('cheerio')
 const path = require('path')
+const typeName = require('type-name')
 const ValidationError = require('../errors/validation-error')
 const parseNum = require('./parse-number')
 const tableToDocs = require('./table-to-docs')
@@ -19,20 +20,59 @@ const {
 const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
 const filepath = `${projectRoot}${fName}`
 
-// override config in 'runtime.json'
-const debug = debugMode // 0 = no debug, 1 = normal, 2 = testing
-const log = enableLogging // true|false
+module.exports = (options, cfg) => {
+  // for debugging and testing, overrides 'runtime.json' settings
+  const debug = cfg && typeName(cfg.debug) === 'number'
+    ? cfg.debug
+    : debugMode // 0 = no debug, 1 = normal, 2 = testing
+  const log = cfg && typeName(cfg.log) === 'boolean'
+    ? cfg.log
+    : enableLogging // boolean
 
-module.exports = async (options) => {
   let docs
   try {
     let err
     let headers
     let rowsStr
-    const {
-      html, hdSelector, tdSelector, schema, labelMap, fieldInject
-    } = options
+    let html
+    let hdSelector
+    let tdSelector
+    let schema
+    let labelMap
+    let fieldInject
 
+    if (options === undefined) {
+      err = new ReferenceError(`Missing argument, expected an object as argument`)
+    } else if (typeName(options) !== 'Object') {
+      err = new TypeError(`Expected an object as the argument`)
+    } else if (options.html === undefined) {
+      err = new ReferenceError(`Missing property 'html' in object passed to function.`)
+    } else if (options.hdSelector === undefined) {
+      err = new ReferenceError(`Missing property 'hdSelector' in object passed to function.`)
+    } else if (options.tdSelector === undefined) {
+      err = new ReferenceError(`Missing property 'tdSelector' in object passed to function.`)
+    } else if (options.schema === undefined) {
+      err = new ReferenceError(`Missing property 'schema' in object passed to function.`)
+    } else if (options.labelMap === undefined) {
+      err = new ReferenceError(`Missing property 'labelMap' in object passed to function.`)
+    } else if (typeName(options.html) !== 'string') {
+      err = new TypeError(`Expected property 'html' in passed object to be a string. Found type '${typeName(options.html)}'.`)
+    } else if (typeName(options.hdSelector) !== 'string') {
+      err = new TypeError(`Expected property 'hdSelector' in passed object to be a string. Found type '${typeName(options.hdSelector)}'.`)
+    } else if (typeName(options.tdSelector) !== 'string') {
+      err = new TypeError(`Expected property 'tdSelector' in passed object to be a string. Found type '${typeName(options.tdSelector)}'.`)
+    } else if (typeName(options.schema) !== 'Object') {
+      err = new TypeError(`Expected property 'schema' in passed object to be an object. Found type '${typeName(options.schema)}'.`)
+    } else if (typeName(options.labelMap) !== 'Array') {
+      err = new TypeError(`Expected property 'labelMap' in passed object to be an array. Found type '${typeName(options.labelMap)}'.`)
+    } else if (options.fieldInject !== undefined && typeName(options.fieldInject) !== 'Object') {
+      err = new TypeError(`Expected property 'fieldInject' in passed object to be an object. Found type '${typeName(options.fieldInject)}'.`)
+    }
+    if (!err) {
+      ({
+        html, hdSelector, tdSelector, schema, labelMap, fieldInject = {}
+      } = options)
+    }
     if (!err) {
       const $ = cheerio.load(html)
       const elementContent = el => $(el).text()
@@ -45,7 +85,7 @@ module.exports = async (options) => {
         .map(trArr => toStringsArray($(trArr).children('td')))
 
       if (labelsChanged(headers, labelMap)) {
-        err = new ValidationError('Unexpected header(s) in page')
+        err = new ValidationError(`Couldn't map all headers given to a corresponding field using map found in 'labelMap' property.`)
       }
     }
     if (!err) {
@@ -62,6 +102,16 @@ module.exports = async (options) => {
 
       // validate objects
       docs.forEach(document => validateDoc(document, schema))
+    }
+    if (err) {
+      err.signature = 'function(options)'
+      err.args = [
+        {
+          position: 0, required: true, expectedType: 'Object', foundType: typeName(options), foundValue: options
+        }
+      ]
+      err.path = filepath
+      throw err
     }
   } catch (e) {
     e.path = filepath

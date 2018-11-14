@@ -26,7 +26,12 @@ module.exports = async (tasks, creditors, _tryAgain) => {
         throw err
       }
       if (!err) {
-        documents = [...documents, ...await task.scraper(await options(task))]
+        const opts = await options(task)
+        const result = task.asyncScraper
+          ? await task.scraper(opts)
+          : task.scraper(opts)
+
+        documents = [...documents, ...result]
       }
       console.log(`...complete!\n`)
     } catch (e) {

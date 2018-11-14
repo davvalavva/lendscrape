@@ -13,6 +13,7 @@ module.exports = (creditors, tryAgain) => {
             maxRetries: creditor.maxRetries,
             creditor: creditor.name,
             scraper: tableScraper,
+            asyncScraper: creditor.scraper.async,
             scraperName: creditor.scraper.name,
             payload: creditor.payload,
             targetURL: creditor.targetURL,

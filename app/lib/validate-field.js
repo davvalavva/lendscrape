@@ -35,7 +35,7 @@ const typeName = require('type-name')
 const ValidationError = require('../errors/validation-error')
 const printError = require('../errors/print-error')
 const logError = require('./log-error')
-const map = require('../schema/BSON-JS-map.json')
+const map = require('../schemas/BSON-JS-map.json')
 const {
   OS,
   projectRoot

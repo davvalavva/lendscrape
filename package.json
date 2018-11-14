@@ -8,7 +8,6 @@
     "server": "node server/browser-sync.js",
     "test": "tap app/tests/*.js --cov --color --reporter=spec --coverage-report=html",
     "abstract-error": "tap app/tests/test-abstract-error.js --color --reporter=spec",
-    "browser-manager": "tap app/tests/test-browser-manager.js --color --reporter=spec",
     "create-tasks": "tap app/tests/test-create-tasks.js --color --reporter=spec",
     "get-output": "tap app/tests/test-get-output.js --color --reporter=spec",
     "get-output-standard": "tap app/tests/test-get-output-standard.js --color --reporter=spec",

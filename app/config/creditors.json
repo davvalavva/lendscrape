@@ -5,6 +5,7 @@
     "payload": "html",
     "scraper": {
       "name": "table-scraper",
+      "async": false,
       "hdSelector": ".content > article > table > thead > tr > th",
       "tdSelector": ".content > article > table > tbody > tr"
     },
@@ -13,7 +14,7 @@
       "löptid(d)":     30,
       "leverantörsId": 1
     },
-    "schema": "payday-simple-1.json",
+    "schema": "payday-simple-1",
     "labelMap": [
       { "label": "Belopp",     "field": "belopp"        },
       { "label": "Uppl. avg",  "field": "uppl.avg"      },
@@ -31,6 +32,7 @@
     "payload": "html",
     "scraper": {
       "name": "table-scraper",
+      "async": false,
       "hdSelector": ".content > article > table > thead > tr > th",
       "tdSelector": ".content > article > table > tbody > tr"
     },
@@ -39,7 +41,7 @@
       "löptid(d)":     30,
       "leverantörsId": 2
     },
-    "schema": "payday-simple-1.json",
+    "schema": "payday-simple-1",
     "labelMap": [
       { "label": "Belopp",     "field": "belopp"        },
       { "label": "Uppl. avg",  "field": "uppl.avg"      },

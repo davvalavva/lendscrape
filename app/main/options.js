@@ -1,9 +1,5 @@
 const rp = require('request-promise')
-const paydaySimple1 = require('../schema/payday-simple-1.json')
-
-const schemas = {
-  'payday-simple-1': paydaySimple1
-}
+const collectionsSchema = require('../schemas/collections.json')
 
 const TABLE_SCRAPER = 'table-scraper'
 
@@ -20,8 +16,8 @@ module.exports = async (task) => {
     options.html = await rp({ uri: task.targetURL })
   }
   switch (task.schema) {
-    case 'payday-simple-1.json':
-      options.schema = schemas['payday-simple-1']
+    case 'payday-simple-1':
+      options.schema = collectionsSchema['payday-simple-1']
       break
     default:
       throw new Error('Invalid schema for task')
