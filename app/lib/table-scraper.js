@@ -5,7 +5,6 @@ const parseNum = require('./parse-number')
 const tableToDocs = require('./table-to-docs')
 const labelsChanged = require('./labels-changed')
 const validateDoc = require('./validate-document')
-const schema = require('../schema/payday-simple-1.json')
 const printError = require('../errors/print-error')
 const logError = require('./log-error')
 const {
@@ -31,7 +30,7 @@ module.exports = async (options) => {
     let headers
     let rowsStr
     const {
-      html, hdSelector, tdSelector, labelMap, fieldInject
+      html, hdSelector, tdSelector, schema, labelMap, fieldInject
     } = options
 
     if (!err) {

@@ -6,13 +6,13 @@
 
 const options = require('./options.js')
 
-module.exports = async (tasks, creditors, failed) => {
+module.exports = async (tasks, creditors, _tryAgain) => {
   const tryAgain = []
   const halted = []
   let documents = []
   for (const task of tasks) {
     try {
-      if (failed.length > 0) {
+      if (_tryAgain.length > 0) {
         console.log(`Retry #${task.attemptNo - 1} for '${task.creditor}'\n${task.targetURL}`)
       } else {
         console.log(`Retrieve/parse '${task.creditor}'\n${task.targetURL}`)

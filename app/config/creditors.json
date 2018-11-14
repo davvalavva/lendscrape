@@ -13,6 +13,7 @@
       "löptid(d)":     30,
       "leverantörsId": 1
     },
+    "schema": "payday-simple-1.json",
     "labelMap": [
       { "label": "Belopp",     "field": "belopp"        },
       { "label": "Uppl. avg",  "field": "uppl.avg"      },
@@ -38,6 +39,7 @@
       "löptid(d)":     30,
       "leverantörsId": 2
     },
+    "schema": "payday-simple-1.json",
     "labelMap": [
       { "label": "Belopp",     "field": "belopp"        },
       { "label": "Uppl. avg",  "field": "uppl.avg"      },
