@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 const { test } = require('tap')
-const ParseError = require('./parse-error')
+const ParseError = require('../errors/parse-error')
 
 test('ParseError(message)', (t) => {
   t.type(new ParseError('message'), ParseError, `[01] Returns instance of ParseError when thrown with correctly set arguments`)

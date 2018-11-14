@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 const { test } = require('tap')
-const AbstractError = require('./abstract-error')
+const AbstractError = require('../errors/abstract-error')
 
 test('AbstractError(message)', (t) => {
   let ChildError
@@ -31,6 +31,18 @@ test('AbstractError(message)', (t) => {
   // [07] *****************************************************************************************
   ChildError = class extends AbstractError { constructor() { super(12) } }
   t.throws(() => { new ChildError() }, TypeError, `[07] Throws TypeError when a number is passed to constructor`)
+
+  // [08] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super(12, { debug: 1, log: false }) } }
+  t.throws(() => { new ChildError() }, TypeError, `[08] Throws TypeError (and should output error to terminal but no log error)`)
+
+  // [09] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super(12, { debug: 1, log: true }) } }
+  t.throws(() => { new ChildError() }, TypeError, `Throws TypeError (and should output error to terminal and log error)`)
+
+  // [10] *****************************************************************************************
+  ChildError = class extends AbstractError { constructor() { super(12, { debug: 0, log: true }) } }
+  t.throws(() => { new ChildError() }, TypeError, `Throws TypeError (and should log error but not output error to terminal)`)
 
   t.end()
 })

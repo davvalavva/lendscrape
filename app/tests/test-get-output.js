@@ -1,5 +1,5 @@
 const { test } = require('tap')
-const getOutput = require('./get-output')
+const getOutput = require('../errors/print-error/get-output')
 
 test('getOutput(errObj)', (t) => {
   t.type(getOutput(new Error('errMessage')), 'string', `[01] Returns a string when passed an Error instance`)

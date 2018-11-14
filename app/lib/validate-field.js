@@ -48,11 +48,15 @@ const {
 const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
 const filepath = `${projectRoot}${fName}`
 
-// override config in 'runtime.json'
-const debug = debugMode // 0 = no debug, 1 = normal, 2 = testing
-const log = enableLogging // true|false
+module.exports = (key, value, schema, cfg) => {
+  // for debugging and testing, overrides 'runtime.json' settings
+  const debug = cfg && typeName(cfg.debug) === 'number'
+    ? cfg.debug
+    : debugMode // 0 = no debug, 1 = normal, 2 = testing
+  const log = cfg && typeName(cfg.log) === 'boolean'
+    ? cfg.log
+    : enableLogging // boolean
 
-module.exports = (key, value, schema) => {
   try {
     let err
     let expectedType
@@ -105,10 +109,8 @@ module.exports = (key, value, schema) => {
       throw err
     }
   } catch (e) {
-    if (debug) {
-      if (debug === 1) printError(e)
-      if (log) logError(e)
-    }
+    if (debug === 1) printError(e)
+    if (log) logError(e)
     throw e
   }
   return true

@@ -38,19 +38,23 @@ const {
 const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
 const filepath = `${projectRoot}${fName}`
 
-// override config in 'runtime.json'
-const debug = debugMode // 0 = no debug, 1 = normal, 2 = testing
-const log = enableLogging // true|false
-
 const requiredKeys = schema => Object.keys(schema)
   .map(keyStr => ({ name: keyStr, ...schema[keyStr] }))
   .filter(obj => obj.required)
 
-module.exports = (document, schema) => {
+module.exports = (document, schema, cfg) => {
+  // for debugging and testing, overrides 'runtime.json' settings
+  const debug = cfg && typeName(cfg.debug) === 'number'
+    ? cfg.debug
+    : debugMode // 0 = no debug, 1 = normal, 2 = testing
+  const log = cfg && typeName(cfg.log) === 'boolean'
+    ? cfg.log
+    : enableLogging // boolean
+
   try {
     let err
     if (document === undefined) {
-      err = new ReferenceError(`Missing argument 'schema', expected an object.`)
+      err = new ReferenceError(`Missing 1st argument 'document', expected an object.`)
     } else if (typeName(document) !== 'Object') {
       err = new TypeError(`Expected an object as 1st argument, found type '${typeName(document)}'`)
     } else if (schema === undefined) {
@@ -82,10 +86,8 @@ module.exports = (document, schema) => {
       throw err
     }
   } catch (e) {
-    if (debug) {
-      if (debug === 1) printError(e)
-      if (log) logError(e)
-    }
+    if (debug === 1) printError(e)
+    if (log) logError(e)
     throw e
   }
 

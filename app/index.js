@@ -31,10 +31,8 @@ async function run() {
     await run()
   } catch (e) {
     e.path = filepath
-    if (debug) {
-      if (debug === 1) printError(e)
-      if (log) logError(e)
-    }
+    if (debug === 1) printError(e)
+    if (log) logError(e)
     throw e
   }
 })()

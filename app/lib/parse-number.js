@@ -48,27 +48,27 @@ const logError = require('./log-error')
 const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
 const filepath = `${projectRoot}${fName}`
 
-// override config in 'runtime.json'
-const debug = debugMode // 0 = no debug, 1 = normal, 2 = testing
-const log = enableLogging // true|false
+module.exports = (str, cfg) => {
+  // for debugging and testing, overrides 'runtime.json' settings
+  const debug = cfg && typeName(cfg.debug) === 'number'
+    ? cfg.debug
+    : debugMode // 0 = no debug, 1 = normal, 2 = testing
+  const log = cfg && typeName(cfg.log) === 'boolean'
+    ? cfg.log
+    : enableLogging // boolean
 
-module.exports = (str, cfg = {}) => {
   let keepDec
   let decSep
   let parsed
-  if (typeName(cfg) === 'Object') {
-    ({ keepDec = false, decSep = ',' } = cfg)
-  }
+
   try {
     let err
-    // return str as is, if it's a number
-    if (typeName(str) === 'number') {
-      return keepDec ? str : Math.trunc(str) // strip decimals if keepDec set to false
-    }
     if (typeName(str) !== 'string' && typeName(str) !== 'number') {
       err = new TypeError(`Expected a string or a number as first argument but found value with type '${typeName(str)}'`)
     } else if (str.trim && str.trim() === '') {
       err = new ParseError(`Can't parse empty string or string with only whitespaces`)
+    } else if (cfg !== undefined && typeName(cfg) !== 'Object') {
+      err = new TypeError(`Expected 2nd arg. to be an object, found type '${typeName(cfg)}'`)
     }
     if (err) {
       err.signature = 'function(str, cfg)'
@@ -83,6 +83,16 @@ module.exports = (str, cfg = {}) => {
       err.path = filepath
       throw err
     }
+    if (typeName(cfg) === 'Object') {
+      ({ keepDec = false, decSep = ',' } = cfg)
+    } else {
+      keepDec = false
+      decSep = ','
+    }
+    // return str as is, if it's a number
+    if (typeName(str) === 'number') {
+      return keepDec ? str : Math.trunc(str) // strip decimals if keepDec set to false
+    }
 
     // strip out everything except digits, decimal separator and minus sign
     const regex = new RegExp(`[^0-9-${decSep}]`, 'g')
@@ -92,10 +102,8 @@ module.exports = (str, cfg = {}) => {
 
     parsed = parseFloat(parsed)
   } catch (e) {
-    if (debug) {
-      if (debug === 1) printError(e)
-      if (log) logError(e)
-    }
+    if (debug === 1) printError(e)
+    if (log) logError(e)
     throw e
   }
 

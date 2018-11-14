@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 const { test } = require('tap')
-const ValidationError = require('./validation-error')
+const ValidationError = require('../errors/validation-error')
 
 test('ValidationError(message)', (t) => {
   t.type(new ValidationError('message'), ValidationError, `[01] Returns instance of ValidationError when thrown with correctly set arguments`)

@@ -1,5 +1,5 @@
 const { test } = require('tap')
-const parseNumber = require('./parse-number')
+const parseNumber = require('../lib/parse-number')
 const ParseError = require('../errors/parse-error')
 
 test('parseNumber(value, keepDecimals, decimalSep)', (t) => {
@@ -67,6 +67,41 @@ test('parseNumber(value, keepDecimals, decimalSep)', (t) => {
     parseNumber('\t<p class="sek">1 200,50 <span class="curr">SEK</span>'),
     1200,
     `[13] parseNumber("<p class='sek'>\\t1 200,50 <span class='curr'>SEK</span>") returns Number(1200)`
+  )
+  t.throws(
+    () => parseNumber('2 000 kr', null),
+    TypeError,
+    `[14] parseNumber("2 000 kr", null) throws TypeError`
+  )
+  t.throws(
+    () => parseNumber('2 000 kr', 'str'),
+    TypeError,
+    `[15] parseNumber("2 000 kr", "str") throws TypeError`
+  )
+  t.throws(
+    () => parseNumber('2 000 kr', 12),
+    TypeError,
+    `[16] parseNumber("2 000 kr", 12) throws TypeError`
+  )
+  t.throws(
+    () => parseNumber('2 000 kr', []),
+    TypeError,
+    `[16] parseNumber("2 000 kr", []) throws TypeError`
+  )
+  t.throws(
+    () => parseNumber(null, { debug: 1, log: false }),
+    TypeError,
+    `[17] parseNumber(null, { debug: 1, log: false }) throws TypeError (and should output error to terminal but no log error)`
+  )
+  t.throws(
+    () => parseNumber(null, { debug: 1, log: true }),
+    TypeError,
+    `[18] parseNumber(null, { debug: 1, log: true }) throws TypeError (and should output error to terminal and log error)`
+  )
+  t.throws(
+    () => parseNumber(null, { debug: 0, log: true }),
+    TypeError,
+    `[19] parseNumber(null, { debug: 0, log: true }) throws TypeError (and should log error but not output error to terminal)`
   )
 
   t.end()

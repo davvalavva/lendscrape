@@ -69,10 +69,6 @@ const {
 const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
 const filepath = `${projectRoot}${fName}`
 
-// override config in 'runtime.json'
-const debug = debugMode // 0 = no debug, 1 = normal, 2 = testing
-const log = enableLogging // true|false
-
 /**
  * @param {Object} acc
  * @param {Number} val
@@ -99,7 +95,15 @@ const docsFrom = (rows, labelMap) => {
   return rows.map(row => rowToDoc(row))
 }
 
-module.exports = (data) => {
+module.exports = (data, cfg) => {
+  // for debugging and testing, overrides 'runtime.json' settings
+  const debug = cfg && typeName(cfg.debug) === 'number'
+    ? cfg.debug
+    : debugMode // 0 = no debug, 1 = normal, 2 = testing
+  const log = cfg && typeName(cfg.log) === 'boolean'
+    ? cfg.log
+    : enableLogging // boolean
+
   let rows
   let labelMap
   try {
@@ -142,10 +146,8 @@ module.exports = (data) => {
       throw err
     }
   } catch (e) {
-    if (debug) {
-      if (debug === 1) printError(e)
-      if (log) logError(e)
-    }
+    if (debug === 1) printError(e)
+    if (log) logError(e)
     throw e
   }
 

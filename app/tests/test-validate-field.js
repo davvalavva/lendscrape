@@ -1,5 +1,5 @@
 const { test } = require('tap')
-const validateField = require('./validate-field')
+const validateField = require('../lib/validate-field')
 const ValidationError = require('../errors/validation-error')
 
 const json = `
@@ -50,6 +50,21 @@ test('validateField(key, value, schema)', (t) => {
   t.same(validateField('statsränta', 12, schema), true, `[24] Returns true when given an integer when expected a double by schema in 3rd arg.`)
   t.throws(() => { validateField('belopp', [1.43, 12], schema) }, ValidationError, `[25] Throws ValidationError when array in 2nd arg. contains a float number when expected an integer`)
   t.throws(() => { validateField('uppl.avg', 1.43, schema) }, ValidationError, `[26] Throws ValidationError when value of 2nd arg. is a float number when expected an integer`)
+  t.throws(
+    () => validateField([], 4, schema, { debug: 1, log: false }),
+    TypeError,
+    `[27] validateField([], 4, schema, { debug: 1, log: false }) throws TypeError (and should output error to terminal but no log error)`
+  )
+  t.throws(
+    () => validateField([], 4, schema, { debug: 1, log: true }),
+    TypeError,
+    `[28] validateField([], 4, schema, { debug: 1, log: true }) throws TypeError (and should output error to terminal and log error)`
+  )
+  t.throws(
+    () => validateField([], 4, schema, { debug: 0, log: true }),
+    TypeError,
+    `[29] validateField([], 4, schema, { debug: 0, log: true }) throws TypeError (and should log error but not output error to terminal)`
+  )
 
   t.end()
 })

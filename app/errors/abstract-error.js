@@ -6,13 +6,21 @@ const path = require('path')
 const printError = require('./print-error')
 const logError = require('../lib/log-error')
 const { OS, projectRoot: dir } = require('../config/env.json')
-const { debugMode, enableLogging: loggingEnabled } = require('../config/runtime.json')
+const { debugMode, enableLogging } = require('../config/runtime.json')
 
 const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
 const filepath = `${dir}${fName}`
 
 class AbstractError extends ExtendableError {
-  constructor(message) {
+  constructor(message, cfg) {
+    // for debugging and testing, overrides 'runtime.json' settings
+    const debug = cfg && typeName(cfg.debug) === 'number'
+      ? cfg.debug
+      : debugMode // 0 = no debug, 1 = normal, 2 = testing
+    const log = cfg && typeName(cfg.log) === 'boolean'
+      ? cfg.log
+      : enableLogging // boolean
+
     try {
       super(message)
       let err
@@ -36,10 +44,8 @@ class AbstractError extends ExtendableError {
         throw err
       }
     } catch (e) {
-      if (debugMode) {
-        if (debugMode === 1) printError(e)
-        if (loggingEnabled) logError(e)
-      }
+      if (debug === 1) printError(e)
+      if (log) logError(e)
       throw e
     }
   }

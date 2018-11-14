@@ -1,5 +1,5 @@
 const { test } = require('tap')
-const labelsChanged = require('./labels-changed')
+const labelsChanged = require('../lib/labels-changed')
 
 const headers = [
   'Belopp',
@@ -13,13 +13,13 @@ const headers = [
 const changedHeaders = [...headers]
 changedHeaders[2] = 'Aviavgift'
 const labelMap = [
-  { field: 'belopp', key: 'Belopp' },
-  { field: 'uppl.avg', key: 'Uppl. avg' },
-  { field: 'fakt.avg', key: 'Fakt. avg' },
-  { field: 'ränta (kr)', key: 'Ränta' },
-  { field: 'betala totalt', key: 'Total' },
-  { field: 'eff. ränta (%)', key: 'Eff. ränta' },
-  { field: 'nom. ränta (%)', key: 'Nom. ränta' }
+  { field: 'belopp', label: 'Belopp' },
+  { field: 'uppl.avg', label: 'Uppl. avg' },
+  { field: 'fakt.avg', label: 'Fakt. avg' },
+  { field: 'ränta (kr)', label: 'Ränta' },
+  { field: 'betala totalt', label: 'Total' },
+  { field: 'eff. ränta (%)', label: 'Eff. ränta' },
+  { field: 'nom. ränta (%)', label: 'Nom. ränta' }
 ]
 
 test('labelsChanged(headers, labelMap)', (t) => {

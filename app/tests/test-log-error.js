@@ -1,5 +1,5 @@
 const { test } = require('tap')
-const logError = require('./log-error')
+const logError = require('../lib/log-error')
 
 test('logError(errorInstance)', (t) => {
   t.throws(() => { logError() }, TypeError, `[01] Throws TypeError when no argument given`, { todo: true })

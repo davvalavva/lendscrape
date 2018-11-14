@@ -1,5 +1,5 @@
 const { test } = require('tap')
-const browserManager = require('./browser-manager')
+const browserManager = require('../lib/browser-manager')
 
 test('browserManager()', (t) => {
   t.same(null, null, `TODO`, { todo: true })

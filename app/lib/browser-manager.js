@@ -46,11 +46,9 @@ const newPage = async () => {
     await page.setCacheEnabled(false)
     await page.setExtraHTTPHeaders({ Referer: 'https://google.com/' })
   } catch (e) {
-    if (debug) {
-      e.path = filepath
-      if (debug === 1) printError(e)
-      if (log) logError(e)
-    }
+    e.path = filepath
+    if (debug === 1) printError(e)
+    if (log) logError(e)
     throw e
   }
   return page

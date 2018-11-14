@@ -1,5 +1,5 @@
 const { test } = require('tap')
-const printError = require('./index')
+const printError = require('../errors/print-error/index')
 
 test('printError(errorInstance)', (t) => {
   t.type(printError(new Error('errMessage')), 'boolean', `[01] Returns a boolean if no errors`)

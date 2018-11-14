@@ -64,11 +64,9 @@ module.exports = async (options) => {
       docs.forEach(document => validateDoc(document, schema))
     }
   } catch (e) {
-    if (debug) {
-      if (debug === 1) printError(e)
-      if (log) logError(e)
-    }
     e.path = filepath
+    if (debug === 1) printError(e)
+    if (log) logError(e)
     throw e
   }
   return docs
