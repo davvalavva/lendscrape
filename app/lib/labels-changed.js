@@ -1,4 +1,4 @@
-/** @module libs/labels-changed */
+/** @module lib/labels-changed */
 
 /**
  * Checks that strings matches expected values given in the object map passed

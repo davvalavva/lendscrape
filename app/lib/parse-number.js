@@ -1,4 +1,4 @@
-/** @module libs/parse-number */
+/** @module lib/parse-number */
 
 /* eslint-disable max-len */
 /**

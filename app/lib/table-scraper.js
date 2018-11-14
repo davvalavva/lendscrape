@@ -1,4 +1,3 @@
-const rp = require('request-promise')
 const cheerio = require('cheerio')
 const path = require('path')
 const ValidationError = require('../errors/validation-error')
@@ -32,12 +31,11 @@ module.exports = async (options) => {
     let headers
     let rowsStr
     const {
-      targetURL, hdSelector, tdSelector, labelMap, fieldInject
+      html, hdSelector, tdSelector, labelMap, fieldInject
     } = options
 
     if (!err) {
-      const cheerioOptions = { uri: targetURL, transform: body => cheerio.load(body) }
-      const $ = await rp(cheerioOptions)
+      const $ = cheerio.load(html)
       const elementContent = el => $(el).text()
       const toStringsArray = nodes => nodes
         .toArray()
@@ -71,9 +69,8 @@ module.exports = async (options) => {
       if (debug === 1) printError(e)
       if (log) logError(e)
     }
-    const err = new Error(e.message)
-    err.path = filepath
-    throw err
+    e.path = filepath
+    throw e
   }
   return docs
 }

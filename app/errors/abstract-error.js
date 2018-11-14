@@ -4,7 +4,7 @@ const ExtendableError = require('es6-error')
 const typeName = require('type-name')
 const path = require('path')
 const printError = require('./print-error')
-const logError = require('../libs/log-error')
+const logError = require('../lib/log-error')
 const { OS, projectRoot: dir } = require('../config/env.json')
 const { debugMode, enableLogging: loggingEnabled } = require('../config/runtime.json')
 

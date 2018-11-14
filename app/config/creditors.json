@@ -2,8 +2,9 @@
   {
     "name": "kredit365",
     "parse": true,
+    "payload": "html",
     "scraper": {
-      "type": "static-table",
+      "name": "table-scraper",
       "hdSelector": ".content > article > table > thead > tr > th",
       "tdSelector": ".content > article > table > tbody > tr"
     },
@@ -25,8 +26,10 @@
   {
     "name": "site2",
     "parse": true,
+    "maxRetries": 4,
+    "payload": "html",
     "scraper": {
-      "type": "static-table",
+      "name": "table-scraper",
       "hdSelector": ".content > article > table > thead > tr > th",
       "tdSelector": ".content > article > table > tbody > tr"
     },

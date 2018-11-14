@@ -4,7 +4,7 @@
  * returning the browser handle to the caller. It uses 3rd party
  * library Puppeteer for launching and controlling the headless browser.
  *
- * @module libs/browser-manager
+ * @module lib/browser-manager
  */
 
 const puppeteer = require('puppeteer')

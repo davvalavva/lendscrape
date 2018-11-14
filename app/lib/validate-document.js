@@ -1,4 +1,4 @@
-/** @module libs/validate-document */
+/** @module lib/validate-document */
 
 /* eslint-disable max-len */
 /**

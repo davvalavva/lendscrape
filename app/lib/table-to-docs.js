@@ -1,4 +1,4 @@
-/** @module libs/table-to-docs */
+/** @module lib/table-to-docs */
 
 /* eslint-disable max-len */
 /**
