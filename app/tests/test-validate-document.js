@@ -28,7 +28,7 @@ const document = JSON.parse(`{
 
 test('validateDoc(document, schema)', (t) => {
   t.type(validateDoc(document, schema), 'boolean', `[01] Returns a boolen true when given valid arguments (where the 1st argument is an array of document)`)
-  t.same(validateDoc(document, schema), true, `[02] Returns true when given valid arguments`)
+  t.equal(validateDoc(document, schema), true, `[02] Returns true when given valid arguments`)
   t.throws(() => { validateDoc(undefined) }, ReferenceError, `[03] Throws ReferenceError when called without any arguments`)
   t.throws(() => { validateDoc(null, schema) }, TypeError, `[04] Throws TypeError when 1st argument is null`)
   t.throws(() => { validateDoc([], schema) }, TypeError, `[05] Throws TypeError when 1st argument is an array`)

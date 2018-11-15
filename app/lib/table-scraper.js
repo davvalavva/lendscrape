@@ -1,3 +1,4 @@
+const requestPromise = require('request-promise')
 const cheerio = require('cheerio')
 const path = require('path')
 const typeName = require('type-name')
@@ -20,7 +21,8 @@ const {
 const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
 const filepath = `${projectRoot}${fName}`
 
-module.exports = (options, cfg) => {
+module.exports = async (options, cfg) => {
+  // return Promise.reject(1)
   // for debugging and testing, overrides 'runtime.json' settings
   const debug = cfg && typeName(cfg.debug) === 'number'
     ? cfg.debug
@@ -28,13 +30,16 @@ module.exports = (options, cfg) => {
   const log = cfg && typeName(cfg.log) === 'boolean'
     ? cfg.log
     : enableLogging // boolean
+  const rp = cfg && typeName(cfg.rp) === 'function'
+    ? cfg.rp
+    : requestPromise
 
   let docs
   try {
     let err
     let headers
     let rowsStr
-    let html
+    let targetURL
     let hdSelector
     let tdSelector
     let schema
@@ -45,8 +50,8 @@ module.exports = (options, cfg) => {
       err = new ReferenceError(`Missing argument, expected an object as argument`)
     } else if (typeName(options) !== 'Object') {
       err = new TypeError(`Expected an object as the argument`)
-    } else if (options.html === undefined) {
-      err = new ReferenceError(`Missing property 'html' in object passed to function.`)
+    } else if (options.targetURL === undefined) {
+      err = new ReferenceError(`Missing property 'targetURL' in object passed to function.`)
     } else if (options.hdSelector === undefined) {
       err = new ReferenceError(`Missing property 'hdSelector' in object passed to function.`)
     } else if (options.tdSelector === undefined) {
@@ -55,8 +60,8 @@ module.exports = (options, cfg) => {
       err = new ReferenceError(`Missing property 'schema' in object passed to function.`)
     } else if (options.labelMap === undefined) {
       err = new ReferenceError(`Missing property 'labelMap' in object passed to function.`)
-    } else if (typeName(options.html) !== 'string') {
-      err = new TypeError(`Expected property 'html' in passed object to be a string. Found type '${typeName(options.html)}'.`)
+    } else if (typeName(options.targetURL) !== 'string') {
+      err = new TypeError(`Expected property 'targetURL' in passed object to be a string. Found type '${typeName(options.targetURL)}'.`)
     } else if (typeName(options.hdSelector) !== 'string') {
       err = new TypeError(`Expected property 'hdSelector' in passed object to be a string. Found type '${typeName(options.hdSelector)}'.`)
     } else if (typeName(options.tdSelector) !== 'string') {
@@ -70,10 +75,11 @@ module.exports = (options, cfg) => {
     }
     if (!err) {
       ({
-        html, hdSelector, tdSelector, schema, labelMap, fieldInject = {}
+        targetURL, hdSelector, tdSelector, schema, labelMap, fieldInject = {}
       } = options)
     }
     if (!err) {
+      const html = await rp({ uri: targetURL })
       const $ = cheerio.load(html)
       const elementContent = el => $(el).text()
       const toStringsArray = nodes => nodes

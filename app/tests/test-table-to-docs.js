@@ -42,7 +42,7 @@ const expected = JSON.parse(`[
 test('tableToDocs({ rows, labelMap })', (t) => {
   let data = { rows, labelMap }
   t.type(tableToDocs(data), 'object', `[01] returns a value of type Object when validation succeeds`)
-  t.same(tableToDocs(data), expected, `[02] returns expected object when validation succeeds`)
+  t.strictSame(tableToDocs(data), expected, `[02] returns expected object when validation succeeds`)
   t.throws(() => { tableToDocs() }, ReferenceError, `[03] Throws ReferenceError when called without any argument`)
   t.throws(() => { tableToDocs(null) }, TypeError, `[04] Throws TypeError when argument is null`)
   t.throws(() => { tableToDocs([]) }, TypeError, `[05] Throws TypeError when argument is an array`)

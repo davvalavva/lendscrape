@@ -24,8 +24,8 @@ const labelMap = [
 
 test('labelsChanged(headers, labelMap)', (t) => {
   t.type(labelsChanged(headers, labelMap), 'boolean', `[01] Returns a boolean when given valid arguments`)
-  t.same(labelsChanged(headers, labelMap), false, `[02] Returns false when given valid arguments and headers haven't changed`)
-  t.same(labelsChanged(changedHeaders, labelMap), true, `[03] Returns true when given valid arguments and headers have changed`)
+  t.equal(labelsChanged(headers, labelMap), false, `[02] Returns false when given valid arguments and headers haven't changed`)
+  t.equal(labelsChanged(changedHeaders, labelMap), true, `[03] Returns true when given valid arguments and headers have changed`)
   t.throws(() => { labelsChanged() }, TypeError, `[04] Throws TypeError when called with no arguments`)
   t.throws(() => { labelsChanged(headers) }, TypeError, `[05] Throws TypeError when called without second argument`)
   t.throws(() => { labelsChanged({}, labelMap) }, TypeError, `[06] Throws TypeError when first argument is an object`)

@@ -3,7 +3,7 @@ const printError = require('../errors/print-error/index')
 
 test('printError(errorInstance)', (t) => {
   t.type(printError(new Error('errMessage')), 'boolean', `[01] Returns a boolean if no errors`)
-  t.same(printError(new Error('errMessage')), true, `[02] Returns true if no errors`)
+  t.equal(printError(new Error('errMessage')), true, `[02] Returns true if no errors`)
   t.throws(() => { printError(null) }, TypeError, `[03] Throws TypeError when argument is null`)
   t.throws(() => { printError(undefined) }, TypeError, `[04] Throws TypeError when argument is undefined`)
   t.throws(() => { printError([]) }, TypeError, `[05] Throws TypeError when argument is an array`)

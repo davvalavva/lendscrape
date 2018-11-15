@@ -1,6 +1,6 @@
 {
   "/* debugMode options */": "0 = No debug, 1 = normal debug, 2 = debug without error terminal output (for not cluttering up test outputs)",
-  "debugMode": 2,
+  "debugMode": 0,
 
   "/* about outputStacktrace */": "outputStacktrace only works when debugMode = 1",
   "outputStacktrace": true,

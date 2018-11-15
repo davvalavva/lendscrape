@@ -5,7 +5,7 @@
     "payload": "html",
     "scraper": {
       "name": "table-scraper",
-      "async": false,
+      "async": true,
       "hdSelector": ".content > article > table > thead > tr > th",
       "tdSelector": ".content > article > table > tbody > tr"
     },
@@ -32,11 +32,11 @@
     "payload": "html",
     "scraper": {
       "name": "table-scraper",
-      "async": false,
+      "async": true,
       "hdSelector": ".content > article > table > thead > tr > th",
       "tdSelector": ".content > article > table > tbody > tr"
     },
-    "targetURL": "http://localhost:3000/site2.html",
+    "targetURL": "http://localhost:3000/site3.html",
     "fieldInject": {
       "löptid(d)":     30,
       "leverantörsId": 2

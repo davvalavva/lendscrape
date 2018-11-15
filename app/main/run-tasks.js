@@ -19,14 +19,15 @@ module.exports = async (tasks, creditors, _tryAgain) => {
       }
       // test of response codes
       let err
-      if (task.creditor === 'site2') {
+      if (task.creditor === 'site12') {
         err = new Error()
         // err.response = { statusCode: 404, message: 'File not found' }
         err.response = { statusCode: 408, message: 'Timeout for request' }
         throw err
       }
       if (!err) {
-        const opts = await options(task)
+        // const opts = await options(task)
+        const opts = options(task)
         const result = task.asyncScraper
           ? await task.scraper(opts)
           : task.scraper(opts)
@@ -35,7 +36,7 @@ module.exports = async (tasks, creditors, _tryAgain) => {
       }
       console.log(`...complete!\n`)
     } catch (e) {
-      if (e.response && e.response.statusCode) {
+      if (e.constructor.name === 'StatusCodeError') {
         // https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
         switch (e.response.statusCode) {
           case 408: // Request Timeout

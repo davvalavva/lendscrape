@@ -1,15 +1,42 @@
-const fs = require('fs')
 const { test } = require('tap')
 const ValidationError = require('../errors/validation-error')
 const tableScraper = require('../lib/table-scraper')
 
-const html = fs.readFileSync('./app/tests/fixtures/testpage-table-scraper.html').toString()
-const htmlHeadersChanged = fs.readFileSync('./app/tests/fixtures/testpage-table-scraper-changed-headers.html').toString()
+const html = `<!DOCTYPE html><html><body>
+<table>
+  <thead>
+    <tr><th>Belopp</th><th>Uppl. avg</th><th>Fakt. avg</th><th>Ränta</th><th>Total</th><th>Eff. ränta</th><th>Nom. ränta</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>200 kr</td><td>10 kr</td><td> 11 kr</td><td>12 kr </td><td>  13 kr</td><td>14%</td><td>15%</td></tr>
+    <tr><td><strong> 3 000,00 kr</strong></td><td>16 kr</td><td>17 kr</td><td>18 kr</td><td>19 kr</td><td>20%</td><td>21%</td></tr>
+  </tbody>
+</table></body></html>`
+const htmlChanged = `<!DOCTYPE html><html><body>
+<table>
+  <thead>
+    <tr><th>Låna</th><th>Uppl. avg</th><th>Fakt. avg</th><th>Ränta</th><th>Total</th><th>Eff. ränta</th><th>ränta</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>200 kr</td><td>10 kr</td><td> 11 kr</td><td>12 kr </td><td>  13 kr</td><td>14%</td><td>15%</td></tr>
+    <tr><td><strong> 3 000,00 kr</strong></td><td>16 kr</td><td>17 kr</td><td>18 kr</td><td>19 kr</td><td>20%</td><td>21%</td></tr>
+  </tbody>
+</table></body></html>`
+
+const rp = ({ uri }) => {
+  if (uri === 'http://example.com') {
+    return html
+  }
+  if (uri === 'http://changed.com') {
+    return htmlChanged
+  }
+  throw new Error(`Invalid uri! Given '${uri}'`)
+}
 
 const options = {
-  html,
   hdSelector: 'table > thead > tr > th',
   tdSelector: 'table > tbody > tr',
+  targetURL: 'http://example.com',
   schema: {
     leverantörsId: { required: true, BSON: 'int' },
     belopp: { required: true, BSON: 'int' },
@@ -37,150 +64,342 @@ const options = {
 // expected when scraped from ./fixtures/testpage.html
 const expected = [
   {
-    belopp: 100,
-    'uppl.avg': 13,
-    'fakt.avg': 14,
-    'ränta(kr)': 16,
-    'betala-totalt': 12,
-    'eff.-ränta(%)': 111,
-    'nom.-ränta(%)': 39,
+    belopp: 200,
+    'uppl.avg': 10,
+    'fakt.avg': 11,
+    'ränta(kr)': 12,
+    'betala-totalt': 13,
+    'eff.-ränta(%)': 14,
+    'nom.-ränta(%)': 15,
     'löptid(d)': 30,
     leverantörsId: 1
   },
   {
-    belopp: 200,
-    'uppl.avg': 21,
-    'fakt.avg': 24,
-    'ränta(kr)': 31,
-    'betala-totalt': 13,
-    'eff.-ränta(%)': 153,
-    'nom.-ränta(%)': 49,
+    belopp: 3000,
+    'uppl.avg': 16,
+    'fakt.avg': 17,
+    'ränta(kr)': 18,
+    'betala-totalt': 19,
+    'eff.-ränta(%)': 20,
+    'nom.-ränta(%)': 21,
     'löptid(d)': 30,
     leverantörsId: 1
   }
 ]
 let adjustedOpts
-
-test('tableScraper(options)', (t) => {
-  t.throws(() => tableScraper(), ReferenceError, `[01] Throws ReferenceError when called without any arguments`)
-  t.throws(() => tableScraper(null), TypeError, `[02] Throws TypeError when passed null as only argument`)
-  t.same(tableScraper(options), expected, `[03] returns expected array of objects (documents) when success`)
-  adjustedOpts = { ...options }
-  delete adjustedOpts.html
-  t.throws(() => tableScraper(adjustedOpts), ReferenceError, `[04] Throws ReferenceError when missing property 'html' in option object passed`)
-  adjustedOpts = { ...options }
-  delete adjustedOpts.hdSelector
-  t.throws(() => tableScraper(adjustedOpts), ReferenceError, `[05] Throws ReferenceError when missing property 'hdSelector' in option object passed`)
-  adjustedOpts = { ...options }
-  delete adjustedOpts.tdSelector
-  t.throws(() => tableScraper(adjustedOpts), ReferenceError, `[06] Throws ReferenceError when missing property 'tdSelector' in option object passed`)
-  adjustedOpts = { ...options }
-  delete adjustedOpts.schema
-  t.throws(() => tableScraper(adjustedOpts), ReferenceError, `[07] Throws ReferenceError when missing property 'schema' in option object passed`)
-  adjustedOpts = { ...options }
-  delete adjustedOpts.labelMap
-  t.throws(() => tableScraper(adjustedOpts), ReferenceError, `[08] Throws ReferenceError when missing property 'labelMap' in option object passed`)
-  adjustedOpts = { ...options }
-  delete adjustedOpts.fieldInject
-  const altSchema = { ...options.schema }
-  delete altSchema.leverantörsId
-  delete altSchema['löptid(d)']
-  adjustedOpts.schema = altSchema
-  const altExpected = [...expected]
-  delete altExpected[0]['löptid(d)']
-  delete altExpected[1]['löptid(d)']
-  delete altExpected[0].leverantörsId
-  delete altExpected[1].leverantörsId
-  t.same(tableScraper(adjustedOpts), altExpected, `[09] success without property 'fieldInject' given in option object passed (schema changed to work)`)
-
-  // Properties with value null >>> incorrect type
-  adjustedOpts = { ...options }
-  adjustedOpts.html = null
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[10] Throws TypeError when property 'html' is null`)
-  adjustedOpts = { ...options }
-  adjustedOpts.hdSelector = null
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[11] Throws TypeError when property 'hdSelector' is null`)
-  adjustedOpts = { ...options }
-  adjustedOpts.tdSelector = null
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[12] Throws TypeError when property 'tdSelector' is null`)
-  adjustedOpts = { ...options }
-  adjustedOpts.schema = null
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[13] Throws TypeError when property 'schema' is null`)
-  adjustedOpts = { ...options }
-  adjustedOpts.labelMap = null
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[14] Throws TypeError when property 'labelMap' is null`)
-  adjustedOpts = { ...options }
-  adjustedOpts.fieldInject = null
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[15] Throws TypeError when property 'fieldInject' is null`)
-
-  // Properties with object value >>> incorrect type
-  adjustedOpts = { ...options }
-  adjustedOpts.html = {}
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[16] Throws TypeError when property 'html' is an object`)
-  adjustedOpts = { ...options }
-  adjustedOpts.hdSelector = {}
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[17] Throws TypeError when property 'hdSelector' is an object`)
-  adjustedOpts = { ...options }
-  adjustedOpts.tdSelector = {}
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[18] Throws TypeError when property 'tdSelector' is an object`)
-  adjustedOpts = { ...options }
-  adjustedOpts.labelMap = {}
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[19] Throws TypeError when property 'labelMap' is an object`)
-
-  // Properties with array value >>> incorrect type
-  adjustedOpts = { ...options }
-  adjustedOpts.html = []
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[20] Throws TypeError when property 'html' is an array`)
-  adjustedOpts = { ...options }
-  adjustedOpts.hdSelector = []
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[21] Throws TypeError when property 'hdSelector' is an array`)
-  adjustedOpts = { ...options }
-  adjustedOpts.tdSelector = []
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[22] Throws TypeError when property 'tdSelector' is an array`)
-  adjustedOpts = { ...options }
-  adjustedOpts.schema = []
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[23] Throws TypeError when property 'schema' is an array`)
-  adjustedOpts = { ...options }
-  adjustedOpts.fieldInject = []
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[24] Throws TypeError when property 'fieldInject' is an array`)
-
-  // Properties with number value >>> incorrect type
-  adjustedOpts = { ...options }
-  adjustedOpts.html = 12
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[25] Throws TypeError when property 'html' is a number`)
-  adjustedOpts = { ...options }
-  adjustedOpts.hdSelector = 12
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[26] Throws TypeError when property 'hdSelector' is a number`)
-  adjustedOpts = { ...options }
-  adjustedOpts.tdSelector = 12
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[27] Throws TypeError when property 'tdSelector' is a number`)
-  adjustedOpts = { ...options }
-  adjustedOpts.schema = 12
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[28] Throws TypeError when property 'schema' is a number`)
-  adjustedOpts = { ...options }
-  adjustedOpts.labelMap = 12
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[29] Throws TypeError when property 'labelMap' is a number`)
-  adjustedOpts = { ...options }
-  adjustedOpts.fieldInject = 12
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[30] Throws TypeError when property 'fieldInject' is a number`)
-
-  // Properties with string value >>> incorrect type
-  adjustedOpts = { ...options }
-  adjustedOpts.schema = '12'
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[31] Throws TypeError when property 'schema' is a string`)
-  adjustedOpts = { ...options }
-  adjustedOpts.labelMap = '12'
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[32] Throws TypeError when property 'labelMap' is a string`)
-  adjustedOpts = { ...options }
-  adjustedOpts.fieldInject = '12'
-  t.throws(() => tableScraper(adjustedOpts), TypeError, `[33] Throws TypeError when property 'fieldInject' is a string`)
-
-  adjustedOpts = { ...options }
-  adjustedOpts.html = htmlHeadersChanged
-  t.throws(() => tableScraper(adjustedOpts), ValidationError, `[34] Throws ValidationError when table headers changed in the html`)
-
-  t.throws(() => tableScraper(null, { debug: 1, log: false }), TypeError, `[35] tableScraper(null, { debug: 1, log: false }) throws TypeError (and should output error to terminal but no log error)`)
-  t.throws(() => tableScraper(null, { debug: 1, log: true }), TypeError, `[36] tableScraper(null, { debug: 1, log: true }) throws TypeError (and should output error to terminal and log error)`)
-  t.throws(() => tableScraper(null, { debug: 0, log: true }), TypeError, `[37] tableScraper(null, { debug: 0, log: true }) throws TypeError (and should log error but not output error to terminal)`)
+let actual
+let describe
+test('tableScraper()', async (t) => {
+  try {
+    describe = `[01] Throws ReferenceError when called without arguments`
+    await tableScraper()
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, ReferenceError, describe)
+  }
+  try {
+    describe = `[02] Throws TypeError when passed null as only argument`
+    await tableScraper(null)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[03] Returns an array populated with identical objects,
+properties and values when compared to a given fixture. Stub for request used.`
+    actual = await tableScraper(options, { rp /* stub */ })
+    t.strictSame(actual, expected, describe)
+  } catch (e) {
+    t.fail(describe)
+  }
+  try {
+    describe = `[04] Throws ReferenceError when missing property 'targetURL' in option object passed`
+    adjustedOpts = { ...options }
+    delete adjustedOpts.targetURL
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, ReferenceError, describe)
+  }
+  try {
+    describe = `[05] Throws ReferenceError when missing property 'hdSelector' in option object passed`
+    adjustedOpts = { ...options }
+    delete adjustedOpts.hdSelector
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, ReferenceError, describe)
+  }
+  try {
+    describe = `[06] Throws ReferenceError when missing property 'tdSelector' in option object passed`
+    adjustedOpts = { ...options }
+    delete adjustedOpts.tdSelector
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, ReferenceError, describe)
+  }
+  try {
+    describe = `[07] Throws ReferenceError when missing property 'schema' in option object passed`
+    adjustedOpts = { ...options }
+    delete adjustedOpts.schema
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, ReferenceError, describe)
+  }
+  try {
+    describe = `[08] Throws ReferenceError when missing property 'labelMap' in option object passed`
+    adjustedOpts = { ...options }
+    delete adjustedOpts.labelMap
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, ReferenceError, describe)
+  }
+  try {
+    describe = `[09] Should be possible to pass an argument that doesn't have a property 'fieldInject' in the object`
+    adjustedOpts = { ...options }
+    delete adjustedOpts.fieldInject
+    const altSchema = { ...options.schema }
+    delete altSchema.leverantörsId
+    delete altSchema['löptid(d)']
+    adjustedOpts.schema = altSchema
+    const altExpected = [...expected]
+    delete altExpected[0]['löptid(d)']
+    delete altExpected[1]['löptid(d)']
+    delete altExpected[0].leverantörsId
+    delete altExpected[1].leverantörsId
+    actual = await tableScraper(adjustedOpts, { rp, /* stub */ })
+    t.strictSame(actual, altExpected, describe)
+  } catch (e) {
+    t.fail(describe)
+  }
+  try {
+    describe = `[10] Throws TypeError when property 'targetURL' is null`
+    adjustedOpts = { ...options }
+    adjustedOpts.targetURL = null
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[11] Throws TypeError when property 'hdSelector' is null`
+    adjustedOpts = { ...options }
+    adjustedOpts.hdSelector = null
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[12] Throws TypeError when property 'tdSelector' is null`
+    adjustedOpts = { ...options }
+    adjustedOpts.tdSelector = null
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[13] Throws TypeError when property 'schema' is null`
+    adjustedOpts = { ...options }
+    adjustedOpts.schema = null
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[14] Throws TypeError when property 'labelMap' is null`
+    adjustedOpts = { ...options }
+    adjustedOpts.labelMap = null
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[15] Throws TypeError when property 'fieldInject' is null`
+    adjustedOpts = { ...options }
+    adjustedOpts.fieldInject = null
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[16] Throws TypeError when property 'targetURL' is an object`
+    adjustedOpts = { ...options }
+    adjustedOpts.targetURL = {}
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[17] Throws TypeError when property 'hdSelector' is an object`
+    adjustedOpts = { ...options }
+    adjustedOpts.hdSelector = {}
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[18] Throws TypeError when property 'tdSelector' is an object`
+    adjustedOpts = { ...options }
+    adjustedOpts.tdSelector = {}
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[19] Throws TypeError when property 'labelMap' is an object`
+    adjustedOpts = { ...options }
+    adjustedOpts.labelMap = {}
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[20] Throws TypeError when property 'targetURL' is an array`
+    adjustedOpts = { ...options }
+    adjustedOpts.targetURL = []
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[21] Throws TypeError when property 'hdSelector' is an array`
+    adjustedOpts = { ...options }
+    adjustedOpts.hdSelector = []
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[22] Throws TypeError when property 'tdSelector' is an array`
+    adjustedOpts = { ...options }
+    adjustedOpts.tdSelector = []
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[23] Throws TypeError when property 'schema' is an array`
+    adjustedOpts = { ...options }
+    adjustedOpts.schema = []
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[24] Throws TypeError when property 'fieldInject' is an array`
+    adjustedOpts = { ...options }
+    adjustedOpts.fieldInject = []
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[25] Throws TypeError when property 'targetURL' is a number`
+    adjustedOpts = { ...options }
+    adjustedOpts.targetURL = 12
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[26] Throws TypeError when property 'hdSelector' is a number`
+    adjustedOpts = { ...options }
+    adjustedOpts.hdSelector = 12
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[27] Throws TypeError when property 'tdSelector' is a number`
+    adjustedOpts = { ...options }
+    adjustedOpts.tdSelector = 12
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[28] Throws TypeError when property 'schema' is a number`
+    adjustedOpts = { ...options }
+    adjustedOpts.schema = 12
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[29] Throws TypeError when property 'labelMap' is a number`
+    adjustedOpts = { ...options }
+    adjustedOpts.labelMap = 12
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[30] Throws TypeError when property 'fieldInject' is a number`
+    adjustedOpts = { ...options }
+    adjustedOpts.fieldInject = 12
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[31] Throws TypeError when property 'schema' is a string`
+    adjustedOpts = { ...options }
+    adjustedOpts.schema = '12'
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[32] Throws TypeError when property 'labelMap' is a string`
+    adjustedOpts = { ...options }
+    adjustedOpts.labelMap = '12'
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[33] Throws TypeError when property 'fieldInject' is a string`
+    adjustedOpts = { ...options }
+    adjustedOpts.fieldInject = '12'
+    await tableScraper(adjustedOpts)
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, TypeError, describe)
+  }
+  try {
+    describe = `[34] Throws ValidationError when table headers extracted from html string doesn't match
+the corresponding label values as given in property 'labelMap' of the argument object`
+    adjustedOpts = { ...options }
+    adjustedOpts.targetURL = 'http://changed.com'
+    await tableScraper(adjustedOpts, { rp /* stub */ })
+    t.fail(describe)
+  } catch (e) {
+    t.type(e, ValidationError, describe)
+  }
   t.end()
-})
+}).catch(test.threw)
