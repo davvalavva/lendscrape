@@ -1,6 +1,6 @@
 const path = require('path')
 const typeName = require('type-name')
-const collectionsSchema = require('../schemas/collections.json')
+const collectionsSchema = require('../schemas/collections.js')
 const ValidationError = require('../errors/validation-error')
 const printError = require('../errors/print-error')
 const logError = require('../lib/log-error')

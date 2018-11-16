@@ -1,6 +1,6 @@
 const { defaultMaxRetries } = require('../config/runtime.json')
 
-module.exports = async function retry(_tryAgain, _halted, _collection, main) {
+module.exports = async function retry(creditors, _tryAgain, _halted, _collection, main) {
   const halted = [..._halted]
   let collection = [..._collection]
   let tryAgain = [..._tryAgain]
@@ -20,7 +20,7 @@ module.exports = async function retry(_tryAgain, _halted, _collection, main) {
 
   if (tryAgain.length > 0) {
     let documents
-    ({ documents, tryAgain } = await main(tryAgain))
+    ({ documents, tryAgain } = await main(creditors, tryAgain))
     collection = [..._collection, ...documents]
     await retry(tryAgain, halted, collection, main)
   }

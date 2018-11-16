@@ -28,7 +28,8 @@ module.exports = async (tasks, creditors, _tryAgain) => {
       if (!err) {
         // const opts = await options(task)
         const opts = options(task)
-        const result = task.asyncScraper
+
+        const result = task.isAsyncScraper
           ? await task.scraper(opts)
           : task.scraper(opts)
 

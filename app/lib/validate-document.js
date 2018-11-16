@@ -22,8 +22,8 @@
 
 const path = require('path')
 const typeName = require('type-name')
+const kasper = require('kasper')
 const ValidationError = require('../errors/validation-error')
-const validateField = require('./validate-field')
 const printError = require('../errors/print-error')
 const logError = require('./log-error')
 const {
@@ -69,7 +69,12 @@ module.exports = (document, schema, cfg) => {
         }
       })
       if (!err) {
-        Object.keys(document).forEach(key => validateField(key, document[key], schema))
+        const fieldsValResult = kasper.validate(schema, document)
+        const fail = fieldsValResult.err
+        if (fail) {
+          err = new ValidationError(`Task doesn't validate with given schema.`)
+          err.kasper = fieldsValResult
+        }
       }
     }
     if (err) {

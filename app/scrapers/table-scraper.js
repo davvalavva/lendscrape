@@ -3,12 +3,12 @@ const cheerio = require('cheerio')
 const path = require('path')
 const typeName = require('type-name')
 const ValidationError = require('../errors/validation-error')
-const parseNum = require('./parse-number')
-const tableToDocs = require('./table-to-docs')
-const labelsChanged = require('./labels-changed')
-const validateDoc = require('./validate-document')
+const parseNum = require('../lib/parse-number')
+const tableToDocs = require('../lib/table-to-docs')
+const labelsChanged = require('../lib/labels-changed')
+const validateDoc = require('../lib/validate-document')
 const printError = require('../errors/print-error')
-const logError = require('./log-error')
+const logError = require('../lib/log-error')
 const {
   OS,
   projectRoot

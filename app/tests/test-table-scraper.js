@@ -1,6 +1,6 @@
 const { test } = require('tap')
 const ValidationError = require('../errors/validation-error')
-const tableScraper = require('../lib/table-scraper')
+const tableScraper = require('../scrapers/table-scraper')
 
 const html = `<!DOCTYPE html><html><body>
 <table>
@@ -170,7 +170,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     delete altExpected[1]['löptid(d)']
     delete altExpected[0].leverantörsId
     delete altExpected[1].leverantörsId
-    actual = await tableScraper(adjustedOpts, { rp, /* stub */ })
+    actual = await tableScraper(adjustedOpts, { rp /* stub */ })
     t.strictSame(actual, altExpected, describe)
   } catch (e) {
     t.fail(describe)

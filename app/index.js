@@ -1,10 +1,13 @@
 const path = require('path')
+const creditorsCfg = require('./config/creditors.json')
 const main = require('./main/main.js')
 const retry = require('./main/retry.js')
 const printError = require('./errors/print-error')
 const logError = require('./lib/log-error')
 const { OS, projectRoot } = require('./config/env.json')
 const { debugMode, enableLogging } = require('./config/runtime.json')
+
+const creditors = creditorsCfg.filter(creditor => creditor.parse)
 
 const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
 const filepath = `${projectRoot}${fName}`
@@ -14,8 +17,8 @@ const debug = debugMode // 0 = no debug, 1 = normal, 2 = testing
 const log = enableLogging // true|false
 
 async function run() {
-  const result = await main()
-  const { halted, collection } = await retry(result.tryAgain, result.halted, result.documents, main)
+  const result = await main(creditors)
+  const { halted, collection } = await retry(creditors, result.tryAgain, result.halted, result.documents, main)
 
   console.log(`\n************************************\nSuccessfully parsed ${collection.length} documents:\n${JSON.stringify(collection, null, 2)}`)
   if (halted.length > 0) {
