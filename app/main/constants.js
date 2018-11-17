@@ -1,4 +1,5 @@
 module.exports = {
-  TESTS_SCRAPER: 'tests-scraper',
-  TABLE_SCRAPER: 'static-table'
+  SCRAPER_TEST_RUNNER: 'test-runner',
+  SCRAPER_STATIC_TABLE: 'static-table',
+  SCHEMA_PAYDAY_SIMPLE_1: 'payday-simple-1'
 }

@@ -4,8 +4,6 @@
 // This is a huge deal. And another great benefit is that rejected promises can easily be
 // tried again without needing to redo successful async operations again.
 
-const options = require('./options.js')
-
 module.exports = async (tasks, creditors, _tryAgain) => {
   const tryAgain = []
   const halted = []
@@ -26,14 +24,9 @@ module.exports = async (tasks, creditors, _tryAgain) => {
         throw err
       }
       if (!err) {
-        // const opts = await options(task)
-        const opts = options(task)
+        const scrapeResults = task.isAsyncScraper ? await task.scraper(task) : task.scraper(task)
 
-        const result = task.isAsyncScraper
-          ? await task.scraper(opts)
-          : task.scraper(opts)
-
-        documents = [...documents, ...result]
+        documents = [...documents, ...scrapeResults]
       }
       console.log(`...complete!\n`)
     } catch (e) {

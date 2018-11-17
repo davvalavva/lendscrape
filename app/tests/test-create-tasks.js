@@ -1,12 +1,13 @@
 const { test } = require('tap')
 const ValidationError = require('../errors/validation-error')
 const createTasks = require('../main/create-tasks')
+const { SCRAPER_STATIC_TABLE } = require('../main/constants.js')
 
 const creditors = [{
   name: 'Creditor1',
   parse: true,
   payload: 'html',
-  scraper: { name: 'tests-scraper', async: true },
+  scraper: { name: SCRAPER_STATIC_TABLE, async: true },
   targetURL: 'http://localhost:1111',
   fieldInject: { leverantörsId: 1 },
   schema: 'payday-complex-2',
@@ -19,7 +20,7 @@ const tryAgain = [{
   creditor: 'Creditor2',
   scraper: () => {},
   isAsyncScraper: true,
-  scraperName: 'tests-scraper',
+  scraperName: SCRAPER_STATIC_TABLE,
   payload: 'html',
   targetURL: 'http://localhost:1111',
   schema: 'payday-complex-2',
@@ -32,7 +33,7 @@ const expected = [{
   creditor: 'Creditor2',
   scraper: () => {},
   isAsyncScraper: true,
-  scraperName: 'tests-scraper',
+  scraperName: SCRAPER_STATIC_TABLE,
   payload: 'html',
   targetURL: 'http://localhost:1111',
   schema: 'payday-complex-2',

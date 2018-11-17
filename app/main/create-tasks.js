@@ -1,5 +1,9 @@
-const { TABLE_SCRAPER } = require('./constants.js')
+const {
+  SCRAPER_STATIC_TABLE,
+  SCHEMA_PAYDAY_SIMPLE_1
+} = require('./constants.js')
 const scrapers = require('../scrapers')
+const schemas = require('../schemas')
 
 module.exports = (creditors, tryAgain) => {
   if (tryAgain.length > 0) return [...tryAgain]
@@ -7,7 +11,7 @@ module.exports = (creditors, tryAgain) => {
   return creditors
     .map((creditor) => {
       switch (creditor.scraper.name) {
-        case TABLE_SCRAPER:
+        case SCRAPER_STATIC_TABLE:
           return {
             attemptNo: 1,
             maxRetries: creditor.maxRetries || null,
@@ -17,7 +21,7 @@ module.exports = (creditors, tryAgain) => {
             scraperName: creditor.scraper.name,
             payload: creditor.payload,
             targetURL: creditor.targetURL,
-            schema: creditor.schema,
+            schema: schemas[SCHEMA_PAYDAY_SIMPLE_1],
             hdSelector: creditor.scraper.hdSelector,
             tdSelector: creditor.scraper.tdSelector,
             labelMap: creditor.labelMap,

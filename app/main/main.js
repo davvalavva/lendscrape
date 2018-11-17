@@ -39,8 +39,7 @@ module.exports = async function main(creditors, tryAgain = [], cfg) {
       }
       if (!err) {
         const validationResult = kasper.validate(schemas[scraperName], task)
-        const invalidTask = validationResult.err
-        if (invalidTask) {
+        if (validationResult.err) {
           err = new ValidationError(`Task doesn't validate with given schema.`)
           err.kasper = validationResult
         }

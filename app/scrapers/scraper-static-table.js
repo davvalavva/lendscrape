@@ -21,8 +21,7 @@ const {
 const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
 const filepath = `${projectRoot}${fName}`
 
-module.exports = async (options, cfg) => {
-  // return Promise.reject(1)
+module.exports = async (task, cfg) => {
   // for debugging and testing, overrides 'runtime.json' settings
   const debug = cfg && typeName(cfg.debug) === 'number'
     ? cfg.debug
@@ -46,37 +45,37 @@ module.exports = async (options, cfg) => {
     let labelMap
     let fieldInject
 
-    if (options === undefined) {
+    if (task === undefined) {
       err = new ReferenceError(`Missing argument, expected an object as argument`)
-    } else if (typeName(options) !== 'Object') {
+    } else if (typeName(task) !== 'Object') {
       err = new TypeError(`Expected an object as the argument`)
-    } else if (options.targetURL === undefined) {
+    } else if (task.targetURL === undefined) {
       err = new ReferenceError(`Missing property 'targetURL' in object passed to function.`)
-    } else if (options.hdSelector === undefined) {
+    } else if (task.hdSelector === undefined) {
       err = new ReferenceError(`Missing property 'hdSelector' in object passed to function.`)
-    } else if (options.tdSelector === undefined) {
+    } else if (task.tdSelector === undefined) {
       err = new ReferenceError(`Missing property 'tdSelector' in object passed to function.`)
-    } else if (options.schema === undefined) {
+    } else if (task.schema === undefined) {
       err = new ReferenceError(`Missing property 'schema' in object passed to function.`)
-    } else if (options.labelMap === undefined) {
+    } else if (task.labelMap === undefined) {
       err = new ReferenceError(`Missing property 'labelMap' in object passed to function.`)
-    } else if (typeName(options.targetURL) !== 'string') {
-      err = new TypeError(`Expected property 'targetURL' in passed object to be a string. Found type '${typeName(options.targetURL)}'.`)
-    } else if (typeName(options.hdSelector) !== 'string') {
-      err = new TypeError(`Expected property 'hdSelector' in passed object to be a string. Found type '${typeName(options.hdSelector)}'.`)
-    } else if (typeName(options.tdSelector) !== 'string') {
-      err = new TypeError(`Expected property 'tdSelector' in passed object to be a string. Found type '${typeName(options.tdSelector)}'.`)
-    } else if (typeName(options.schema) !== 'Object') {
-      err = new TypeError(`Expected property 'schema' in passed object to be an object. Found type '${typeName(options.schema)}'.`)
-    } else if (typeName(options.labelMap) !== 'Array') {
-      err = new TypeError(`Expected property 'labelMap' in passed object to be an array. Found type '${typeName(options.labelMap)}'.`)
-    } else if (options.fieldInject !== undefined && typeName(options.fieldInject) !== 'Object') {
-      err = new TypeError(`Expected property 'fieldInject' in passed object to be an object. Found type '${typeName(options.fieldInject)}'.`)
+    } else if (typeName(task.targetURL) !== 'string') {
+      err = new TypeError(`Expected property 'targetURL' in passed object to be a string. Found type '${typeName(task.targetURL)}'.`)
+    } else if (typeName(task.hdSelector) !== 'string') {
+      err = new TypeError(`Expected property 'hdSelector' in passed object to be a string. Found type '${typeName(task.hdSelector)}'.`)
+    } else if (typeName(task.tdSelector) !== 'string') {
+      err = new TypeError(`Expected property 'tdSelector' in passed object to be a string. Found type '${typeName(task.tdSelector)}'.`)
+    } else if (typeName(task.schema) !== 'Object') {
+      err = new TypeError(`Expected property 'schema' in passed object to be an object. Found type '${typeName(task.schema)}'.`)
+    } else if (typeName(task.labelMap) !== 'Array') {
+      err = new TypeError(`Expected property 'labelMap' in passed object to be an array. Found type '${typeName(task.labelMap)}'.`)
+    } else if (task.fieldInject !== undefined && typeName(task.fieldInject) !== 'Object') {
+      err = new TypeError(`Expected property 'fieldInject' in passed object to be an object. Found type '${typeName(task.fieldInject)}'.`)
     }
     if (!err) {
       ({
         targetURL, hdSelector, tdSelector, schema, labelMap, fieldInject = {}
-      } = options)
+      } = task)
     }
     if (!err) {
       const html = await rp({ uri: targetURL })
@@ -110,10 +109,10 @@ module.exports = async (options, cfg) => {
       docs.forEach(document => validateDoc(document, schema))
     }
     if (err) {
-      err.signature = 'function(options)'
+      err.signature = 'function(task)'
       err.args = [
         {
-          position: 0, required: true, expectedType: 'Object', foundType: typeName(options), foundValue: options
+          position: 0, required: true, expectedType: 'Object', foundType: typeName(task), foundValue: task
         }
       ]
       err.path = filepath
