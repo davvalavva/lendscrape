@@ -1,6 +1,6 @@
 const path = require('path')
 const typeName = require('type-name')
-const collectionsSchema = require('../schemas/collections.js')
+const schemas = require('../schemas')
 const ValidationError = require('../errors/validation-error')
 const printError = require('../errors/print-error')
 const logError = require('../lib/log-error')
@@ -16,7 +16,7 @@ const {
 const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
 const filepath = `${projectRoot}${fName}`
 
-const TABLE_SCRAPER = 'table-scraper'
+const TABLE_SCRAPER = 'static-table'
 
 module.exports = (task, cfg) => {
   // for debugging and testing, overrides 'runtime.json' settings
@@ -47,15 +47,11 @@ module.exports = (task, cfg) => {
       }
     }
 
-    // if (!err && task.payload === 'html') {
-    //   options.html = await rp({ uri: task.targetURL })
-    // }
     switch (task.schema) {
       case 'payday-simple-1':
-        options.schema = collectionsSchema['payday-simple-1']
+        options.schema = schemas['payday-simple-1']
         break
       default:
-        // err = new ValidationError(`Implementation for scraper '${task.scraperName}' wasn't found.`)
         throw new Error('Invalid schema for task')
     }
     if (err) {

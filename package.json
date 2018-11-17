@@ -20,7 +20,7 @@
     "print-error": "tap app/tests/test-print-error.js --color --reporter=spec",
     "retry": "tap app/tests/test-retry.js --color --reporter=spec",
     "run-tasks": "tap app/tests/test-run-tasks.js --color --reporter=spec",
-    "table-scraper": "tap app/tests/test-table-scraper.js --color --reporter=spec",
+    "scraper-static-table": "tap app/tests/test-scraper-static-table.js --color --reporter=spec",
     "table-to-docs": "tap app/tests/test-table-to-docs.js --color --reporter=spec",
     "validate-document": "tap app/tests/test-validate-document.js --color --reporter=spec",
     "validate-field": "tap app/tests/test-validate-field.js --color --reporter=spec",

@@ -4,7 +4,7 @@ const typeName = require('type-name')
 const ValidationError = require('../errors/validation-error')
 const runTasks = require('../main/run-tasks.js')
 const createTasks = require('../main/create-tasks.js')
-const taskSchemas = require('../schemas/task-schemas.js')
+const schemas = require('../schemas')
 const printError = require('../errors/print-error')
 const logError = require('../lib/log-error')
 const {
@@ -38,7 +38,7 @@ module.exports = async function main(creditors, tryAgain = [], cfg) {
         err = new ValidationError(`Missing property 'scraperName' or the value isn't a string`)
       }
       if (!err) {
-        const validationResult = kasper.validate(taskSchemas[scraperName], task)
+        const validationResult = kasper.validate(schemas[scraperName], task)
         const invalidTask = validationResult.err
         if (invalidTask) {
           err = new ValidationError(`Task doesn't validate with given schema.`)

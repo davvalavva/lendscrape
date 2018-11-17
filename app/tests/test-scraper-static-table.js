@@ -1,6 +1,6 @@
 const { test } = require('tap')
 const ValidationError = require('../errors/validation-error')
-const tableScraper = require('../scrapers/table-scraper')
+const scraperStaticTable = require('../scrapers')['static-table']
 
 const html = `<!DOCTYPE html><html><body>
 <table>
@@ -89,17 +89,17 @@ const expected = [
 let adjustedOpts
 let actual
 let describe
-test('tableScraper()', async (t) => {
+test('scraperStaticTable()', async (t) => {
   try {
     describe = `[01] Throws ReferenceError when called without arguments`
-    await tableScraper()
+    await scraperStaticTable()
     t.fail(describe)
   } catch (e) {
     t.type(e, ReferenceError, describe)
   }
   try {
     describe = `[02] Throws TypeError when passed null as only argument`
-    await tableScraper(null)
+    await scraperStaticTable(null)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -107,7 +107,7 @@ test('tableScraper()', async (t) => {
   try {
     describe = `[03] Returns an array populated with identical objects,
 properties and values when compared to a given fixture. Stub for request used.`
-    actual = await tableScraper(options, { rp /* stub */ })
+    actual = await scraperStaticTable(options, { rp /* stub */ })
     t.strictSame(actual, expected, describe)
   } catch (e) {
     t.fail(describe)
@@ -116,7 +116,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[04] Throws ReferenceError when missing property 'targetURL' in option object passed`
     adjustedOpts = { ...options }
     delete adjustedOpts.targetURL
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, ReferenceError, describe)
@@ -125,7 +125,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[05] Throws ReferenceError when missing property 'hdSelector' in option object passed`
     adjustedOpts = { ...options }
     delete adjustedOpts.hdSelector
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, ReferenceError, describe)
@@ -134,7 +134,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[06] Throws ReferenceError when missing property 'tdSelector' in option object passed`
     adjustedOpts = { ...options }
     delete adjustedOpts.tdSelector
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, ReferenceError, describe)
@@ -143,7 +143,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[07] Throws ReferenceError when missing property 'schema' in option object passed`
     adjustedOpts = { ...options }
     delete adjustedOpts.schema
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, ReferenceError, describe)
@@ -152,7 +152,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[08] Throws ReferenceError when missing property 'labelMap' in option object passed`
     adjustedOpts = { ...options }
     delete adjustedOpts.labelMap
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, ReferenceError, describe)
@@ -170,7 +170,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     delete altExpected[1]['löptid(d)']
     delete altExpected[0].leverantörsId
     delete altExpected[1].leverantörsId
-    actual = await tableScraper(adjustedOpts, { rp /* stub */ })
+    actual = await scraperStaticTable(adjustedOpts, { rp /* stub */ })
     t.strictSame(actual, altExpected, describe)
   } catch (e) {
     t.fail(describe)
@@ -179,7 +179,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[10] Throws TypeError when property 'targetURL' is null`
     adjustedOpts = { ...options }
     adjustedOpts.targetURL = null
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -188,7 +188,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[11] Throws TypeError when property 'hdSelector' is null`
     adjustedOpts = { ...options }
     adjustedOpts.hdSelector = null
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -197,7 +197,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[12] Throws TypeError when property 'tdSelector' is null`
     adjustedOpts = { ...options }
     adjustedOpts.tdSelector = null
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -206,7 +206,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[13] Throws TypeError when property 'schema' is null`
     adjustedOpts = { ...options }
     adjustedOpts.schema = null
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -215,7 +215,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[14] Throws TypeError when property 'labelMap' is null`
     adjustedOpts = { ...options }
     adjustedOpts.labelMap = null
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -224,7 +224,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[15] Throws TypeError when property 'fieldInject' is null`
     adjustedOpts = { ...options }
     adjustedOpts.fieldInject = null
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -233,7 +233,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[16] Throws TypeError when property 'targetURL' is an object`
     adjustedOpts = { ...options }
     adjustedOpts.targetURL = {}
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -242,7 +242,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[17] Throws TypeError when property 'hdSelector' is an object`
     adjustedOpts = { ...options }
     adjustedOpts.hdSelector = {}
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -251,7 +251,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[18] Throws TypeError when property 'tdSelector' is an object`
     adjustedOpts = { ...options }
     adjustedOpts.tdSelector = {}
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -260,7 +260,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[19] Throws TypeError when property 'labelMap' is an object`
     adjustedOpts = { ...options }
     adjustedOpts.labelMap = {}
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -269,7 +269,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[20] Throws TypeError when property 'targetURL' is an array`
     adjustedOpts = { ...options }
     adjustedOpts.targetURL = []
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -278,7 +278,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[21] Throws TypeError when property 'hdSelector' is an array`
     adjustedOpts = { ...options }
     adjustedOpts.hdSelector = []
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -287,7 +287,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[22] Throws TypeError when property 'tdSelector' is an array`
     adjustedOpts = { ...options }
     adjustedOpts.tdSelector = []
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -296,7 +296,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[23] Throws TypeError when property 'schema' is an array`
     adjustedOpts = { ...options }
     adjustedOpts.schema = []
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -305,7 +305,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[24] Throws TypeError when property 'fieldInject' is an array`
     adjustedOpts = { ...options }
     adjustedOpts.fieldInject = []
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -314,7 +314,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[25] Throws TypeError when property 'targetURL' is a number`
     adjustedOpts = { ...options }
     adjustedOpts.targetURL = 12
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -323,7 +323,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[26] Throws TypeError when property 'hdSelector' is a number`
     adjustedOpts = { ...options }
     adjustedOpts.hdSelector = 12
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -332,7 +332,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[27] Throws TypeError when property 'tdSelector' is a number`
     adjustedOpts = { ...options }
     adjustedOpts.tdSelector = 12
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -341,7 +341,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[28] Throws TypeError when property 'schema' is a number`
     adjustedOpts = { ...options }
     adjustedOpts.schema = 12
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -350,7 +350,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[29] Throws TypeError when property 'labelMap' is a number`
     adjustedOpts = { ...options }
     adjustedOpts.labelMap = 12
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -359,7 +359,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[30] Throws TypeError when property 'fieldInject' is a number`
     adjustedOpts = { ...options }
     adjustedOpts.fieldInject = 12
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -368,7 +368,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[31] Throws TypeError when property 'schema' is a string`
     adjustedOpts = { ...options }
     adjustedOpts.schema = '12'
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -377,7 +377,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[32] Throws TypeError when property 'labelMap' is a string`
     adjustedOpts = { ...options }
     adjustedOpts.labelMap = '12'
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -386,7 +386,7 @@ properties and values when compared to a given fixture. Stub for request used.`
     describe = `[33] Throws TypeError when property 'fieldInject' is a string`
     adjustedOpts = { ...options }
     adjustedOpts.fieldInject = '12'
-    await tableScraper(adjustedOpts)
+    await scraperStaticTable(adjustedOpts)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -396,7 +396,7 @@ properties and values when compared to a given fixture. Stub for request used.`
 the corresponding label values as given in property 'labelMap' of the argument object`
     adjustedOpts = { ...options }
     adjustedOpts.targetURL = 'http://changed.com'
-    await tableScraper(adjustedOpts, { rp /* stub */ })
+    await scraperStaticTable(adjustedOpts, { rp /* stub */ })
     t.fail(describe)
   } catch (e) {
     t.type(e, ValidationError, describe)

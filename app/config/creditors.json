@@ -4,7 +4,7 @@
     "parse": true,
     "payload": "html",
     "scraper": {
-      "name": "table-scraper",
+      "name": "static-table",
       "async": true,
       "hdSelector": ".content > article > table > thead > tr > th",
       "tdSelector": ".content > article > table > tbody > tr"
@@ -31,7 +31,7 @@
     "maxRetries": 4,
     "payload": "html",
     "scraper": {
-      "name": "table-scraper",
+      "name": "static-table",
       "async": true,
       "hdSelector": ".content > article > table > thead > tr > th",
       "tdSelector": ".content > article > table > tbody > tr"
