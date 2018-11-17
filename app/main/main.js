@@ -19,8 +19,9 @@ module.exports = async function main(creditors, tryAgain = [], cfg) {
 
   let result
   try {
-    const tasks = createTasks(creditors, tryAgain)
+    const tasks = tryAgain.length > 0 ? tryAgain : createTasks(creditors)
     let err
+
     tasks.forEach((task) => {
       const scraperName = task && task.scraperName
       if (typeName(scraperName) !== 'string') {

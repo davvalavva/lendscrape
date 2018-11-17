@@ -1,15 +1,25 @@
+const kasper = require('kasper')
 const {
   SCRAPER_STATIC_TABLE,
   SCHEMA_PAYDAY_SIMPLE_1
 } = require('./constants.js')
+const ValidationError = require('../errors/validation-error')
 const scrapers = require('../scrapers')
 const schemas = require('../schemas')
 
-module.exports = (creditors, tryAgain) => {
-  if (tryAgain.length > 0) return [...tryAgain]
-
+module.exports = (creditors) => {
+  if (creditors === undefined) {
+    throw new Error()
+  }
   return creditors
     .map((creditor) => {
+      const validationResult = kasper.validate(schemas.creditor, creditor)
+      if (validationResult.err) {
+        const err = new ValidationError(`Invalid configuration of creditor`)
+        err.errorSubject = creditor
+        err.kasper = validationResult
+        throw err
+      }
       switch (creditor.scraper.name) {
         case SCRAPER_STATIC_TABLE:
           return {
