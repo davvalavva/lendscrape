@@ -1,12 +1,8 @@
 /** @module errors/print-error/get-output */
 
-const path = require('path')
 const typeName = require('type-name')
-const { OS, projectRoot: dir } = require('../../config/env.json')
+const { filepath } = require('../../helpers/common-debug-tools.js')
 const getOutputStandard = require('./get-output-standard')
-
-const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
-const filepath = `${dir}${fName}`
 
 /**
  * Returns a string for output in terminal
@@ -16,7 +12,7 @@ const filepath = `${dir}${fName}`
 module.exports = (errObj) => {
   try {
     if (!(errObj instanceof Error)) {
-      const thrownStr = `This error was thrown in '${filepath}'`
+      const thrownStr = `This error was thrown in '${filepath(__filename)}'`
       throw new TypeError(`Expected the argument to be of type Error, found type '${typeName(errObj)}'.\n${thrownStr}`)
     }
     // TODO: Customized outputs for different errors?

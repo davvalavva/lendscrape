@@ -31,22 +31,11 @@
  */
 /* eslint-enable max-len */
 
-const path = require('path')
 const typeName = require('type-name')
 const {
-  OS,
-  projectRoot
-} = require('../config/env.json')
-const {
-  debugMode,
-  enableLogging
-} = require('../config/runtime.json')
+  printError, logError, filepath, debugMode, enableLogging
+} = require('../helpers/common-debug-tools.js')
 const ParseError = require('../errors/parse-error')
-const printError = require('../errors/print-error')
-const logError = require('./log-error')
-
-const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
-const filepath = `${projectRoot}${fName}`
 
 module.exports = (str, cfg) => {
   // for debugging and testing, overrides 'runtime.json' settings
@@ -80,7 +69,7 @@ module.exports = (str, cfg) => {
           position: 1, required: false, expectedType: 'Object', foundType: typeName(cfg), foundValue: cfg
         }
       ]
-      err.path = filepath
+      err.path = filepath(__filename)
       throw err
     }
     if (typeName(cfg) === 'Object') {

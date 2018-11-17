@@ -1,23 +1,12 @@
 const kasper = require('kasper')
-const path = require('path')
 const typeName = require('type-name')
+const {
+  printError, logError, filepath, debugMode, enableLogging
+} = require('../helpers/common-debug-tools.js')
 const ValidationError = require('../errors/validation-error')
 const runTasks = require('../main/run-tasks.js')
 const createTasks = require('../main/create-tasks.js')
 const schemas = require('../schemas')
-const printError = require('../errors/print-error')
-const logError = require('../lib/log-error')
-const {
-  OS,
-  projectRoot
-} = require('../config/env.json')
-const {
-  debugMode,
-  enableLogging
-} = require('../config/runtime.json')
-
-const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
-const filepath = `${projectRoot}${fName}`
 
 module.exports = async function main(creditors, tryAgain = [], cfg) {
   // for debugging and testing, overrides 'runtime.json' settings
@@ -45,7 +34,7 @@ module.exports = async function main(creditors, tryAgain = [], cfg) {
         }
       }
       if (err) {
-        err.path = filepath
+        err.path = filepath(__filename)
         throw err
       }
     })

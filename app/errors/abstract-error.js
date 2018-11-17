@@ -2,14 +2,9 @@
 
 const ExtendableError = require('es6-error')
 const typeName = require('type-name')
-const path = require('path')
-const printError = require('./print-error')
-const logError = require('../lib/log-error')
-const { OS, projectRoot: dir } = require('../config/env.json')
-const { debugMode, enableLogging } = require('../config/runtime.json')
-
-const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
-const filepath = `${dir}${fName}`
+const {
+  printError, logError, filepath, debugMode, enableLogging
+} = require('../helpers/common-debug-tools.js')
 
 class AbstractError extends ExtendableError {
   constructor(message, cfg) {
@@ -40,7 +35,7 @@ class AbstractError extends ExtendableError {
             position: 0, required: true, expectedType: 'string', foundType: typeName(message), foundValue: message
           }
         ]
-        err.path = filepath
+        err.path = filepath(__filename)
         throw err
       }
     } catch (e) {

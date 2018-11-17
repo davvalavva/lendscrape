@@ -1,25 +1,14 @@
 const requestPromise = require('request-promise')
 const cheerio = require('cheerio')
-const path = require('path')
 const typeName = require('type-name')
+const {
+  printError, logError, filepath, debugMode, enableLogging
+} = require('../helpers/common-debug-tools.js')
 const ValidationError = require('../errors/validation-error')
 const parseNum = require('../lib/parse-number')
 const tableToDocs = require('../lib/table-to-docs')
 const labelsChanged = require('../lib/labels-changed')
 const validateDoc = require('../lib/validate-document')
-const printError = require('../errors/print-error')
-const logError = require('../lib/log-error')
-const {
-  OS,
-  projectRoot
-} = require('../config/env.json')
-const {
-  debugMode,
-  enableLogging
-} = require('../config/runtime.json')
-
-const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
-const filepath = `${projectRoot}${fName}`
 
 module.exports = async (task, cfg) => {
   // for debugging and testing, overrides 'runtime.json' settings
@@ -115,11 +104,10 @@ module.exports = async (task, cfg) => {
           position: 0, required: true, expectedType: 'Object', foundType: typeName(task), foundValue: task
         }
       ]
-      err.path = filepath
       throw err
     }
   } catch (e) {
-    e.path = filepath
+    e.path = filepath(__filename)
     if (debug === 1) printError(e)
     if (log) logError(e)
     throw e

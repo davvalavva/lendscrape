@@ -20,23 +20,12 @@
  */
 /* eslint-enable max-len */
 
-const path = require('path')
 const typeName = require('type-name')
 const kasper = require('kasper')
 const ValidationError = require('../errors/validation-error')
-const printError = require('../errors/print-error')
-const logError = require('./log-error')
 const {
-  OS,
-  projectRoot
-} = require('../config/env.json')
-const {
-  debugMode,
-  enableLogging
-} = require('../config/runtime.json')
-
-const fName = OS === 'win' ? path.win32.basename(__filename) : path.posix.basename(__filename)
-const filepath = `${projectRoot}${fName}`
+  printError, logError, filepath, debugMode, enableLogging
+} = require('../helpers/common-debug-tools.js')
 
 const requiredKeys = schema => Object.keys(schema)
   .map(keyStr => ({ name: keyStr, ...schema[keyStr] }))
@@ -87,7 +76,7 @@ module.exports = (document, schema, cfg) => {
           position: 1, required: true, expectedType: 'Object', foundType: typeName(schema), foundValue: schema
         }
       ]
-      err.path = filepath
+      err.path = filepath(__filename)
       throw err
     }
   } catch (e) {
