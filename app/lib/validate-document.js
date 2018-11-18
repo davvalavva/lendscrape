@@ -27,15 +27,11 @@ const {
   printError, logError, filepath, debugMode, enableLogging
 } = require('../helpers/common-debug-tools.js')
 
-const requiredKeys = schema => Object.keys(schema)
-  .map(keyStr => ({ name: keyStr, ...schema[keyStr] }))
-  .filter(obj => obj.required)
-
 module.exports = (document, schema, cfg) => {
   // for debugging and testing, overrides 'runtime.json' settings
   const debug = cfg && typeName(cfg.debug) === 'number'
     ? cfg.debug
-    : debugMode // 0 = no debug, 1 = normal, 2 = testing
+    : 1 // 0 = no debug, 1 = normal, 2 = testing
   const log = cfg && typeName(cfg.log) === 'boolean'
     ? cfg.log
     : enableLogging // boolean
@@ -52,18 +48,10 @@ module.exports = (document, schema, cfg) => {
       err = new TypeError(`Expected an object as 2nd argument, found type '${typeName(schema)}'`)
     }
     if (!err) {
-      requiredKeys(schema).forEach((obj) => {
-        if (document[obj.name] == null) {
-          err = new ValidationError(`Missing required property "${obj.name}" in object passed as first argument`)
-        }
-      })
-      if (!err) {
-        const fieldsValResult = kasper.validate(schema, document)
-        const fail = fieldsValResult.err
-        if (fail) {
-          err = new ValidationError(`Task doesn't validate with given schema.`)
-          err.kasper = fieldsValResult
-        }
+      const returned = kasper.validate(schema, document)
+      if (returned.result == null) {
+        err = new ValidationError(`Task doesn't validate with given schema.`)
+        err.kasper = returned.err.message
       }
     }
     if (err) {

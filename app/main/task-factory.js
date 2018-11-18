@@ -22,11 +22,11 @@ module.exports = function taskFactory(creditors) {
     if (!err) {
       tasks = creditors
         .map((creditor) => {
-          const validationResult = kasper.validate(schemas.creditor, creditor)
-          if (validationResult.err) {
+          const returned = kasper.validate(schemas.creditor, creditor)
+          if (returned.result == null) {
             err = new ValidationError(`Invalid configuration of creditor`)
             err.subject = creditor
-            err.kasper = validationResult
+            err.kasper = returned.err.message
             throw err
           }
           switch (creditor.scraper.name) {

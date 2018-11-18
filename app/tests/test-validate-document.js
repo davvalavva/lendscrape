@@ -2,17 +2,17 @@ const { test } = require('tap')
 const validateDoc = require('../lib/validate-document')
 const ValidationError = require('../errors/validation-error')
 
-const schema = JSON.parse(`{
-  "leverantörsId": { "required": true,  "BSON": "int" },
-  "belopp":        { "required": true,  "BSON": "int" },
-  "uppl.avg":      { "required": false, "BSON": "int" },
-  "fakt.avg":      { "required": false, "BSON": "int" },
-  "ränta(kr)":     { "required": false, "BSON": "int" },
-  "betala-totalt": { "required": false, "BSON": "int" },
-  "eff.-ränta(%)": { "required": false, "BSON": "int" },
-  "nom.-ränta(%)": { "required": false, "BSON": "int" },
-  "löptid(d)":     { "required": true,  "BSON": "int" }
-}`)
+const schema = {
+  leverantörsId: { keyType: ['number'], min: 1, isInteger: true },
+  belopp: { keyType: ['number'], min: 0, isInteger: true },
+  'uppl.avg': { keyType: ['number'], min: 0, isInteger: true },
+  'fakt.avg': { keyType: ['number'], min: 0, isInteger: true },
+  'ränta(kr)': { keyType: ['number'], min: 0, isInteger: true },
+  'betala-totalt': { keyType: ['number'], min: 0, isInteger: true },
+  'eff.-ränta(%)': { keyType: ['number'], min: 0, isInteger: true },
+  'nom.-ränta(%)': { keyType: ['number'], min: 0, isInteger: true },
+  'löptid(d)': { keyType: ['number'], min: 0, isInteger: true }
+}
 
 const document = JSON.parse(`{
   "belopp":        2000,

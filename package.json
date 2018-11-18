@@ -22,7 +22,6 @@
     "task-factory": "tap app/tests/test-task-factory.js --color --reporter=spec",
     "task-runner": "tap app/tests/test-task-runner.js --color --reporter=spec",
     "validate-document": "tap app/tests/test-validate-document.js --color --reporter=spec",
-    "validate-field": "tap app/tests/test-validate-field.js --color --reporter=spec",
     "validation-error": "tap app/tests/test-validation-error.js --color --reporter=spec",
     "build": "",
     "bash-example": "bash playaround/bash-example.sh",

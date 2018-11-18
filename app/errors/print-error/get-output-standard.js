@@ -30,7 +30,7 @@ module.exports = (errObj) => {
     }
     if (errObj.kasper) {
       output += `\n\nKasper ouput:\n`
-      output += JSON.stringify(errObj.kasper, null, 2)
+      output += JSON.stringify(errObj.kasper)
     }
     if (errObj.args) {
       output += `\n\nArguments debug info:\n`

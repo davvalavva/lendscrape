@@ -30,7 +30,6 @@ const rp = ({ uri }) => {
   if (uri === 'http://changed.com') {
     return htmlChanged
   }
-  throw new Error(`Invalid uri! Given '${uri}'`)
 }
 
 const options = {
@@ -38,15 +37,15 @@ const options = {
   tdSelector: 'table > tbody > tr',
   targetURL: 'http://example.com',
   schema: {
-    leverantörsId: { required: true, BSON: 'int' },
-    belopp: { required: true, BSON: 'int' },
-    'uppl.avg': { required: false, BSON: 'int' },
-    'fakt.avg': { required: false, BSON: 'int' },
-    'ränta(kr)': { required: false, BSON: 'int' },
-    'betala-totalt': { required: false, BSON: 'int' },
-    'eff.-ränta(%)': { required: false, BSON: 'int' },
-    'nom.-ränta(%)': { required: false, BSON: 'int' },
-    'löptid(d)': { required: true, BSON: 'int' }
+    leverantörsId: { keyType: ['number'], min: 1, isInteger: true },
+    belopp: { keyType: ['number'], min: 0, isInteger: true },
+    'uppl.avg': { keyType: ['number'], min: 0, isInteger: true },
+    'fakt.avg': { keyType: ['number'], min: 0, isInteger: true },
+    'ränta(kr)': { keyType: ['number'], min: 0, isInteger: true },
+    'betala-totalt': { keyType: ['number'], min: 0, isInteger: true },
+    'eff.-ränta(%)': { keyType: ['number'], min: 0, isInteger: true },
+    'nom.-ränta(%)': { keyType: ['number'], min: 0, isInteger: true },
+    'löptid(d)': { keyType: ['number'], min: 0, isInteger: true }
   },
   labelMap: [
     { label: 'Belopp', field: 'belopp' },
@@ -93,14 +92,12 @@ test('scraperStaticTable()', async (t) => {
   try {
     describe = `[01] Throws ReferenceError when called without arguments`
     await scraperStaticTable()
-    t.fail(describe)
   } catch (e) {
     t.type(e, ReferenceError, describe)
   }
   try {
     describe = `[02] Throws TypeError when passed null as only argument`
     await scraperStaticTable(null)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -117,7 +114,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     delete adjustedOpts.targetURL
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, ReferenceError, describe)
   }
@@ -126,7 +122,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     delete adjustedOpts.hdSelector
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, ReferenceError, describe)
   }
@@ -135,7 +130,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     delete adjustedOpts.tdSelector
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, ReferenceError, describe)
   }
@@ -144,7 +138,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     delete adjustedOpts.schema
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, ReferenceError, describe)
   }
@@ -153,7 +146,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     delete adjustedOpts.labelMap
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, ReferenceError, describe)
   }
@@ -180,7 +172,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.targetURL = null
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -189,7 +180,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.hdSelector = null
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -198,7 +188,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.tdSelector = null
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -207,7 +196,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.schema = null
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -216,7 +204,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.labelMap = null
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -225,7 +212,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.fieldInject = null
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -234,7 +220,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.targetURL = {}
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -243,7 +228,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.hdSelector = {}
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -252,7 +236,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.tdSelector = {}
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -261,7 +244,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.labelMap = {}
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -270,7 +252,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.targetURL = []
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -279,7 +260,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.hdSelector = []
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -288,7 +268,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.tdSelector = []
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -297,7 +276,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.schema = []
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -306,7 +284,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.fieldInject = []
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -315,7 +292,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.targetURL = 12
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -324,7 +300,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.hdSelector = 12
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -333,7 +308,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.tdSelector = 12
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -342,7 +316,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.schema = 12
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -351,7 +324,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.labelMap = 12
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -360,7 +332,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.fieldInject = 12
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -369,7 +340,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.schema = '12'
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -378,7 +348,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.labelMap = '12'
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -387,7 +356,6 @@ properties and values when compared to a given fixture. Stub for request used.`
     adjustedOpts = { ...options }
     adjustedOpts.fieldInject = '12'
     await scraperStaticTable(adjustedOpts)
-    t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
   }
@@ -397,7 +365,6 @@ the corresponding label values as given in property 'labelMap' of the argument o
     adjustedOpts = { ...options }
     adjustedOpts.targetURL = 'http://changed.com'
     await scraperStaticTable(adjustedOpts, { rp /* stub */ })
-    t.fail(describe)
   } catch (e) {
     t.type(e, ValidationError, describe)
   }
