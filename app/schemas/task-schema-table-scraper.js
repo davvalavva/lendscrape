@@ -1,6 +1,6 @@
 module.exports = {
   attemptNo: { keyType: ['number'], min: 1, isInteger: true },
-  maxRetries: { keyType: ['number', 'null'], min: 1, isInteger: true, default: null }, // eslint-disable-line
+  maxAttempts: { keyType: ['number', 'null'], min: 1, isInteger: true, default: null }, // eslint-disable-line
   creditor: { keyType: ['string'] },
   scraper: { keyType: ['function'] },
   isAsyncScraper: { keyType: ['boolean'] },
@@ -11,5 +11,5 @@ module.exports = {
   hdSelector: { keyType: ['string'] },
   tdSelector: { keyType: ['string'] },
   labelMap: { keyType: ['array'] },
-  fieldInject: { keyType: ['object'] }
+  fieldInject: { keyType: ['object', 'null'], default: null }
 }

@@ -6,5 +6,5 @@
   "outputStacktrace": true,
   "/* about enableLogging */": "When debugMode = 2 then logging is always turned off, no matter what this setting says",
   "enableLogging": true,
-  "defaultMaxRetries": 2
+  "defaultMaxAttempts": 3
 }

@@ -28,7 +28,7 @@
   {
     "name": "site2",
     "parse": true,
-    "maxRetries": 4,
+    "maxAttempts": 4,
     "payload": "html",
     "scraper": {
       "name": "static-table",

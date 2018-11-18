@@ -25,8 +25,8 @@ module.exports = (errObj) => {
     if (errObj.signature) {
       output += `\n\nSyntax:\n${errObj.signature}`
     }
-    if (errObj.errorSubject) {
-      output += `\n\nSubject of error:\n${JSON.stringify(errObj.errorSubject, null, 2)}`
+    if (errObj.subject) {
+      output += `\n\nSubject of error:\n${JSON.stringify(errObj.subject, null, 2)}`
     }
     if (errObj.kasper) {
       output += `\n\nKasper ouput:\n`
