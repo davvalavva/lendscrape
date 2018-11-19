@@ -30,7 +30,10 @@ const successTask1 = {
   attemptNo: 1,
   maxAttempts: 4,
   creditor: 'testCreditor',
-  scraper: async () => [{ belopp: 100, 'betala-totalt': 150 }, { belopp: 200, 'betala-totalt': 300 }],
+  scraper: async () => ({
+    response: {},
+    documents: [{ belopp: 100, 'betala-totalt': 150 }, { belopp: 200, 'betala-totalt': 300 }]
+  }),
   isAsyncScraper: true,
   scraperName: 'test-scraper',
   payload: 'html',
@@ -46,12 +49,16 @@ const successTask1 = {
 }
 const successTask1Result = {
   success: true,
+  response: {},
   documents: [{ belopp: 100, 'betala-totalt': 150 }, { belopp: 200, 'betala-totalt': 300 }]
 }
 const successTask2 = {
   ...successTask1,
   creditor: 'testCreditor2',
-  scraper: () => [{ belopp: 500, 'betala-ungefär': 300 }, { belopp: 600, 'betala-ungefär': 400 }],
+  scraper: () => ({
+    response: {},
+    documents: [{ belopp: 500, 'betala-ungefär': 300 }, { belopp: 600, 'betala-ungefär': 400 }]
+  }),
   isAsyncScraper: false,
   schema: {
     belopp: { keyType: ['number'], min: 0, isInteger: true },
@@ -63,6 +70,7 @@ const successTask2 = {
 }
 const successTask2Result = {
   success: true,
+  response: {},
   documents: [{ belopp: 500, 'betala-ungefär': 300 }, { belopp: 600, 'betala-ungefär': 400 }]
 }
 
@@ -218,8 +226,10 @@ test('async taskRunner(tasks, schemas)', async (t) => {
     const failTaskStatus404Result = {
       success: false,
       kasper: null,
-      message: 'HTTP 404: File not found',
-      code: 404,
+      response: {
+        statusCode: 404,
+        message: 'HTTP 404: File not found'
+      },
       constructor: 'StatusCodeError'
     }
     const actual = await taskRunner([successTask1, failTaskStatus404], schemas)

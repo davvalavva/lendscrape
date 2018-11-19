@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const { test } = require('tap')
 const ValidationError = require('../errors/validation-error')
 const scraperStaticTable = require('../scrapers')['static-table']
@@ -23,12 +24,12 @@ const htmlChanged = `<!DOCTYPE html><html><body>
   </tbody>
 </table></body></html>`
 
-const rp = ({ uri }) => {
+const requestPromiseNativeStub = ({ uri }) => {
   if (uri === 'http://example.com') {
-    return html
+    return { statusCode: 200, body: html }
   }
   if (uri === 'http://changed.com') {
-    return htmlChanged
+    return { statusCode: 200, body: htmlChanged }
   }
 }
 
@@ -88,6 +89,7 @@ const expected = [
 let adjustedOpts
 let actual
 let describe
+let result
 test('scraperStaticTable()', async (t) => {
   try {
     describe = `[01] Throws ReferenceError when called without arguments`
@@ -102,9 +104,9 @@ test('scraperStaticTable()', async (t) => {
     t.type(e, TypeError, describe)
   }
   try {
-    describe = `[03] Returns an array populated with identical objects,
-properties and values when compared to a given fixture. Stub for request used.`
-    actual = await scraperStaticTable(options, { rp /* stub */ })
+    describe = `[03] Returns an object with a property 'documents' (an array) populated with identical objects, properties and values compared to a given fixture.`
+    result = await scraperStaticTable(options, requestPromiseNativeStub)
+    actual = result.documents
     t.strictSame(actual, expected, describe)
   } catch (e) {
     t.fail(describe)
@@ -162,7 +164,8 @@ properties and values when compared to a given fixture. Stub for request used.`
     delete altExpected[1]['löptid(d)']
     delete altExpected[0].leverantörsId
     delete altExpected[1].leverantörsId
-    actual = await scraperStaticTable(adjustedOpts, { rp /* stub */ })
+    result = await scraperStaticTable(adjustedOpts, requestPromiseNativeStub)
+    actual = result.documents
     t.strictSame(actual, altExpected, describe)
   } catch (e) {
     t.fail(describe)
@@ -364,7 +367,7 @@ properties and values when compared to a given fixture. Stub for request used.`
 the corresponding label values as given in property 'labelMap' of the argument object`
     adjustedOpts = { ...options }
     adjustedOpts.targetURL = 'http://changed.com'
-    await scraperStaticTable(adjustedOpts, { rp /* stub */ })
+    await scraperStaticTable(adjustedOpts, requestPromiseNativeStub)
   } catch (e) {
     t.type(e, ValidationError, describe)
   }

@@ -39,11 +39,11 @@ module.exports = async function taskRunner(tasks, schemas, accSettledTasks = [],
           }
           console.log(`\nAttempt #${task.attemptNo} for '${task.creditor}' >>> ${task.targetURL}`)
 
-          const docs = task.isAsyncScraper
+          const result = task.isAsyncScraper
             ? await task.scraper(task)
             : task.scraper(task)
 
-          task.result = { success: true, documents: docs }
+          task.result = { success: true, documents: result.documents, response: result.response }
           settledTasks = [...settledTasks, task]
           console.log(`Completed!\n`)
 

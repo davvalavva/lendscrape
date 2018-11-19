@@ -5,7 +5,6 @@ module.exports = (task, err) => {
   const { response = {} } = err
   const maxAttempts = task.maxAttempts || defaultMaxAttempts
   const code = (response && Number.parseInt(response.statusCode, 10)) || 0
-  const message = (response && response.message) || null
   const kasper = err.kasper || null
   const noRetry = [400, 401, 403, 404, 405, 410, 412, 429]
   const success = false
@@ -14,9 +13,10 @@ module.exports = (task, err) => {
     return {
       ...task,
       result: {
-        success, constructor, code, message, kasper
+        success, constructor, kasper, response
       }
     }
   }
+
   return null
 }

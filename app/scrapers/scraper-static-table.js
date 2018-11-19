@@ -1,28 +1,23 @@
-const requestPromise = require('request-promise')
+const requestPromiseNative = require('request-promise-native')
 const cheerio = require('cheerio')
 const typeName = require('type-name')
 const {
   printError, logError, filepath, debugMode, enableLogging
 } = require('../helpers/common-debug-tools.js')
 const ValidationError = require('../errors/validation-error')
+const StatusCodeError = require('../errors/status-code-error')
 const parseNum = require('../lib/parse-number')
 const tableToDocs = require('../lib/table-to-docs')
 const labelsChanged = require('../lib/labels-changed')
 const validateDoc = require('../lib/validate-document')
 
-module.exports = async (task, cfg) => {
-  // for debugging and testing, overrides 'runtime.json' settings
-  const debug = cfg && typeName(cfg.debug) === 'number'
-    ? cfg.debug
-    : debugMode // 0 = no debug, 1 = normal, 2 = testing
-  const log = cfg && typeName(cfg.log) === 'boolean'
-    ? cfg.log
-    : enableLogging // boolean
-  const rp = cfg && typeName(cfg.rp) === 'function'
-    ? cfg.rp
-    : requestPromise
+// for debugging and testing, overrides 'runtime.json' settings
+const debug = debugMode // 0 = no debug, 1 = normal, 2 = testing
+const log = enableLogging // boolean
 
-  let docs
+module.exports = async (task, request = requestPromiseNative) => {
+  let documents
+  let response
   try {
     let err
     let headers
@@ -67,8 +62,20 @@ module.exports = async (task, cfg) => {
       } = task)
     }
     if (!err) {
-      const html = await rp({ uri: targetURL })
-      const $ = cheerio.load(html)
+      request.debug = debug === 1 // note: works only when real request, not stub
+      const options = {
+        uri: targetURL,
+        simple: false,
+        resolveWithFullResponse: true
+      }
+      response = await request(options)
+
+      if (!(/^2/.test(response.statusCode.toString()))) { // Status Codes other than 2xx
+        err = new StatusCodeError(`A HTTP ${response.statusCode} response was returned from the request`)
+        err.response = response
+        throw err
+      }
+      const $ = cheerio.load(response.body)
       const elementContent = el => $(el).text()
       const toStringsArray = nodes => nodes
         .toArray()
@@ -92,10 +99,10 @@ module.exports = async (task, cfg) => {
       const docsPartial = tableToDocs({ rows, labelMap })
 
       // inject manual fields into every object
-      docs = docsPartial.map(document => ({ ...document, ...fieldInject }))
+      documents = docsPartial.map(document => ({ ...document, ...fieldInject }))
 
       // validate objects
-      docs.forEach(document => validateDoc(document, schema))
+      documents.forEach(document => validateDoc(document, schema))
     }
     if (err) {
       err.signature = 'function(task)'
@@ -112,5 +119,6 @@ module.exports = async (task, cfg) => {
     if (log) logError(e)
     throw e
   }
-  return docs
+  delete response.body
+  return { documents, response }
 }

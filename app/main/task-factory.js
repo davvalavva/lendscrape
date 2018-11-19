@@ -14,9 +14,13 @@ module.exports = function taskFactory(creditors, schemas) {
   let err
   try {
     if (creditors === undefined) {
-      err = new ReferenceError(`Missing argument, expected an object`)
+      err = new ReferenceError(`Missing arguments, expected two arguments`)
+    } else if (schemas === undefined) {
+      err = new ReferenceError(`Missing 2nd argument, expected an object`)
     } else if (typeName(creditors) !== 'Array') {
-      err = new TypeError(`Wrong type for given argument, expected an array`)
+      err = new TypeError(`Wrong type for 1st argument, expected an array, found type '${typeName(creditors)}'`)
+    } else if (typeName(schemas) !== 'Object') {
+      err = new TypeError(`Wrong type for 2nd argument, expected an object, found type '${typeName(schemas)}'`)
     }
     if (!err) {
       tasks = creditors
