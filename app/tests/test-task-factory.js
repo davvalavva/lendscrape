@@ -13,7 +13,7 @@ const creditors = [{
     name: 'static-table',
     async: true,
     hdSelector: 'table > thead > tr > th',
-    tdSelector: 'table > tbody > tr'
+    trSelector: 'table > tbody > tr'
   },
   targetURL: 'http://localhost:3000',
   fieldInject: { 'löptid(d)': 30, leverantörsId: 1 },
@@ -27,7 +27,7 @@ const creditorsInvalid = [{
     name: 'static-table',
     async: true,
     hdSelector: 'table > thead > tr > th',
-    tdSelector: 'table > tbody > tr'
+    trSelector: 'table > tbody > tr'
   },
   targetURL: 'http://localhost:3000',
   fieldInject: { 'löptid(d)': 30, leverantörsId: 1 },
@@ -46,7 +46,7 @@ const tasks = [{
   targetURL: 'http://localhost:3000',
   schema: schemas[SCHEMA_PAYDAY_SIMPLE_1],
   hdSelector: 'table > thead > tr > th',
-  tdSelector: 'table > tbody > tr',
+  trSelector: 'table > tbody > tr',
   labelMap: [{ label: 'Belopp', field: 'belopp' }],
   fieldInject: { 'löptid(d)': 30, leverantörsId: 1 }
 }]

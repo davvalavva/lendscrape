@@ -29,7 +29,7 @@ module.exports = async (task, cfg) => {
     let rowsStr
     let targetURL
     let hdSelector
-    let tdSelector
+    let trSelector
     let schema
     let labelMap
     let fieldInject
@@ -42,8 +42,8 @@ module.exports = async (task, cfg) => {
       err = new ReferenceError(`Missing property 'targetURL' in object passed to function.`)
     } else if (task.hdSelector === undefined) {
       err = new ReferenceError(`Missing property 'hdSelector' in object passed to function.`)
-    } else if (task.tdSelector === undefined) {
-      err = new ReferenceError(`Missing property 'tdSelector' in object passed to function.`)
+    } else if (task.trSelector === undefined) {
+      err = new ReferenceError(`Missing property 'trSelector' in object passed to function.`)
     } else if (task.schema === undefined) {
       err = new ReferenceError(`Missing property 'schema' in object passed to function.`)
     } else if (task.labelMap === undefined) {
@@ -52,8 +52,8 @@ module.exports = async (task, cfg) => {
       err = new TypeError(`Expected property 'targetURL' in passed object to be a string. Found type '${typeName(task.targetURL)}'.`)
     } else if (typeName(task.hdSelector) !== 'string') {
       err = new TypeError(`Expected property 'hdSelector' in passed object to be a string. Found type '${typeName(task.hdSelector)}'.`)
-    } else if (typeName(task.tdSelector) !== 'string') {
-      err = new TypeError(`Expected property 'tdSelector' in passed object to be a string. Found type '${typeName(task.tdSelector)}'.`)
+    } else if (typeName(task.trSelector) !== 'string') {
+      err = new TypeError(`Expected property 'trSelector' in passed object to be a string. Found type '${typeName(task.trSelector)}'.`)
     } else if (typeName(task.schema) !== 'Object') {
       err = new TypeError(`Expected property 'schema' in passed object to be an object. Found type '${typeName(task.schema)}'.`)
     } else if (typeName(task.labelMap) !== 'Array') {
@@ -63,7 +63,7 @@ module.exports = async (task, cfg) => {
     }
     if (!err) {
       ({
-        targetURL, hdSelector, tdSelector, schema, labelMap, fieldInject = {}
+        targetURL, hdSelector, trSelector, schema, labelMap, fieldInject = {}
       } = task)
     }
     if (!err) {
@@ -74,7 +74,7 @@ module.exports = async (task, cfg) => {
         .toArray()
         .map(elementContent)
       headers = toStringsArray($(hdSelector))
-      rowsStr = $(tdSelector)
+      rowsStr = $(trSelector)
         .toArray()
         .map(trArr => toStringsArray($(trArr).children('td')))
 

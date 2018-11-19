@@ -9,7 +9,7 @@ module.exports = {
   targetURL: { keyType: ['string'], regExp: /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/ }, // eslint-disable-line
   schema: { keyType: ['object'] },
   hdSelector: { keyType: ['string'] },
-  tdSelector: { keyType: ['string'] },
+  trSelector: { keyType: ['string'] },
   labelMap: { keyType: ['array'] },
   fieldInject: { keyType: ['object', 'null'], default: null }
 }

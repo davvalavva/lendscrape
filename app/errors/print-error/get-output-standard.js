@@ -26,15 +26,27 @@ module.exports = (errObj) => {
       output += `\n\nSyntax:\n${errObj.signature}`
     }
     if (errObj.subject) {
-      output += `\n\nSubject of error:\n${JSON.stringify(errObj.subject, null, 2)}`
+      let out
+      try {
+        out += `\n\nSubject of error:\n${JSON.stringify(errObj.subject, null, 2)}`
+        output += out
+      } catch (e) {
+        output += `\n\nSubject of error:\nProblems stringifying, probably because of circular references (most often a Promise)`
+      }
     }
     if (errObj.kasper) {
       output += `\n\nKasper ouput:\n`
       output += JSON.stringify(errObj.kasper)
     }
     if (errObj.args) {
-      output += `\n\nArguments debug info:\n`
-      output += JSON.stringify(errObj.args, null, 2)
+      let out
+      try {
+        out += `\n\nArguments debug info:\n`
+        out += JSON.stringify(errObj.args, null, 2)
+        output += out
+      } catch (e) {
+        output += `\n\nArguments debug info:\nProblems stringifying, probably because of circular references (most often a Promise)`
+      }
     }
     if (printStacktrace) {
       output += `\n\nStacktrace:\n\n${errObj.stack}\n`

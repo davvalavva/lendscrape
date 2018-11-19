@@ -34,7 +34,7 @@ const rp = ({ uri }) => {
 
 const options = {
   hdSelector: 'table > thead > tr > th',
-  tdSelector: 'table > tbody > tr',
+  trSelector: 'table > tbody > tr',
   targetURL: 'http://example.com',
   schema: {
     leverantörsId: { keyType: ['number'], min: 1, isInteger: true },
@@ -126,9 +126,9 @@ properties and values when compared to a given fixture. Stub for request used.`
     t.type(e, ReferenceError, describe)
   }
   try {
-    describe = `[06] Throws ReferenceError when missing property 'tdSelector' in option object passed`
+    describe = `[06] Throws ReferenceError when missing property 'trSelector' in option object passed`
     adjustedOpts = { ...options }
-    delete adjustedOpts.tdSelector
+    delete adjustedOpts.trSelector
     await scraperStaticTable(adjustedOpts)
   } catch (e) {
     t.type(e, ReferenceError, describe)
@@ -184,9 +184,9 @@ properties and values when compared to a given fixture. Stub for request used.`
     t.type(e, TypeError, describe)
   }
   try {
-    describe = `[12] Throws TypeError when property 'tdSelector' is null`
+    describe = `[12] Throws TypeError when property 'trSelector' is null`
     adjustedOpts = { ...options }
-    adjustedOpts.tdSelector = null
+    adjustedOpts.trSelector = null
     await scraperStaticTable(adjustedOpts)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -232,9 +232,9 @@ properties and values when compared to a given fixture. Stub for request used.`
     t.type(e, TypeError, describe)
   }
   try {
-    describe = `[18] Throws TypeError when property 'tdSelector' is an object`
+    describe = `[18] Throws TypeError when property 'trSelector' is an object`
     adjustedOpts = { ...options }
-    adjustedOpts.tdSelector = {}
+    adjustedOpts.trSelector = {}
     await scraperStaticTable(adjustedOpts)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -264,9 +264,9 @@ properties and values when compared to a given fixture. Stub for request used.`
     t.type(e, TypeError, describe)
   }
   try {
-    describe = `[22] Throws TypeError when property 'tdSelector' is an array`
+    describe = `[22] Throws TypeError when property 'trSelector' is an array`
     adjustedOpts = { ...options }
-    adjustedOpts.tdSelector = []
+    adjustedOpts.trSelector = []
     await scraperStaticTable(adjustedOpts)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -304,9 +304,9 @@ properties and values when compared to a given fixture. Stub for request used.`
     t.type(e, TypeError, describe)
   }
   try {
-    describe = `[27] Throws TypeError when property 'tdSelector' is a number`
+    describe = `[27] Throws TypeError when property 'trSelector' is a number`
     adjustedOpts = { ...options }
-    adjustedOpts.tdSelector = 12
+    adjustedOpts.trSelector = 12
     await scraperStaticTable(adjustedOpts)
   } catch (e) {
     t.type(e, TypeError, describe)

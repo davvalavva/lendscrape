@@ -3,14 +3,13 @@ const typeName = require('type-name')
 const { printError, logError, filepath, debugMode: debug, enableLogging: log } = require('../helpers/common-debug-tools.js') // eslint-disable-line
 const ValidationError = require('../errors/validation-error')
 const scrapers = require('../scrapers')
-const schemas = require('../schemas')
 const {
   SCRAPER_STATIC_TABLE,
   SCHEMA_PAYDAY_SIMPLE_1
 } = require('./constants.js')
 
 
-module.exports = function taskFactory(creditors) {
+module.exports = function taskFactory(creditors, schemas) {
   let tasks
   let err
   try {
@@ -42,7 +41,7 @@ module.exports = function taskFactory(creditors) {
                 targetURL: creditor.targetURL,
                 schema: schemas[SCHEMA_PAYDAY_SIMPLE_1],
                 hdSelector: creditor.scraper.hdSelector,
-                tdSelector: creditor.scraper.tdSelector,
+                trSelector: creditor.scraper.trSelector,
                 labelMap: creditor.labelMap,
                 fieldInject: creditor.fieldInject || null
               }

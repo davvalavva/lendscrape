@@ -7,7 +7,7 @@
       "name": "static-table",
       "async": true,
       "hdSelector": ".content > article > table > thead > tr > th",
-      "tdSelector": ".content > article > table > tbody > tr"
+      "trSelector": ".content > article > table > tbody > tr"
     },
     "targetURL": "http://localhost:3000",
     "fieldInject": {
@@ -34,7 +34,7 @@
       "name": "static-table",
       "async": true,
       "hdSelector": ".content > article > table > thead > tr > th",
-      "tdSelector": ".content > article > table > tbody > tr"
+      "trSelector": ".content > article > table > tbody > tr"
     },
     "targetURL": "http://localhost:3000/site3.html",
     "fieldInject": {

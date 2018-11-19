@@ -1,6 +1,7 @@
 const typeName = require('type-name')
 const { printError, logError, filepath, debugMode: debug, enableLogging: log } = require('../helpers/common-debug-tools.js') // eslint-disable-line
 const ValidationError = require('../errors/validation-error')
+const schemas = require('../schemas')
 
 module.exports = async function main(args) {
   let settledTasks
@@ -9,7 +10,7 @@ module.exports = async function main(args) {
     if (args === undefined) {
       err = new ReferenceError(`Missing argument, expected an object`)
     } else if (typeName(args) !== 'Object') {
-      err = new TypeError(`Wrong type for given argument, expected an object`)
+      err = new TypeError(`Wrong type for given argument, expected an object, found type '${typeName(args)}'`)
     } else if (typeName(args.creditors) !== 'Array') {
       err = new ValidationError(`Missing property 'creditors' in object given as argument`)
     } else if (typeName(args.taskFactory) !== 'function') {
@@ -19,8 +20,8 @@ module.exports = async function main(args) {
     }
     if (!err) {
       const { creditors, taskFactory, taskRunner } = args
-      const tasks = taskFactory(creditors)
-      settledTasks = await taskRunner(tasks)
+      const tasks = taskFactory(creditors, schemas)
+      settledTasks = await taskRunner(tasks, schemas)
     }
     if (err) {
       err.signature = 'function(data)'
