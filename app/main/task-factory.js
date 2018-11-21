@@ -1,11 +1,11 @@
 const kasper = require('kasper')
 const typeName = require('type-name')
+const requestPromiseNative = require('request-promise-native')
 const { printError, logError, filepath, debugMode: debug, enableLogging: log } = require('../helpers/common-debug-tools.js') // eslint-disable-line
 const ValidationError = require('../errors/validation-error')
 const scrapers = require('../scrapers')
 const {
-  SCRAPER_STATIC_TABLE,
-  SCHEMA_PAYDAY_SIMPLE_1
+  SCRAPER_STATIC_TABLE
 } = require('./constants.js')
 
 
@@ -39,11 +39,12 @@ module.exports = function taskFactory(creditors, schemas) {
                 maxAttempts: creditor.maxAttempts || null,
                 creditor: creditor.name,
                 scraper: scrapers[creditor.scraper.name],
+                requestFunction: requestPromiseNative,
                 isAsyncScraper: creditor.scraper.async,
                 scraperName: creditor.scraper.name,
                 payload: creditor.payload,
                 targetURL: creditor.targetURL,
-                schema: schemas[SCHEMA_PAYDAY_SIMPLE_1],
+                schemaName: creditor.bsonDocSchema,
                 hdSelector: creditor.scraper.hdSelector,
                 trSelector: creditor.scraper.trSelector,
                 labelMap: creditor.labelMap,

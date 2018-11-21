@@ -17,7 +17,7 @@
     "parse-number": "tap app/tests/test-parse-number.js --color --reporter=spec",
     "print-error": "tap app/tests/test-print-error.js --color --reporter=spec",
     "retry": "tap app/tests/test-retry.js --color --reporter=spec",
-    "scraper-static-table": "tap app/tests/test-scraper-static-table.js --color --reporter=spec",
+    "static-table": "tap app/tests/test-static-table.js --color --reporter=spec",
     "table-to-docs": "tap app/tests/test-table-to-docs.js --color --reporter=spec",
     "task-factory": "tap app/tests/test-task-factory.js --color --reporter=spec",
     "task-runner": "tap app/tests/test-task-runner.js --color --reporter=spec",
@@ -30,6 +30,7 @@
   "author": "",
   "license": "",
   "dependencies": {
+    "ajv": "^6.5.5",
     "browser-agents": "^1.0.1",
     "cheerio": "^1.0.0-rc.2",
     "date-time": "^2.1.0",

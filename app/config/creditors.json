@@ -2,54 +2,57 @@
   {
     "name": "kredit365",
     "parse": true,
+    "maxAttempts": 2,
     "payload": "html",
     "scraper": {
-      "name": "static-table",
+      "name": "staticTable",
       "async": true,
       "hdSelector": ".content > article > table > thead > tr > th",
       "trSelector": ".content > article > table > tbody > tr"
     },
     "targetURL": "http://localhost:3000",
     "fieldInject": {
-      "löptid(d)":     30,
-      "leverantörsId": 1
+      "providerId":   1,
+      "durationDays": 30,
+      "currency":     "SEK"
     },
-    "schema": "payday-simple-1",
+    "bsonDocSchema": "paydayVariant1",
     "labelMap": [
-      { "label": "Belopp",     "field": "belopp"        },
-      { "label": "Uppl. avg",  "field": "uppl.avg"      },
-      { "label": "Fakt. avg",  "field": "fakt.avg"      },
-      { "label": "Ränta",      "field": "ränta(kr)"     },
-      { "label": "Total",      "field": "betala-totalt" },
-      { "label": "Eff. ränta", "field": "eff.-ränta(%)" },
-      { "label": "Nom. ränta", "field": "nom.-ränta(%)" }
+      { "label": "Belopp",     "field": "amount"                },
+      { "label": "Uppl. avg",  "field": "contractingCost"       },
+      { "label": "Fakt. avg",  "field": "invoiceFee"            },
+      { "label": "Ränta",      "field": "interestRate"          },
+      { "label": "Total",      "field": "payback"               },
+      { "label": "Eff. ränta", "field": "effectiveInterestRate" },
+      { "label": "Nom. ränta", "field": "interestRate"          }
     ]
   },
   {
     "name": "site2",
     "parse": true,
-    "maxAttempts": 4,
+    "maxAttempts": 2,
     "payload": "html",
     "scraper": {
-      "name": "static-table",
+      "name": "staticTable",
       "async": true,
       "hdSelector": ".content > article > table > thead > tr > th",
       "trSelector": ".content > article > table > tbody > tr"
     },
     "targetURL": "http://localhost:3000/site3.html",
     "fieldInject": {
-      "löptid(d)":     30,
-      "leverantörsId": 2
+      "providerId":   1,
+      "durationDays": 30,
+      "currency":     "SEK"
     },
-    "schema": "payday-simple-1",
+    "bsonDocSchema": "paydayVariant1",
     "labelMap": [
-      { "label": "Belopp",     "field": "belopp"        },
-      { "label": "Uppl. avg",  "field": "uppl.avg"      },
-      { "label": "Fakt. avg",  "field": "fakt.avg"      },
-      { "label": "Ränta",      "field": "ränta(kr)"     },
-      { "label": "Total",      "field": "betala-totalt" },
-      { "label": "Eff. ränta", "field": "eff.-ränta(%)" },
-      { "label": "Nom. ränta", "field": "nom.-ränta(%)" }
+      { "label": "Belopp",     "field": "amount"                },
+      { "label": "Uppl. avg",  "field": "contractingCost"       },
+      { "label": "Fakt. avg",  "field": "invoiceFee"            },
+      { "label": "Ränta",      "field": "interestRate"          },
+      { "label": "Total",      "field": "payback"               },
+      { "label": "Eff. ränta", "field": "effectiveInterestRate" },
+      { "label": "Nom. ränta", "field": "interestRate"          }
     ]
   }
 ]

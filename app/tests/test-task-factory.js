@@ -5,7 +5,7 @@ const scrapers = require('../scrapers')
 const { SCRAPER_STATIC_TABLE } = require('../main/constants.js')
 
 const schemas = {
-  'payday-simple-1': {
+  paydayVariant1: {
     leverantörsId: { keyType: ['number'], min: 1, isInteger: true },
     belopp: { keyType: ['number'], min: 0, isInteger: true },
     'uppl.avg': { keyType: ['number'], min: 0, isInteger: true },
@@ -28,7 +28,7 @@ const schemas = {
     },
     targetURL: { keyType: ['string'], regExp: /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/ }, // eslint-disable-line
     fieldInject: { keyType: ['object', 'null'], default: null },
-    schema: { keyType: ['string'], allowed: ['payday-simple-1'] },
+    schema: { keyType: ['string'], allowed: ['paydayVariant1'] },
     labelMap: { keyType: ['array'] }
   }
 }
@@ -38,28 +38,28 @@ const creditors = [{
   parse: true,
   payload: 'html',
   scraper: {
-    name: 'static-table',
+    name: staticTable,
     async: true,
     hdSelector: 'table > thead > tr > th',
     trSelector: 'table > tbody > tr'
   },
   targetURL: 'http://localhost:3000',
   fieldInject: { 'löptid(d)': 30, leverantörsId: 1 },
-  schema: 'payday-simple-1',
+  schema: 'paydayVariant1',
   labelMap: [{ label: 'Belopp', field: 'belopp' }]
 }]
 const creditorsInvalid = [{
   name: 'kredit365',
   payload: 'html',
   scraper: {
-    name: 'static-table',
+    name: staticTable,
     async: true,
     hdSelector: 'table > thead > tr > th',
     trSelector: 'table > tbody > tr'
   },
   targetURL: 'http://localhost:3000',
   fieldInject: { 'löptid(d)': 30, leverantörsId: 1 },
-  schema: 'payday-simple-1',
+  schema: 'paydayVariant1',
   labelMap: [{ label: 'Belopp', field: 'belopp' }]
 }]
 
@@ -69,10 +69,10 @@ const tasks = [{
   creditor: 'kredit365',
   scraper: scrapers[SCRAPER_STATIC_TABLE],
   isAsyncScraper: true,
-  scraperName: 'static-table',
+  scraperName: staticTable,
   payload: 'html',
   targetURL: 'http://localhost:3000',
-  schema: schemas['payday-simple-1'],
+  schema: schemas['paydayVariant1'],
   hdSelector: 'table > thead > tr > th',
   trSelector: 'table > tbody > tr',
   labelMap: [{ label: 'Belopp', field: 'belopp' }],

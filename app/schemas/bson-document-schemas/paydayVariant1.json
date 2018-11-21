@@ -1,0 +1,67 @@
+{
+  "bsonType": "object",
+  "required": ["providerId", "amount", "payback", "durationDays", "currency"],
+  "additionalProperties": false,
+  "properties": {
+    "providerId": {
+      "bsonType": "int",
+      "minimum": 1
+    },
+    "amount": {
+      "bsonType": "int",
+      "minimum": 0
+    },
+    "contractingCost": {
+      "bsonType": "int",
+      "minimum": 0,
+      "description": "Swe: uppläggninsavgift"
+    },
+    "administrationFee": {
+      "bsonType": "int",
+      "minimum": 0,
+      "description": "Swe: aviavgift"
+    },
+    "invoiceFee": {
+      "bsonType": "int",
+      "minimum": 0,
+      "description": "Swe: fakturaavgift"
+    },
+    "interestRate": {
+      "bsonType": "double",
+      "minimum": 0,
+      "description": "Annual nominal interest rate"
+    },
+    "interestPayed": {
+      "bsonType": "int",
+      "minimum": 0,
+      "description": "The actual amount to pay in interest"
+    },
+    "dayCountConvention": {
+      "enum": ["30E/360", "Act/360", "Act/365F", "Act/365L"],
+      "description": "https://sv.wikipedia.org/wiki/R%C3%A4ntedagsbas || https://en.wikipedia.org/wiki/Day_count_convention#Definitions"
+    },
+    "effectiveInterestRate": {
+      "bsonType": "int",
+      "description": "Annual effective interest rate"
+    },
+    "payback": {
+      "bsonType": "int",
+      "minimum": 0
+    },
+    "durationDays": {
+      "bsonType": "int",
+      "minimum": 0
+    },
+    "durationMonths": {
+      "bsonType": "int",
+      "minimum": 0
+    },
+    "durationYears": {
+      "bsonType": "int",
+      "minimum": 0
+    },
+    "currency": {
+      "enum": ["SEK"]
+    }
+  }
+}
