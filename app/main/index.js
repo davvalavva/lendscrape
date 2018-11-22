@@ -24,7 +24,6 @@ module.exports = async function main(args) {
       settledTasks = await taskRunner(tasks, schemas)
     }
     if (err) {
-      err.signature = 'function(data)'
       err.args = [{ position: 0, required: true, expectedType: 'object', foundType: typeName(args), foundValue: args }] // eslint-disable-line
       err.path = filepath(__filename)
       throw err

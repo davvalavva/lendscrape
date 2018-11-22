@@ -1,8 +1,7 @@
+const typeName = require('type-name')
 const cheerio = require('cheerio')
-const validationErrors = require('../schemas/validation-errors')
-const {
-  printError, logError, filepath, debugMode, enableLogging
-} = require('../helpers/common-debug-tools.js')
+const hasValidationErrors = require('../lib/has-validation-errors')
+const { printError, logError, filepath, debugMode, enableLogging } = require('../helpers/common-debug-tools.js') // eslint-disable-line
 const ValidationError = require('../errors/validation-error')
 const StatusCodeError = require('../errors/status-code-error')
 const parseNum = require('../lib/parse-number')
@@ -17,17 +16,11 @@ module.exports = async (task) => {
   let response
   try {
     const {
-      requestFunction: request,
-      targetURL,
-      hdSelector,
-      trSelector,
-      schemaName,
-      labelMap,
-      fieldInject = {}
-    } = task
+      request, targetURL, hdSelector, trSelector, documentSchema, labelMap, fieldInject = {}
+    } = task || {}
 
-    if (task === undefined) {
-      throw new ReferenceError(`Missing argument, expected an object as argument`)
+    if (typeName(task) !== 'Object') {
+      throw new TypeError(`Argument must be an object, found type '${typeName(task)}'`)
     }
 
     request.debug = debug === 1
@@ -38,7 +31,7 @@ module.exports = async (task) => {
     }
     response = await request(options)
 
-    if (!(/^2/.test(response.statusCode.toString()))) { // Status Codes other than 2xx
+    if (!(/^2/.test(response.statusCode.toString()))) { // status codes other than 2xx
       const err = new StatusCodeError(`A HTTP ${response.statusCode} response was returned from the request`)
       err.response = response
       throw err
@@ -67,9 +60,9 @@ module.exports = async (task) => {
 
     // validate documents
     for (const document of documents) {
-      const ajvErrors = validationErrors(schemaName, document)
+      const ajvErrors = hasValidationErrors(documentSchema, document)
       if (ajvErrors) {
-        const err = new ValidationError(`Invalid configuration of document`)
+        const err = new ValidationError(`Invalid document`)
         err.ajv = ajvErrors
         throw err
       }

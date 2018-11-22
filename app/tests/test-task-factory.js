@@ -69,7 +69,6 @@ const tasks = [{
   creditor: 'kredit365',
   scraper: scrapers[SCRAPER_STATIC_TABLE],
   isAsyncScraper: true,
-  scraperName: staticTable,
   payload: 'html',
   targetURL: 'http://localhost:3000',
   schema: schemas['paydayVariant1'],

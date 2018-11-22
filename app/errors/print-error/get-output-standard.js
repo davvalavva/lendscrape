@@ -22,21 +22,8 @@ module.exports = (errObj) => {
     if (errObj.path) {
       output += `\n\nThrown in file:\n${errObj.path}`
     }
-    if (errObj.signature) {
-      output += `\n\nSyntax:\n${errObj.signature}`
-    }
-    if (errObj.subject) {
-      let out
-      try {
-        out += `\n\nSubject of error:\n${JSON.stringify(errObj.subject, null, 2)}`
-        output += out
-      } catch (e) {
-        output += `\n\nSubject of error:\nProblems stringifying, probably because of circular references (most often a Promise)`
-      }
-    }
-    if (errObj.kasper) {
-      output += `\n\nKasper ouput:\n`
-      output += JSON.stringify(errObj.kasper)
+    if (errObj.ajv) {
+      output += `\n\nValidation error details:\n${JSON.stringify(errObj.ajv, null, 2)}`
     }
     if (errObj.args) {
       let out

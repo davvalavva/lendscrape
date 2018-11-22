@@ -1,15 +1,19 @@
 {
-  "debugMode << comments >>": "0 = No debug, 1 = normal debug, 2 = debug without error terminal output (for not cluttering up test outputs)",
-  "debugMode": 0,
+  "dbConnectionURL": "mongodb://127.0.0.1:27017",
+  "dbName": "lendscrape",
 
-  "outputStacktrace << comments >>": "outputStacktrace only works when debugMode = 1",
-  "outputStacktrace": true,
+  "debugMode << comments >>": "0 = No debug, 1 = normal debug, 2 = debug without error terminal output (for not cluttering up test outputs)",
+  "debugMode": 2,
 
   "enableLogging << comments >>": "When debugMode = 2 then logging is always turned off, no matter what this setting says",
   "enableLogging": true,
 
   "defaultMaxAttempts": 3,
 
-  "dbConnectionURL": "mongodb://127.0.0.1:27017",
-  "dbName": "lendscrape"
+  "outputStacktrace << comments >>": "outputStacktrace only works when debugMode = 1",
+  "outputStacktrace": true,
+
+  "dont_run_tasks_for_black_listed_creditors << comments >>": "If true, don't run tasks for blacklisted creditors",
+  "dont_run_tasks_for_black_listed_creditors": false,
+  "blackListed_creditors": []
 }

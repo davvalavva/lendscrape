@@ -1,22 +1,18 @@
 [
   {
     "name": "kredit365",
-    "parse": true,
+    "task": "staticTable",
+    "disable": false,
     "maxAttempts": 2,
-    "payload": "html",
-    "scraper": {
-      "name": "staticTable",
-      "async": true,
-      "hdSelector": ".content > article > table > thead > tr > th",
-      "trSelector": ".content > article > table > tbody > tr"
-    },
+    "hdSelector": ".content > article > table > thead > tr > th",
+    "trSelector": ".content > article > table > tbody > tr",
     "targetURL": "http://localhost:3000",
     "fieldInject": {
       "providerId":   1,
       "durationDays": 30,
       "currency":     "SEK"
     },
-    "bsonDocSchema": "paydayVariant1",
+    "documentSchema": "paydayVariant1",
     "labelMap": [
       { "label": "Belopp",     "field": "amount"                },
       { "label": "Uppl. avg",  "field": "contractingCost"       },
@@ -29,22 +25,18 @@
   },
   {
     "name": "site2",
-    "parse": true,
+    "task": "staticTable",
+    "disable": false,
     "maxAttempts": 2,
-    "payload": "html",
-    "scraper": {
-      "name": "staticTable",
-      "async": true,
-      "hdSelector": ".content > article > table > thead > tr > th",
-      "trSelector": ".content > article > table > tbody > tr"
-    },
-    "targetURL": "http://localhost:3000/site3.html",
+    "hdSelector": ".content > article > table > thead > tr > th",
+    "trSelector": ".content > article > table > tbody > tr",
+    "targetURL": "http://localhost:3000/site2.html",
     "fieldInject": {
       "providerId":   1,
       "durationDays": 30,
       "currency":     "SEK"
     },
-    "bsonDocSchema": "paydayVariant1",
+    "documentSchema": "paydayVariant1",
     "labelMap": [
       { "label": "Belopp",     "field": "amount"                },
       { "label": "Uppl. avg",  "field": "contractingCost"       },

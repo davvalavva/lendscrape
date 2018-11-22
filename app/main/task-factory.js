@@ -1,65 +1,55 @@
-const kasper = require('kasper')
 const typeName = require('type-name')
 const requestPromiseNative = require('request-promise-native')
+const hasValidationErrors = require('../lib/has-validation-errors')
 const { printError, logError, filepath, debugMode: debug, enableLogging: log } = require('../helpers/common-debug-tools.js') // eslint-disable-line
 const ValidationError = require('../errors/validation-error')
 const scrapers = require('../scrapers')
-const {
-  SCRAPER_STATIC_TABLE
-} = require('./constants.js')
-
 
 module.exports = function taskFactory(creditors, schemas) {
   let tasks
-  let err
   try {
     if (creditors === undefined) {
-      err = new ReferenceError(`Missing arguments, expected two arguments`)
-    } else if (schemas === undefined) {
-      err = new ReferenceError(`Missing 2nd argument, expected an object`)
-    } else if (typeName(creditors) !== 'Array') {
-      err = new TypeError(`Wrong type for 1st argument, expected an array, found type '${typeName(creditors)}'`)
-    } else if (typeName(schemas) !== 'Object') {
-      err = new TypeError(`Wrong type for 2nd argument, expected an object, found type '${typeName(schemas)}'`)
+      throw new ReferenceError(`Missing arguments, expected two arguments`)
     }
-    if (!err) {
-      tasks = creditors
-        .map((creditor) => {
-          const returned = kasper.validate(schemas.creditor, creditor)
-          if (returned.result == null) {
-            err = new ValidationError(`Invalid configuration of creditor`)
-            err.subject = creditor
-            err.kasper = returned.err.message
-            throw err
-          }
-          switch (creditor.scraper.name) {
-            case SCRAPER_STATIC_TABLE:
-              return {
-                attemptNo: 1,
-                maxAttempts: creditor.maxAttempts || null,
-                creditor: creditor.name,
-                scraper: scrapers[creditor.scraper.name],
-                requestFunction: requestPromiseNative,
-                isAsyncScraper: creditor.scraper.async,
-                scraperName: creditor.scraper.name,
-                payload: creditor.payload,
-                targetURL: creditor.targetURL,
-                schemaName: creditor.bsonDocSchema,
-                hdSelector: creditor.scraper.hdSelector,
-                trSelector: creditor.scraper.trSelector,
-                labelMap: creditor.labelMap,
-                fieldInject: creditor.fieldInject || null
-              }
-            default:
-              throw new Error('Not implemented!')
-          }
-        })
+    if (schemas === undefined) {
+      throw new ReferenceError(`Missing 2nd argument, expected an object`)
     }
-    if (err) {
-      err.path = filepath(__filename)
-      throw err
+    if (typeName(creditors) !== 'Array') {
+      throw new TypeError(`Wrong type for 1st argument, expected an array, found type '${typeName(creditors)}'`)
     }
+    if (typeName(schemas) !== 'Object') {
+      throw new TypeError(`Wrong type for 2nd argument, expected an object, found type '${typeName(schemas)}'`)
+    }
+    tasks = creditors
+      .map((creditor) => {
+        const ajvErrors = hasValidationErrors(schemas.staticTableCreditor, creditor)
+        if (ajvErrors) {
+          const err = new ValidationError(`Invalid configuration of creditor '${creditor.name}'`)
+          err.ajv = ajvErrors
+          throw err
+        }
+        switch (creditor.task) {
+          case 'staticTable':
+            return {
+              attemptNo: 1,
+              maxAttempts: creditor.maxAttempts,
+              creditor: creditor.name,
+              scraper: scrapers.staticTable,
+              request: requestPromiseNative,
+              targetURL: creditor.targetURL,
+              documentSchema: creditor.documentSchema,
+              hdSelector: creditor.hdSelector,
+              trSelector: creditor.trSelector,
+              labelMap: creditor.labelMap,
+              fieldInject: creditor.fieldInject,
+              async execute() { return this.scraper(this) }
+            }
+          default:
+            throw new Error('Not implemented!')
+        }
+      })
   } catch (e) {
+    e.path = filepath(__filename)
     if (debug === 1) printError(e)
     if (log) logError(e)
     throw e

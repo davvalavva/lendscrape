@@ -1,0 +1,51 @@
+{
+  "type": "object",
+  "required": ["name", "task", "hdSelector", "trSelector", "targetURL", "documentSchema", "labelMap"],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "task": {
+      "type": "string"
+    },
+    "disable": {
+      "type": "boolean"
+    },
+    "maxAttempts": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "hdSelector": {
+      "type": "string"
+    },
+    "trSelector": {
+      "type": "string"
+    },
+    "targetURL": {
+      "type": "string"
+    },
+    "documentSchema": {
+      "type": "string"
+    },
+    "fieldInject": {
+      "type": "object"
+    },
+    "labelMap": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "field"],
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

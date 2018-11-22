@@ -1,12 +1,7 @@
-// const creditor = require('./creditor.json')
-const taskSchemas = require('./task-schemas/')
-const bsonDocSchemas = require('./bson-document-schemas/')
-
-/** ***************** TO BE REPLACED ******************* */
-const creditor = require('./deprecated/creditor.js')
+const staticTableCreditor = require('./creditor/staticTable-creditor.json')
+const documentSchemas = require('./document-schemas/')
 
 module.exports = {
-  creditor,
-  staticTable: taskSchemas.staticTable,
-  paydayVariant1: bsonDocSchemas.paydayVariant1
+  staticTableCreditor,
+  paydayVariant1: documentSchemas.paydayVariant1
 }

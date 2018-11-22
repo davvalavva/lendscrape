@@ -15,15 +15,15 @@ module.exports = async function taskRunner(tasks, schemas, accSettledTasks = [],
       throw new TypeError(`Wrong type for 2nd argument, expected an object, found type '${typeName(schemas)}'`)
     }
     if (typeName(accSettledTasks) !== 'Array') {
-      throw new TypeError(`Dont use 3rd arg, only used for recursive calls. Wrong type '${typeName(accSettledTasks)}' given.`)
+      throw new TypeError(`Don't pass a 3rd arg, it's only used for recursive calls. Wrong type '${typeName(accSettledTasks)}' was given.`)
     }
     if (typeName(firstRun) !== 'boolean') {
-      throw new TypeError(`Dont use 4th arg, only used for recursive calls. Wrong type '${typeName(firstRun)}' given.`)
+      throw new TypeError(`Don't pass a 4th arg, it's only used for recursive calls. Wrong type '${typeName(firstRun)}' was given.`)
     }
     for (const task of tasks) {
       try {
         console.log(`\nAttempt #${task.attemptNo} for '${task.creditor}' >>> ${task.targetURL}`)
-        const result = task.isAsyncScraper ? await task.scraper(task) : task.scraper(task)
+        const result = await task.execute()
         task.result = { documents: result.documents }
         settledTasks = [...settledTasks, task]
         console.log(`...Completed!\n`)

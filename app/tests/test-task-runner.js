@@ -16,7 +16,6 @@ const schemas = {
     creditor: { keyType: ['string'] },
     scraper: { keyType: ['function'] },
     isAsyncScraper: { keyType: ['boolean'] },
-    scraperName: { keyType: ['string'] },
     payload: { keyType: ['string'] },
     targetURL: { keyType: ['string'], regExp: /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/ }, // eslint-disable-line
     schema: { keyType: ['object'] },
@@ -35,7 +34,6 @@ const successTask1 = {
     documents: [{ belopp: 100, 'betala-totalt': 150 }, { belopp: 200, 'betala-totalt': 300 }]
   }),
   isAsyncScraper: true,
-  scraperName: 'test-scraper',
   payload: 'html',
   targetURL: 'http://localhost:9999',
   schema: {
@@ -225,7 +223,6 @@ test('async taskRunner(tasks, schemas)', async (t) => {
     const failTaskStatus404 = { ...successTask1, scraper: throw404 }
     const failTaskStatus404Result = {
       success: false,
-      kasper: null,
       response: {
         statusCode: 404,
         message: 'HTTP 404: File not found'
