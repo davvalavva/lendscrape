@@ -11,10 +11,18 @@
  */
 module.exports = (labels, labelMap) => {
   const clean = str => str.trim().toLowerCase()
-  if (!labels.every(
-    (element, i) => clean(element) === clean(labelMap[i].label)
+  if (labels.length !== labelMap.length) {
+    return true
+  }
+  if (!labelMap.every(
+    (item, i) => clean(item.label) === clean(labels[i])
   )) {
     return true
   }
+  // if (!labels.every(
+  //   (element, i) => clean(element) === clean(labelMap[i].label)
+  // )) {
+  //   return true
+  // }
   return false
 }
