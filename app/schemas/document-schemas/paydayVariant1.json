@@ -27,11 +27,11 @@
       "description": "Swe: fakturaavgift"
     },
     "interestRate": {
-      "type": "double",
+      "type": "number",
       "minimum": 0,
       "description": "Annual nominal interest rate"
     },
-    "interestPayed": {
+    "interestToPay": {
       "type": "integer",
       "minimum": 0,
       "description": "The actual amount to pay in interest"

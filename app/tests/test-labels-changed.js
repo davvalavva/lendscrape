@@ -1,7 +1,8 @@
 const { test } = require('tap')
 const labelsChanged = require('../lib/labels-changed')
+const ValidationError = require('../errors/validation-error')
 
-const headers = [
+const labels = [
   'Belopp',
   'Uppl. avg',
   'Fakt. avg',
@@ -10,35 +11,50 @@ const headers = [
   'Eff. ränta',
   'Nom. ränta'
 ]
-const changedHeaders = [...headers]
-changedHeaders[2] = 'Aviavgift'
 const labelMap = [
-  { field: 'belopp', label: 'Belopp' },
-  { field: 'uppl.avg', label: 'Uppl. avg' },
-  { field: 'fakt.avg', label: 'Fakt. avg' },
-  { field: 'ränta (kr)', label: 'Ränta' },
-  { field: 'betala totalt', label: 'Total' },
-  { field: 'eff. ränta (%)', label: 'Eff. ränta' },
-  { field: 'nom. ränta (%)', label: 'Nom. ränta' }
+  { field: 'amount', label: 'Belopp' },
+  { field: 'contractingCost', label: 'Uppl. avg' },
+  { field: 'invoiceFee', label: 'Fakt. avg' },
+  { field: 'interestToPay', label: 'Ränta' },
+  { field: 'payback', label: 'Total' },
+  { field: 'effectiveInterestRate', label: 'Eff. ränta' },
+  { field: 'interestRate', label: 'Nom. ränta' }
 ]
 
-test('labelsChanged(headers, labelMap)', (t) => {
-  t.type(labelsChanged(headers, labelMap), 'boolean', `[01] Returns a boolean when given valid arguments`)
-  t.equal(labelsChanged(headers, labelMap), false, `[02] Returns false when given valid arguments and headers haven't changed`)
-  t.equal(labelsChanged(changedHeaders, labelMap), true, `[03] Returns true when given valid arguments and headers have changed`)
+test('labelsChanged(labels, labelMap)', (t) => {
+  t.type(labelsChanged(labels, labelMap), 'boolean', `[01] Returns a boolean when given valid arguments`)
+
+  t.equal(labelsChanged(labels, labelMap), false, `[02] Returns false when given valid arguments and labels haven't changed`)
+
+  const changedLabels = [...labels]
+  changedLabels[2] = 'Aviavgift'
+  t.equal(labelsChanged(changedLabels, labelMap), true, `[03] Returns true when given valid arguments and labels have changed`)
+
   t.throws(() => { labelsChanged() }, TypeError, `[04] Throws TypeError when called with no arguments`)
-  t.throws(() => { labelsChanged(headers) }, TypeError, `[05] Throws TypeError when called without second argument`)
-  t.throws(() => { labelsChanged({}, labelMap) }, TypeError, `[06] Throws TypeError when first argument is an object`)
-  t.throws(() => { labelsChanged(() => {}, labelMap) }, TypeError, `[07] Throws TypeError when first argument is a function`)
-  t.throws(() => { labelsChanged(12, labelMap) }, TypeError, `[08] Throws TypeError when first argument is a number`)
-  t.throws(() => { labelsChanged('12', labelMap) }, TypeError, `[09] Throws TypeError when first argument is a string`)
-  t.throws(() => { labelsChanged(null, labelMap) }, TypeError, `[10] Throws TypeError when first argument is null`)
-  t.throws(() => { labelsChanged(undefined, labelMap) }, TypeError, `[11] Throws TypeError when first argument is undefined`)
-  t.throws(() => { labelsChanged(headers, {}) }, TypeError, `[12] Throws TypeError when second argument is an object`)
-  t.throws(() => { labelsChanged(headers, () => {}) }, TypeError, `[13] Throws TypeError when second argument is a function`)
-  t.throws(() => { labelsChanged(headers, 12) }, TypeError, `[14] Throws TypeError when second argument is a number`)
-  t.throws(() => { labelsChanged(headers, '12') }, TypeError, `[15] Throws TypeError when second argument is a string`)
-  t.throws(() => { labelsChanged(headers, null) }, TypeError, `[16] Throws TypeError when second argument is null`)
-  t.throws(() => { labelsChanged(headers, undefined) }, TypeError, `[17] Throws TypeError when second argument is undefined`)
+
+  t.throws(() => { labelsChanged(labels) }, TypeError, `[05] Throws TypeError when called without second argument`)
+
+  t.throws(() => { labelsChanged({}, labelMap) }, TypeError, `[06] Throws TypeError when first argument isn't an array`)
+
+  t.throws(() => { labelsChanged(labels, {}) }, TypeError, `[07] Throws TypeError when second argument isn't an array`)
+
+  const invalidLabels = [...labels]
+  invalidLabels[3] = 450
+  t.throws(() => {
+    labelsChanged(invalidLabels, labelMap)
+  }, ValidationError, `[08] Throws ValidationError when array in first argument contains non-string element`)
+
+  const invalidLabelMap1 = [...labelMap]
+  invalidLabelMap1[0].additional_property = 'hello'
+  t.throws(() => { labelsChanged(labels, invalidLabelMap1) }, ValidationError, `[09] Throws ValidationError when given invalid array in second argument`)
+
+  const invalidLabelMap2 = [...labelMap]
+  delete invalidLabelMap2[0].label
+  t.throws(() => { labelsChanged(labels, invalidLabelMap2) }, ValidationError, `[10] Throws ValidationError when given invalid array in second argument`)
+
+  const invalidLabelMap3 = [...labelMap]
+  invalidLabelMap3[4].label = ['Total']
+  t.throws(() => { labelsChanged(labels, invalidLabelMap3) }, ValidationError, `[11] Throws ValidationError when given invalid array in second argument`)
+
   t.end()
 })

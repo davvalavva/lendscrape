@@ -1,0 +1,23 @@
+{
+  "definitions": {
+    "labelSchema": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minItems": 1
+      }
+    },
+    "labelMapSchema": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["field", "label"],
+        "additionalProperties": false,
+        "properties": {
+          "field": { "type": "string" },
+          "label": { "type": "string" }
+        }
+      }
+    }
+  }
+}
