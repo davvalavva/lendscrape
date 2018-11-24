@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "/schemas/task-config/defs.json#",
+  "type": "object",
+  "definitions": {
+    "name":           { "type":       "string",
+                        "minLength":  2             },
+    "task":           { "enum": ["staticTable",
+                                 "someOtherTask",
+                                 "anotherTask"     ]},
+    "disable":        { "type":       "boolean"     },
+    "maxAttempts":    { "type":       "integer",
+                        "minimum":    1             },
+    "hdSelector":     { "type":       "string"      },
+    "trSelector":     { "type":       "string"      },
+    "targetURL":      { "type":       "string",
+                        "format":     "uri"         },
+    "documentSchema": { "type":       "string"      },
+    "fieldInject":    { "type":       "object"      },
+    "labelMap": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "field"],
+        "additionalProperties": false,
+        "properties": {
+          "label": { "type": "string" },
+          "field": { "type": "string" }
+        }
+      }
+    }
+  }
+}

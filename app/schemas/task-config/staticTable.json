@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "/schemas/task-config/staticTable.json#",
+  "type": "object",
+  "allOf": [
+    { "$ref": "default.json#" },
+    {
+      "required": [
+        "hdSelector",
+        "trSelector",
+        "labelMap"
+      ],
+      "properties": {
+        "hdSelector": { "$ref": "defs.json#/definitions/hdSelector" },
+        "trSelector": { "$ref": "defs.json#/definitions/trSelector" },
+        "labelMap":   { "$ref": "defs.json#/definitions/labelMap"   }
+      }
+    }
+  ]
+}

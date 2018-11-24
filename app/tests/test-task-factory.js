@@ -1,8 +1,8 @@
 const { test } = require('tap')
 const taskFactory = require('../main/task-factory')
 const ValidationError = require('../errors/validation-error')
-const scrapers = require('../scrapers')
-const { SCRAPER_STATIC_TABLE } = require('../main/constants.js')
+
+const scraperStub = () => {}
 
 const schemas = {
   paydayVariant1: {
@@ -35,48 +35,27 @@ const schemas = {
 
 const creditors = [{
   name: 'kredit365',
-  parse: true,
-  payload: 'html',
-  scraper: {
-    name: staticTable,
-    async: true,
-    hdSelector: 'table > thead > tr > th',
-    trSelector: 'table > tbody > tr'
-  },
-  targetURL: 'http://localhost:3000',
-  fieldInject: { 'löptid(d)': 30, leverantörsId: 1 },
+  task: 'staticTable',
+  hdSelector: 'table > thead > tr > th',
+  trSelector: 'table > tbody > tr',
+  targetURL: 'http://localhost:9999',
+  fieldInject: { durationDays: 30, providerId: 1 },
   schema: 'paydayVariant1',
-  labelMap: [{ label: 'Belopp', field: 'belopp' }]
-}]
-const creditorsInvalid = [{
-  name: 'kredit365',
-  payload: 'html',
-  scraper: {
-    name: staticTable,
-    async: true,
-    hdSelector: 'table > thead > tr > th',
-    trSelector: 'table > tbody > tr'
-  },
-  targetURL: 'http://localhost:3000',
-  fieldInject: { 'löptid(d)': 30, leverantörsId: 1 },
-  schema: 'paydayVariant1',
-  labelMap: [{ label: 'Belopp', field: 'belopp' }]
+  labelMap: [{ label: 'Belopp', field: 'amount' }]
 }]
 
-const tasks = [{
+const task = {
   attemptNo: 1,
   maxAttempts: null,
-  creditor: 'kredit365',
-  scraper: scrapers[SCRAPER_STATIC_TABLE],
-  isAsyncScraper: true,
-  payload: 'html',
+  creditor: 'someCreditorName',
+  scraper: scraperStub,
   targetURL: 'http://localhost:3000',
-  schema: schemas['paydayVariant1'],
+  documentSchema: 'paydayVariant1',
   hdSelector: 'table > thead > tr > th',
   trSelector: 'table > tbody > tr',
   labelMap: [{ label: 'Belopp', field: 'belopp' }],
   fieldInject: { 'löptid(d)': 30, leverantörsId: 1 }
-}]
+}
 
 test('taskFactory(creditors)', (t) => {
   t.throws(() => { taskFactory() }, ReferenceError, `[01] Throws ReferenceError when no argument given`)

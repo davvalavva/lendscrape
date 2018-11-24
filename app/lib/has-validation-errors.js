@@ -2,21 +2,29 @@ const Ajv = require('ajv')
 const typeName = require('type-name')
 const schemas = require('../schemas/')
 
-const ajv = new Ajv({ allErrors: true })
+const options = {
+  allErrors: true,
+  format: 'full',
+  schemas: schemas.all
+  /* , logger: myCustomLoggerFunction */
+}
 
-module.exports = (schemaOpt, subject) => {
+const ajv = new Ajv(options)
+
+
+module.exports = (s, subject) => {
   let schema
   let schemaName = 'unavailable'
 
-  if (typeName(schemaOpt) === 'string') {
-    schema = schemas[schemaOpt]
-    schemaName = schemaOpt
+  if (typeName(s) === 'string') {
+    schema = schemas[s]
+    schemaName = s
   //
-  } else if (typeName(schemaOpt) === 'Object') {
-    schema = schemaOpt
+  } else if (typeName(s) === 'Object') {
+    schema = s
   //
   } else {
-    throw new TypeError(`Expected a string or an object as first argument, found type '${typeName(schemaOpt)}'`)
+    throw new TypeError(`Expected a string or an object as first argument, found type '${typeName(s)}'`)
   }
 
   const validate = ajv.compile(schema)
