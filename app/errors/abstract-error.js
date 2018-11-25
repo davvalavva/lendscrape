@@ -29,7 +29,6 @@ class AbstractError extends ExtendableError {
       }
 
       if (err) {
-        err.signature = 'function(message)'
         err.args = [
           {
             position: 0, required: true, expectedType: 'string', foundType: typeName(message), foundValue: message

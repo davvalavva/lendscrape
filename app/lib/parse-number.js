@@ -9,92 +9,54 @@
  * and before returning the value, the decimals are truncated. This however, can be changed
  * with the optional configuration object argument.
  *
- * PARAMETERS:
- * in order   Type      Name    Required  Default   Description
- * ============================================================================================================================
- * @param     {String}  str     yes                 A required string or a number. If this is a string it will be converted
- *                                                  to a Number. If this is a number it will just be returned with any
- *                                                  decimals truncated unless the keepDec setting is set to to true,
- *                                                  than it will the number without truncating it before.
+ * PARAMETERS
+ * first-to-last  Type      Name    Required  Default   Description
+ * ================================================================================================================================================
+ * @param         {String}  str     yes                 A required string or a number. If this is a string it will be converted
+ *                                                      to a Number. If this is a number it will just be returned with any
+ *                                                      decimals truncated unless the keepDec setting is set to true,
+ *                                                      then it will return the number as is.
  *
- * @param     {Object}  [cfg]   no        {}        An optional configuration object for altering the parsers behavior.
+ * @param         {Object}  cfg     no        {}        Optional config object for altering the parsers behavior. See properties below.
+ *                   ▼
+ *                   ▼
+ *                   ▼        Type      Name      Required  Default   Description
+ *                =======================================================================================================================
+ *                @property   {Boolean} keepDec   no        false     If set to true, keeps the decimals in the resulting number.
+ *                @property   {String}  decSep    no        ','       The character that the parser interprets as the decimal separator.
+ *                                                                    If set, must be one character only.
  *
- *      PROPERTIES:
- *      'cfg'     Type      Name        Required  Default   Description
- *      =======================================================================================================================
- *      @property {Boolean} [keepDec]   no        false     If set to true, keeps the decimals in the resulting number.
- *      @property {String}  [decSep]    no         ','      The character that the parser interprets as the decimal separator.
- *                                                          If set, must be one character only.
  *
- * RETURNS:
  * @return {Number} Returns the parsed number
  */
 /* eslint-enable max-len */
 
 const typeName = require('type-name')
-const {
-  printError, logError, filepath, debugMode, enableLogging
-} = require('../helpers/common-debug-tools.js')
 const ParseError = require('../errors/parse-error')
 
-module.exports = (str, cfg) => {
-  // for debugging and testing, overrides 'runtime.json' settings
-  const debug = cfg && typeName(cfg.debug) === 'number'
-    ? cfg.debug
-    : debugMode // 0 = no debug, 1 = normal, 2 = testing
-  const log = cfg && typeName(cfg.log) === 'boolean'
-    ? cfg.log
-    : enableLogging // boolean
-
-  let keepDec
-  let decSep
-  let parsed
-
-  try {
-    let err
-    if (typeName(str) !== 'string' && typeName(str) !== 'number') {
-      err = new TypeError(`Expected a string or a number as first argument but found value with type '${typeName(str)}'`)
-    } else if (str.trim && str.trim() === '') {
-      err = new ParseError(`Can't parse empty string or string with only whitespaces`)
-    } else if (cfg !== undefined && typeName(cfg) !== 'Object') {
-      err = new TypeError(`Expected 2nd arg. to be an object, found type '${typeName(cfg)}'`)
-    }
-    if (err) {
-      err.signature = 'function(str, cfg)'
-      err.args = [
-        {
-          position: 0, required: true, expectedType: 'string|number', foundType: typeName(str), foundValue: str
-        },
-        {
-          position: 1, required: false, expectedType: 'Object', foundType: typeName(cfg), foundValue: cfg
-        }
-      ]
-      err.path = filepath(__filename)
-      throw err
-    }
-    if (typeName(cfg) === 'Object') {
-      ({ keepDec = false, decSep = ',' } = cfg)
-    } else {
-      keepDec = false
-      decSep = ','
-    }
-    // return str as is, if it's a number
-    if (typeName(str) === 'number') {
-      return keepDec ? str : Math.trunc(str) // strip decimals if keepDec set to false
-    }
-
-    // strip out everything except digits, decimal separator and minus sign
-    const regex = new RegExp(`[^0-9-${decSep}]`, 'g')
-    parsed = str
-      .replace(regex, '')
-      .replace(decSep, '.') // JS recognizable decimal before parseFloat()
-
-    parsed = parseFloat(parsed)
-  } catch (e) {
-    if (debug === 1) printError(e)
-    if (log) logError(e)
-    throw e
+module.exports = (str, cfg = {}) => {
+  if (typeName(str) !== 'string' && typeName(str) !== 'number') {
+    throw new TypeError(`Expected a string or a number as first argument but found value with type '${typeName(str)}'`)
+  }
+  if (str.trim && str.trim() === '') {
+    throw new ParseError(`Can't parse empty string or string with only whitespaces`)
+  }
+  if (typeName(cfg) !== 'Object') {
+    throw new TypeError(`When given second argument expects an object, found type '${typeName(cfg)}'`)
   }
 
-  return keepDec ? parsed : Math.trunc(parsed)
+  const { keepDec = false, decSep = ',' } = cfg
+
+  // return str as is, if it's a number
+  if (typeName(str) === 'number') {
+    return keepDec ? str : Math.trunc(str) // strip decimals if keepDec set to false
+  }
+
+  // strip out everything except digits, decimal separator and minus sign
+  const regex = new RegExp(`[^0-9-${decSep}]`, 'g')
+  const parsed = str
+    .replace(regex, '')
+    .replace(decSep, '.') // JS recognizable decimal before parseFloat()
+
+  return keepDec ? parseFloat(parsed) : Math.trunc(parseFloat(parsed))
 }

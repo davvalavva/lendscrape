@@ -5,7 +5,7 @@ const { printError, logError, filepath, debugMode, enableLogging } = require('..
 const ValidationError = require('../errors/validation-error')
 const StatusCodeError = require('../errors/status-code-error')
 const parseNum = require('../lib/parse-number')
-const tableToDocs = require('../lib/table-to-docs')
+const toDocuments = require('../lib/to-documents')
 const labelsChanged = require('../lib/labels-changed')
 
 const debug = debugMode
@@ -45,7 +45,7 @@ module.exports = async (task) => {
     const rowsStr = $(trSelector).toArray().map(trArr => toStringsArray($(trArr).children('td')))
 
     // headers changed on webpage?
-    if (labelsChanged(headers, labelMap)) {
+    if (labelsChanged({ labels: headers, labelMap })) {
       throw new ValidationError(`Couldn't map all headers given to a corresponding field using map found in 'labelMap' property.`)
     }
 
@@ -53,7 +53,7 @@ module.exports = async (task) => {
     const rows = rowsStr.map(row => row.map(strVal => parseNum(strVal)))
 
     // array of arrays becomes array of objects (bson documents)
-    const docsPartial = tableToDocs({ rows, labelMap })
+    const docsPartial = toDocuments({ rows, labelMap })
 
     // merge manual (not parsed) fields into every document
     documents = docsPartial.map(document => ({ ...document, ...fieldInject }))

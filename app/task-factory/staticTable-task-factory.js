@@ -1,6 +1,6 @@
-const validationErrors = require('../../lib/validation-errors')
-const ValidationError = require('../../errors/validation-error')
-const { staticTable: scraper } = require('../../scrapers')
+const validationErrors = require('../lib/validation-errors')
+const ValidationError = require('../errors/validation-error')
+const { staticTable: scraper } = require('../scrapers')
 const defaultTaskFactory = require('./default-task-factory.js')
 
 const schemaId = '/schemas/task-config/staticTable.json#'

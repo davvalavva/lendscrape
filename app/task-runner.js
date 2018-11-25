@@ -1,6 +1,6 @@
-const settledTaskFactory = require('./settled-task-factory')
+const settledTaskFactory = require('./task-factory/settled-task-factory')
 
-module.exports = async function taskRunner(tasks, schemas, accSettledTasks = []) {
+module.exports = async function taskRunner(tasks, accSettledTasks = []) {
   let tryAgain = []
   let settledTasks = accSettledTasks
 
@@ -28,7 +28,7 @@ module.exports = async function taskRunner(tasks, schemas, accSettledTasks = [])
     }
   }
   if (tryAgain.length > 0) {
-    settledTasks = await taskRunner(tryAgain, schemas, settledTasks)
+    settledTasks = await taskRunner(tryAgain, settledTasks)
   }
 
   return settledTasks

@@ -13,7 +13,8 @@
   "outputStacktrace << comments >>": "outputStacktrace only works when debugMode = 1",
   "outputStacktrace": true,
 
-  "dont_run_tasks_for_black_listed_creditors << comments >>": "If true, don't run tasks for blacklisted creditors",
-  "dont_run_tasks_for_black_listed_creditors": false,
-  "blackListed_creditors": []
+  "blacklist << comments >>": "If true, don't run tasks for blacklisted creditors",
+  "blacklist": false,
+  "blacklisted << comments >>": "The blacklisted creditors",
+  "blacklisted": []
 }
