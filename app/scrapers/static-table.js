@@ -1,6 +1,6 @@
 const typeName = require('type-name')
 const cheerio = require('cheerio')
-const hasValidationErrors = require('../lib/has-validation-errors')
+const validationErrors = require('../lib/validation-errors')
 const { printError, logError, filepath, debugMode, enableLogging } = require('../helpers/common-debug-tools.js') // eslint-disable-line
 const ValidationError = require('../errors/validation-error')
 const StatusCodeError = require('../errors/status-code-error')
@@ -16,7 +16,7 @@ module.exports = async (task) => {
   let response
   try {
     const {
-      request, targetURL, hdSelector, trSelector, documentSchema, labelMap, fieldInject = {}
+      request, targetURL, hdSelector, trSelector, documentSchemaId, labelMap, fieldInject = {}
     } = task || {}
 
     if (typeName(task) !== 'Object') {
@@ -60,7 +60,7 @@ module.exports = async (task) => {
 
     // validate documents
     for (const document of documents) {
-      const ajvErrors = hasValidationErrors(documentSchema, document)
+      const ajvErrors = validationErrors({ $id: documentSchemaId, subject: document })
       if (ajvErrors) {
         const err = new ValidationError(`Invalid document`)
         err.ajv = ajvErrors

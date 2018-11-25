@@ -6,15 +6,15 @@
     "name",
     "task",
     "targetURL",
-    "documentSchema"
+    "documentSchemaId"
   ],
   "properties": {
-    "name":           { "$ref": "defs.json#/definitions/name"           },
-    "task":           { "$ref": "defs.json#/definitions/task"           },
-    "disable":        { "$ref": "defs.json#/definitions/disable"        },
-    "maxAttempts":    { "$ref": "defs.json#/definitions/maxAttempts"    },
-    "targetURL":      { "$ref": "defs.json#/definitions/targetURL"      },
-    "documentSchema": { "$ref": "defs.json#/definitions/documentSchema" },
-    "fieldInject":    { "$ref": "defs.json#/definitions/fieldInject"    }
+    "name":             { "$ref": "defs.json#/definitions/name"             },
+    "task":             { "$ref": "defs.json#/definitions/task"             },
+    "disable":          { "$ref": "defs.json#/definitions/disable"          },
+    "maxAttempts":      { "$ref": "defs.json#/definitions/maxAttempts"      },
+    "targetURL":        { "$ref": "defs.json#/definitions/targetURL"        },
+    "documentSchemaId": { "$ref": "defs.json#/definitions/documentSchemaId" },
+    "fieldInject":      { "$ref": "defs.json#/definitions/fieldInject"      }
   }
 }

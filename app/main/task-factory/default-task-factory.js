@@ -11,7 +11,7 @@ module.exports = function defaultTaskFactory(creditor) {
     creditor: creditor.name,
     request: requestPromiseNative,
     targetURL: creditor.targetURL,
-    documentSchema: creditor.documentSchema
+    documentSchemaId: creditor.documentSchemaId
   }
 
   return task

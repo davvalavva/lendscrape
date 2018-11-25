@@ -12,7 +12,7 @@
       "durationDays": 30,
       "currency":     "SEK"
     },
-    "documentSchema": "paydayVariant1",
+    "documentSchemaId": "/schemas/documents/paydayVariant1.json#",
     "labelMap": [
       { "label": "Belopp",     "field": "amount"                },
       { "label": "Uppl. avg",  "field": "contractingCost"       },
@@ -36,7 +36,7 @@
       "durationDays": 30,
       "currency":     "SEK"
     },
-    "documentSchema": "paydayVariant1",
+    "documentSchemaId": "/schemas/documents/paydayVariant1.json#",
     "labelMap": [
       { "label": "Belopp",     "field": "amount"                },
       { "label": "Uppl. avg",  "field": "contractingCost"       },

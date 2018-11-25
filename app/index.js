@@ -12,7 +12,7 @@ const taskRunner = require('./main/task-runner')
 const main = require('./main');
 
 (async () => {
-  const settledTasks = (await main({ creditors, taskFactory, taskRunner }))
+  const settledTasks = await main({ creditors, taskFactory, taskRunner })
   const strippedTasks = settledTasks.map(task => ({ creditor: task.creditor, result: task.result }))
 
   console.log(`\n\n\nFINAL RESULTS:`)
