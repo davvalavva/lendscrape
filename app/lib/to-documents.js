@@ -76,5 +76,11 @@ const docsFrom = (rows, labelMap) => {
 }
 
 module.exports = ({ rows, labelMap } = {}) => {
+  if (rows && rows.length === 0) {
+    throw new TypeError(`Property 'rows' can't be an empty array`)
+  }
+  if (labelMap && labelMap.length === 0) {
+    throw new TypeError(`Property 'labelMap' can't be an empty array`)
+  }
   return docsFrom(rows, labelMap)
 }

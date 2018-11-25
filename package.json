@@ -18,7 +18,7 @@
     "print-error": "tap app/tests/test-print-error.js --color --reporter=spec",
     "retry": "tap app/tests/test-retry.js --color --reporter=spec",
     "static-table": "tap app/tests/test-static-table.js --color --reporter=spec",
-    "table-to-docs": "tap app/tests/test-table-to-docs.js --color --reporter=spec",
+    "to-documents": "tap app/tests/test-to-documents.js --color --reporter=spec",
     "task-factory": "tap app/tests/test-task-factory.js --color --reporter=spec",
     "task-runner": "tap app/tests/test-task-runner.js --color --reporter=spec",
     "validate-document": "tap app/tests/test-validate-document.js --color --reporter=spec",
