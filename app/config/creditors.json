@@ -30,7 +30,7 @@
     "maxAttempts": 2,
     "hdSelector": ".content > article > table > thead > tr > th",
     "trSelector": ".content > article > table > tbody > tr",
-    "targetURL": "http://localhost:3000/site2.html",
+    "targetURL": "http://localhost:3000/site3.html",
     "fieldInject": {
       "providerId":   1,
       "durationDays": 30,
