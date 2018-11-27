@@ -1,5 +1,5 @@
 const { test } = require('tap')
-const taskRunner = require('../main/task-runner')
+const taskRunner = require('../task-runner')
 
 class StatusCodeError extends Error {}
 

@@ -104,23 +104,11 @@ test('tableToDocs({ rows, labelMap })', (t) => {
   data = { rows, labelMap: [{ key: 'Ränta', field: 'ränta(kr)' }, { key: 'Belopp', field: 3000 }] }
   t.throws(() => { tableToDocs(data) }, TypeError, `[23] Throws TypeError when property 'labelMap' in object passed to function is an array of objects, but not all 'field' properties are strings`)
 
-  t.throws(
-    () => tableToDocs(null, { debug: 1, log: false }),
-    TypeError,
-    `[24] tableToDocs(null, { debug: 1, log: false }) throws TypeError (and should output error to terminal but no log error)`
-  )
+  t.throws(() => tableToDocs(null, { debug: 1, log: false }), TypeError, `[24] tableToDocs(null, { debug: 1, log: false }) throws TypeError (and should output error to terminal but no log error)`)
 
-  t.throws(
-    () => tableToDocs(null, { debug: 1, log: true }),
-    TypeError,
-    `[25] tableToDocs(null, { debug: 1, log: true }) throws TypeError (and should output error to terminal and log error)`
-  )
+  t.throws(() => tableToDocs(null, { debug: 1, log: true }), TypeError, `[25] tableToDocs(null, { debug: 1, log: true }) throws TypeError (and should output error to terminal and log error)`)
 
-  t.throws(
-    () => tableToDocs(null, { debug: 0, log: true }),
-    TypeError,
-    `[26] tableToDocs(null, { debug: 0, log: true }) throws TypeError (and should log error but not output error to terminal)`
-  )
+  t.throws(() => tableToDocs(null, { debug: 0, log: true }), TypeError, `[26] tableToDocs(null, { debug: 0, log: true }) throws TypeError (and should log error but not output error to terminal)`)
 
   t.end()
 })
