@@ -2,85 +2,111 @@ const { test } = require('tap')
 const taskFactory = require('../task-factory')
 const ValidationError = require('../errors/validation-error')
 
+const creditors = [{
+  name: 'somename',
+  task: 'staticTable',
+  targetURL: 'http://localhost:9999',
+  documentSchemaId: '/schemas/documents/paydayVariant1.json#',
+  hdSelector: 'thead > tr > td',
+  trSelector: 'tbody > tr',
+  labelMap: [
+    { label: 'Belopp', field: 'amount' },
+    { label: 'Uppl. avg', field: 'contractingCost' }
+  ]
+}]
+const expected = [{
+  attemptNo: 1,
+  maxAttempts: undefined,
+  creditor: 'somename',
+  targetURL: 'http://localhost:9999',
+  documentSchemaId: '/schemas/documents/paydayVariant1.json#',
+  hdSelector: 'thead > tr > td',
+  trSelector: 'tbody > tr',
+  labelMap: [
+    { label: 'Belopp', field: 'amount' },
+    { label: 'Uppl. avg', field: 'contractingCost' }
+  ],
+  fieldInject: undefined
+}]
 
-// const scraperStub = () => {}
+test('taskFactory(creditors)', (t) => {
+  // [01] *****************************************************************************************
+  t.throws(() => { taskFactory() }, TypeError, `[01] Throws TypeError when called without any argument`)
 
-// const schemas = {
-//   paydayVariant1: {
-//     leverantörsId: { keyType: ['number'], min: 1, isInteger: true },
-//     belopp: { keyType: ['number'], min: 0, isInteger: true },
-//     'uppl.avg': { keyType: ['number'], min: 0, isInteger: true },
-//     'fakt.avg': { keyType: ['number'], min: 0, isInteger: true },
-//     'ränta(kr)': { keyType: ['number'], min: 0, isInteger: true },
-//     'betala-totalt': { keyType: ['number'], min: 0, isInteger: true },
-//     'eff.-ränta(%)': { keyType: ['number'], min: 0, isInteger: true },
-//     'nom.-ränta(%)': { keyType: ['number'], min: 0, isInteger: true },
-//     'löptid(d)': { keyType: ['number'], min: 0, isInteger: true }
-//   },
-//   creditor: {
-//     name: { keyType: ['string'] },
-//     parse: { keyType: ['boolean'] },
-//     payload: { keyType: ['string'], allowed: ['html'] },
-//     scraper: {
-//       name: { keyType: ['string'] },
-//       async: { keyType: ['boolean'] },
-//       hdSelector: { keyType: ['string', 'null'], default: null },
-//       trSelector: { keyType: ['string', 'null'], default: null }
-//     },
-//     targetURL: { keyType: ['string'], regExp: /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/ }, // eslint-disable-line
-//     fieldInject: { keyType: ['object', 'null'], default: null },
-//     schema: { keyType: ['string'], allowed: ['paydayVariant1'] },
-//     labelMap: { keyType: ['array'] }
-//   }
-// }
+  // [02] *****************************************************************************************
+  t.throws(() => { taskFactory(null) }, TypeError, `[02] Throws TypeError when argument is null`)
 
-// const creditors = [{
-//   name: 'kredit365',
-//   task: 'staticTable',
-//   hdSelector: 'table > thead > tr > th',
-//   trSelector: 'table > tbody > tr',
-//   targetURL: 'http://localhost:9999',
-//   fieldInject: { durationDays: 30, providerId: 1 },
-//   schema: 'paydayVariant1',
-//   labelMap: [{ label: 'Belopp', field: 'amount' }]
-// }]
+  // [03] *****************************************************************************************
+  t.throws(() => { taskFactory({}) }, TypeError, `[03] Throws TypeError when argument is an object`)
 
-// const task = {
-//   attemptNo: 1,
-//   maxAttempts: null,
-//   creditor: 'someCreditorName',
-//   scraper: scraperStub,
-//   targetURL: 'http://localhost:3000',
-//   documentSchema: 'paydayVariant1',
-//   hdSelector: 'table > thead > tr > th',
-//   trSelector: 'table > tbody > tr',
-//   labelMap: [{ label: 'Belopp', field: 'belopp' }],
-//   fieldInject: { 'löptid(d)': 30, leverantörsId: 1 }
-// }
+  // [04] *****************************************************************************************
+  t.throws(() => { taskFactory(12) }, TypeError, `[04] Throws TypeError when argument is a number`)
 
-// test('taskFactory(creditors)', (t) => {
-//   t.throws(() => { taskFactory() }, ReferenceError, `[01] Throws ReferenceError when no argument given`)
-//   t.throws(() => { taskFactory(null, schemas) }, TypeError, `[02] Throws TypeError when given null as 1st argument`)
-//   t.throws(() => { taskFactory({}, schemas) }, TypeError, `[03] Throws TypeError when given an object as 1st argument`)
-//   t.throws(() => { taskFactory(() => {}, schemas) }, TypeError, `[04] Throws TypeError when given a function as 1st argument`)
-//   t.throws(() => { taskFactory(Promise.resolve(1), schemas) }, TypeError, `[05] Throws TypeError when given a promise as 1st argument`)
-//   t.throws(() => { taskFactory(true, schemas) }, TypeError, `[06] Throws TypeError when given a boolean as 1st argument`)
-//   t.throws(() => { taskFactory(12, schemas) }, TypeError, `[07] Throws TypeError when given a number as 1st argument`)
-//   t.throws(() => { taskFactory('12', schemas) }, TypeError, `[08] Throws TypeError when given a string as 1st argument`)
-//   t.strictSame(taskFactory([], schemas), [], `[09] Returns an empty array when given an empty array as 1st argument`)
+  // [05] *****************************************************************************************
+  t.throws(() => { taskFactory('12') }, TypeError, `[05] Throws TypeError when argument is a string`)
 
-//   t.throws(() => { taskFactory(creditors) }, ReferenceError, `[01] Throws ReferenceError when no 2nd argument is given`)
-//   t.throws(() => { taskFactory(creditors, null) }, TypeError, `[02] Throws TypeError when given null as 2nd argument`)
-//   t.throws(() => { taskFactory(creditors, []) }, TypeError, `[03] Throws TypeError when given an array as 2nd argument`)
-//   t.throws(() => { taskFactory(creditors, () => {}) }, TypeError, `[04] Throws TypeError when given a function as 2nd argument`)
-//   t.throws(() => { taskFactory(creditors, Promise.resolve(1)) }, TypeError, `[05] Throws TypeError when given a promise as 2nd argument`)
-//   t.throws(() => { taskFactory(creditors, true) }, TypeError, `[06] Throws TypeError when given a boolean as 2nd argument`)
-//   t.throws(() => { taskFactory(creditors, 12) }, TypeError, `[07] Throws TypeError when given a number as 2nd argument`)
-//   t.throws(() => { taskFactory(creditors, '12') }, TypeError, `[08] Throws TypeError when given a string as 2nd argument`)
-//   t.throws(() => { taskFactory(creditors, {}) }, ValidationError, `[08] Throws ValidationError when given an empty object as 2nd argument`)
+  // [06] *****************************************************************************************
+  t.throws(() => { taskFactory(true) }, TypeError, `[06] Throws TypeError when argument is a boolean`)
 
-//   t.throws(() => { taskFactory(creditorsInvalid, schemas) }, ValidationError, `[10] Throws ValidationError when given an array with invalid data as 1st argument`)
-//   t.strictSame(taskFactory(creditors, schemas), tasks, `[11] Returns an array with one task object identical to an expected object`)
+  // [07] *****************************************************************************************
+  t.throws(() => { taskFactory(() => {}) }, TypeError, `[07] Throws TypeError when argument is a function`)
 
-//   t.end()
-// })
+  // [08] *****************************************************************************************
+  t.throws(() => { taskFactory(Promise.resolve(1)) }, TypeError, `[08] Throws TypeError when argument is a promise`)
+
+  // [09] *****************************************************************************************
+  if (taskFactory(creditors) instanceof Array) t.pass(`[09] Returns an array`)
+
+  // [10] *****************************************************************************************
+  const task = taskFactory(creditors)[0]
+  t.type(task.request, 'function', `[10] Property 'request' of first object in the array returned is a function`)
+
+  // [11] *****************************************************************************************
+  t.type(task.scraper, 'function', `[11] Property 'scraper' of first object in the array returned is a function`)
+
+  // [12] *****************************************************************************************
+  t.type(task.execute, 'function', `[12] Property 'execute' of first object in the array returned is a function`)
+
+  // [13] *****************************************************************************************
+  delete task.request
+  delete task.scraper
+  delete task.execute
+  t.strictSame([task], expected, `[13] Returns an array with one object having properties and values as expected`)
+
+  // [14] *****************************************************************************************
+  let invalidcreditors = [{ ...creditors[0] }]
+  delete invalidcreditors[0].name
+  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[14] Throws ValidationError when passed invalid creditors object`)
+
+  // [15] *****************************************************************************************
+  invalidcreditors = [{ ...creditors[0] }]
+  delete invalidcreditors[0].task
+  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[15] Throws ValidationError when passed invalid creditors object`)
+
+  // [16] *****************************************************************************************
+  invalidcreditors = [{ ...creditors[0] }]
+  delete invalidcreditors[0].targetURL
+  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[16] Throws ValidationError when passed invalid creditors object`)
+
+  // [17] *****************************************************************************************
+  invalidcreditors = [{ ...creditors[0] }]
+  delete invalidcreditors[0].documentSchemaId
+  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[17] Throws ValidationError when passed invalid creditors object`)
+
+  // [18] *****************************************************************************************
+  invalidcreditors = [{ ...creditors[0] }]
+  delete invalidcreditors[0].hdSelector
+  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[18] Throws ValidationError when passed invalid creditors object`)
+
+  // [19] *****************************************************************************************
+  invalidcreditors = [{ ...creditors[0] }]
+  delete invalidcreditors[0].trSelector
+  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[19] Throws ValidationError when passed invalid creditors object`)
+
+  // [20] *****************************************************************************************
+  invalidcreditors = [{ ...creditors[0] }]
+  delete invalidcreditors[0].labelMap
+  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[20] Throws ValidationError when passed invalid creditors object`)
+
+  t.end()
+})

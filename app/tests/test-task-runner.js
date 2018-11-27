@@ -75,6 +75,7 @@ const successTask2Result = {
 let describe
 
 test('async taskRunner(tasks, schemas)', async (t) => {
+  // [01] *****************************************************************************************
   try {
     describe = `[01] Throws ReferenceError when called without arguments`
     await taskRunner()
@@ -82,6 +83,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.type(e, ReferenceError, describe)
   }
+
+  // [02] *****************************************************************************************
   try {
     describe = `[02] Throws TypeError when given null as 1st argument`
     await taskRunner(null, schemas)
@@ -89,6 +92,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.type(e, TypeError, describe)
   }
+
+  // [03] *****************************************************************************************
   try {
     describe = `[03] Throws TypeError when given an object as 1st argument`
     await taskRunner({}, schemas)
@@ -96,6 +101,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.type(e, TypeError, describe)
   }
+
+  // [04] *****************************************************************************************
   try {
     describe = `[04] Throws TypeError when given a function as 1st argument`
     await taskRunner(() => {}, schemas)
@@ -103,6 +110,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.type(e, TypeError, describe)
   }
+
+  // [05] *****************************************************************************************
   try {
     describe = `[05] Throws TypeError when given a Promise as 1st argument`
     await taskRunner(Promise.resolve(1), schemas)
@@ -110,6 +119,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.type(e, TypeError, describe)
   }
+
+  // [06] *****************************************************************************************
   try {
     describe = `[06] Throws TypeError when given a boolean as 1st argument`
     await taskRunner(true, schemas)
@@ -117,6 +128,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.type(e, TypeError, describe)
   }
+
+  // [07] *****************************************************************************************
   try {
     describe = `[07] Throws TypeError when given a string as 1st argument`
     await taskRunner('true', schemas)
@@ -124,6 +137,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.type(e, TypeError, describe)
   }
+
+  // [08] *****************************************************************************************
   try {
     describe = `[08] Throws TypeError when given a number as 1st argument`
     await taskRunner(12, schemas)
@@ -131,6 +146,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.type(e, TypeError, describe)
   }
+
+  // [09] *****************************************************************************************
   try {
     describe = `[09] Throws ReferenceError when called without 2nd argument`
     await taskRunner([])
@@ -138,6 +155,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.type(e, ReferenceError, describe)
   }
+
+  // [10] *****************************************************************************************
   try {
     describe = `[10] Throws TypeError when given null as 2nd argument`
     await taskRunner([], null)
@@ -145,6 +164,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.type(e, TypeError, describe)
   }
+
+  // [11] *****************************************************************************************
   try {
     describe = `[11] Throws TypeError when given an array as 2nd argument`
     await taskRunner([], [])
@@ -152,6 +173,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.type(e, TypeError, describe)
   }
+
+  // [12] *****************************************************************************************
   try {
     describe = `[12] Throws TypeError when given a function as 2nd argument`
     await taskRunner([], () => {})
@@ -159,6 +182,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.type(e, TypeError, describe)
   }
+
+  // [13] *****************************************************************************************
   try {
     describe = `[13] Throws TypeError when given a Promise as 2nd argument`
     await taskRunner([], Promise.resolve(1))
@@ -166,6 +191,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.type(e, TypeError, describe)
   }
+
+  // [14] *****************************************************************************************
   try {
     describe = `[14] Throws TypeError when given a boolean as 2nd argument`
     await taskRunner([], true)
@@ -173,6 +200,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.type(e, TypeError, describe)
   }
+
+  // [15] *****************************************************************************************
   try {
     describe = `[15] Throws TypeError when given a string as 2nd argument`
     await taskRunner([], 'true')
@@ -180,6 +209,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.type(e, TypeError, describe)
   }
+
+  // [16] *****************************************************************************************
   try {
     describe = `[16] Throws TypeError when given a number as 2nd argument`
     await taskRunner([], 12)
@@ -187,12 +218,16 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.type(e, TypeError, describe)
   }
+
+  // [17] *****************************************************************************************
   try {
     describe = `[17] Returns an empty array when given an empty array as 1st argument`
     t.strictSame(await taskRunner([], schemas), [], describe)
   } catch (e) {
     t.fail(describe)
   }
+
+  // [18] *****************************************************************************************
   try {
     describe = `[18] Throws TypeError when given a 3rd argument and the type isn't an array. 3rd argument is only meant to be used by recursive calls.`
     await taskRunner([], schemas, null)
@@ -200,6 +235,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.type(e, TypeError, describe)
   }
+
+  // [19] *****************************************************************************************
   try {
     describe = `[19] Throws TypeError when given a 4th argument and the type isn't a boolean. 4th argument is only meant to be used by recursive calls.`
     await taskRunner([], schemas, [], null)
@@ -207,6 +244,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.type(e, TypeError, describe)
   }
+
+  // [20] *****************************************************************************************
   try {
     describe = `[20] Returns an array with 2 tasks that were successfull when given, as 1st argument, an array of 2 tasks expected to succeed.`
     const actual = await taskRunner([successTask1, successTask2], schemas)
@@ -218,6 +257,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
   } catch (e) {
     t.fail(describe)
   }
+
+  // [21] *****************************************************************************************
   try {
     describe = `[21] Returns an array with 2 tasks where one is successfull and the other fails due to a HTTP 404 error.`
     const failTaskStatus404 = { ...successTask1, scraper: throw404 }

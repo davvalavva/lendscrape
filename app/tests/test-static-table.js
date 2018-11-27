@@ -69,16 +69,21 @@ let actual
 let describe
 let result
 test('staticTable(task)', async (t) => {
+  // [01] *****************************************************************************************
   try {
     await staticTable()
   } catch (e) {
     t.type(e, TypeError, `[01] Throws TypeError when called without an argument`)
   }
+
+  // [02] *****************************************************************************************
   try {
     await staticTable([])
   } catch (e) {
     t.type(e, TypeError, `[02] Throws TypeError when passed an array as argument`)
   }
+
+  // [03] *****************************************************************************************
   try {
     adjustedTask = { ...task }
     delete adjustedTask.request
@@ -86,6 +91,8 @@ test('staticTable(task)', async (t) => {
   } catch (e) {
     t.type(e, Error, `[03] Throws an error when property 'request' missing in task object passed`)
   }
+
+  // [04] *****************************************************************************************
   try {
     adjustedTask = { ...task }
     delete adjustedTask.hdSelector
@@ -93,6 +100,8 @@ test('staticTable(task)', async (t) => {
   } catch (e) {
     t.type(e, Error, `[04] Throws an error when missing property 'hdSelector' in task object passed`)
   }
+
+  // [05] *****************************************************************************************
   try {
     adjustedTask = { ...task }
     delete adjustedTask.trSelector
@@ -100,6 +109,8 @@ test('staticTable(task)', async (t) => {
   } catch (e) {
     t.type(e, Error, `[05] Throws an error when missing property 'trSelector' in task object passed`)
   }
+
+  // [06] *****************************************************************************************
   try {
     adjustedTask = { ...task }
     delete adjustedTask.documentSchema
@@ -107,6 +118,8 @@ test('staticTable(task)', async (t) => {
   } catch (e) {
     t.type(e, Error, `[06] Throws an error when missing property 'documentSchema' in task object passed`)
   }
+
+  // [07] *****************************************************************************************
   try {
     adjustedTask = { ...task }
     delete adjustedTask.labelMap
@@ -114,6 +127,8 @@ test('staticTable(task)', async (t) => {
   } catch (e) {
     t.type(e, Error, `[07] Throws an error when missing property 'labelMap' in task object passed`)
   }
+
+  // [08] *****************************************************************************************
   try {
     adjustedTask = { ...task }
     adjustedTask.request = {}
@@ -121,6 +136,8 @@ test('staticTable(task)', async (t) => {
   } catch (e) {
     t.type(e, Error, `[08] Throws an error when property 'request' in passed task object is not a function`)
   }
+
+  // [09] *****************************************************************************************
   try {
     adjustedTask = { ...task }
     adjustedTask.hdSelector = {}
@@ -128,6 +145,8 @@ test('staticTable(task)', async (t) => {
   } catch (e) {
     t.type(e, Error, `[09] Throws an error when property 'hdSelector' in passed task object is not a string`)
   }
+
+  // [10] *****************************************************************************************
   try {
     adjustedTask = { ...task }
     adjustedTask.trSelector = {}
@@ -135,6 +154,8 @@ test('staticTable(task)', async (t) => {
   } catch (e) {
     t.type(e, Error, `[10] Throws an error when property 'trSelector' in passed task object is not a string`)
   }
+
+  // [11] *****************************************************************************************
   try {
     adjustedTask = { ...task }
     adjustedTask.documentSchema = {}
@@ -142,6 +163,8 @@ test('staticTable(task)', async (t) => {
   } catch (e) {
     t.type(e, Error, `[11] Throws an error when property 'documentSchema' in passed task object is not a string or an object`)
   }
+
+  // [12] *****************************************************************************************
   try {
     adjustedTask = { ...task }
     adjustedTask.labelMap = {}
@@ -149,6 +172,8 @@ test('staticTable(task)', async (t) => {
   } catch (e) {
     t.type(e, Error, `[12] Throws an error when property 'labelMap' in passed task object is not an array`)
   }
+
+  // [13] *****************************************************************************************
   try {
     adjustedTask = { ...task }
     adjustedTask.fieldInject = []
@@ -156,6 +181,8 @@ test('staticTable(task)', async (t) => {
   } catch (e) {
     t.type(e, Error, `[13] Throws an error when property 'fieldInject' in passed task object is not an object`)
   }
+
+  // [14] *****************************************************************************************
   try {
     describe = `[14] Returns an object with a property 'documents' (an array) populated with identical objects, properties and values compared to prepared fixture.`
     result = await staticTable(task)
@@ -164,5 +191,6 @@ test('staticTable(task)', async (t) => {
   } catch (e) {
     t.fail(describe)
   }
+
   t.end()
 }).catch(test.threw)
