@@ -1,5 +1,4 @@
 const { test } = require('tap')
-const requestPromiseNative = require('request-promise-native')
 const defaultTaskFactory = require('../task-factory/default-task-factory')
 
 const creditor = {
@@ -12,7 +11,6 @@ const expected = {
   attemptNo: 1,
   maxAttempts: undefined,
   creditor: 'somename',
-  request: requestPromiseNative,
   targetURL: 'http://localhost:9999',
   documentSchemaId: '/schemas/documents/paydayVariant1.json#'
 }
@@ -36,7 +34,11 @@ test('defaultTaskFactory(creditor)', (t) => {
 
   t.type(defaultTaskFactory(creditor), 'object', `[09] Returns a value of type Object`)
 
-  t.strictSame(defaultTaskFactory(creditor), expected, `[10] Returns object with properties and values as expected`)
+  const task = defaultTaskFactory(creditor)
+  t.type(task.request, 'function', `[10] Property 'request' of return object is a function`)
+
+  delete task.request
+  t.strictSame(task, expected, `[11] Returns object with properties and values as expected`)
 
   t.end()
 })
