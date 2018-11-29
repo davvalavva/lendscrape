@@ -25,7 +25,7 @@ const hdSelector = 'table > thead > tr > th'
 const trSelector = 'table > tbody > tr'
 let describe
 
-test('staticTable(task)', async (t) => {
+test('async staticTable(task)', async (t) => {
   // [01] *****************************************************************************************
   try {
     describe = `[01] Throws TypeError when called without an argument`

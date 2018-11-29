@@ -21,12 +21,7 @@ const expected = [{
   targetURL: 'http://localhost:9999',
   documentSchemaId: '/schemas/documents/paydayVariant1.json#',
   hdSelector: 'thead > tr > td',
-  trSelector: 'tbody > tr',
-  labelMap: [
-    { label: 'Belopp', field: 'amount' },
-    { label: 'Uppl. avg', field: 'contractingCost' }
-  ],
-  fieldInject: undefined
+  trSelector: 'tbody > tr'
 }]
 
 test('taskFactory(creditors)', (t) => {
@@ -60,9 +55,6 @@ test('taskFactory(creditors)', (t) => {
   // [10] *****************************************************************************************
   const task = taskFactory(creditors)[0]
   t.type(task.request, 'function', `[10] Property 'request' of first object in the array returned is a function`)
-
-  // [11] *****************************************************************************************
-  t.type(task.scraper, 'function', `[11] Property 'scraper' of first object in the array returned is a function`)
 
   // [12] *****************************************************************************************
   t.type(task.execute, 'function', `[12] Property 'execute' of first object in the array returned is a function`)
