@@ -1,6 +1,8 @@
 const { test } = require('tap')
 const { staticTable } = require('../scrapers')
 
+console.log('wtf')
+
 const html = `<!DOCTYPE html><html><body><table>
 <thead>
   <tr>

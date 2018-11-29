@@ -1,5 +1,5 @@
-const scraperStaticTable = require('./staticTable-scraper.js')
+const staticTableScraper = require('./staticTable-scraper')
 
 module.exports = {
-  staticTable: scraperStaticTable
+  staticTable: staticTableScraper
 }
