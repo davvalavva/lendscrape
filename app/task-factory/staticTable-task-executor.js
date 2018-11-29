@@ -13,11 +13,7 @@ module.exports = async ({ task, creditor }) => {
     throw new ValidationError(`Couldn't map all headers given to a corresponding field using map found in 'labelMap' property.`)
   }
 
-  // array of arrays becomes array of objects (bson documents)
-  const docsPartial = toDocuments({ rows, labelMap })
-
-  // merge manual (not parsed) fields into every document
-  const documents = docsPartial.map(document => ({ ...document, ...fieldInject }))
+  const documents = toDocuments({ rows, labelMap, fieldInject })
 
   for (const document of documents) {
     const ajvErrors = validationErrors({ $id: task.documentSchemaId, subject: document })

@@ -1,5 +1,5 @@
 const { test } = require('tap')
-const tableToDocs = require('../lib/to-documents')
+const toDocuments = require('../lib/to-documents')
 
 const labelMap = JSON.parse(`
 [
@@ -38,104 +38,121 @@ const expected = JSON.parse(`[
   }
 ]`)
 
-test('tableToDocs({ rows, labelMap })', (t) => {
+test('toDocuments({ rows, labelMap, fieldInject })', (t) => {
   // [01] *****************************************************************************************
   let data = { rows, labelMap }
-  t.type(tableToDocs(data), 'object', `[01] returns a value of type Object when validation succeeds`)
+  t.type(toDocuments(data), 'object', `[01] Returns a value of type Object`)
 
   // [02] *****************************************************************************************
-  t.strictSame(tableToDocs(data), expected, `[02] returns expected object when validation succeeds`)
+  t.strictSame(toDocuments(data), expected, `[02] Returns object with expected key value pairs`)
 
   // [03] *****************************************************************************************
-  t.throws(() => { tableToDocs() }, TypeError, `[03] Throws TypeError when called without any argument`)
+  const fieldInject = { providerId: 12 }
+  data = { rows, labelMap, fieldInject }
+  const expected2 = expected.map(doc => ({ ...doc, providerId: 12 }))
+  t.strictSame(toDocuments(data), expected2, `[03] Returns object with expected key value pairs`)
 
   // [04] *****************************************************************************************
-  t.throws(() => { tableToDocs(null) }, TypeError, `[04] Throws TypeError when argument is null`)
+  t.throws(() => { toDocuments() }, TypeError, `[04] Throws TypeError when called without any argument`)
 
   // [05] *****************************************************************************************
-  t.throws(() => { tableToDocs([]) }, TypeError, `[05] Throws TypeError when argument is an array`)
+  t.throws(() => { toDocuments(null) }, TypeError, `[05] Throws TypeError when argument is null`)
 
   // [06] *****************************************************************************************
-  t.throws(() => { tableToDocs(() => {}) }, TypeError, `[06] Throws TypeError when argument is an function`)
+  t.throws(() => { toDocuments([]) }, TypeError, `[06] Throws TypeError when argument is an array`)
 
   // [07] *****************************************************************************************
-  t.throws(() => { tableToDocs('abc') }, TypeError, `[07] Throws TypeError when argument is a string`)
+  t.throws(() => { toDocuments(() => {}) }, TypeError, `[07] Throws TypeError when argument is an function`)
 
   // [08] *****************************************************************************************
-  t.throws(() => { tableToDocs(12) }, TypeError, `[08] Throws TypeError when argument is a number`)
+  t.throws(() => { toDocuments('abc') }, TypeError, `[08] Throws TypeError when argument is a string`)
 
   // [09] *****************************************************************************************
-  data = { labelMap }
-  t.throws(() => { tableToDocs(data) }, TypeError, `[09] Throws TypeError when property 'rows' missing in object passed to function`)
+  t.throws(() => { toDocuments(12) }, TypeError, `[09] Throws TypeError when argument is a number`)
 
   // [10] *****************************************************************************************
-  data = { rows }
-  t.throws(() => { tableToDocs(data) }, TypeError, `[10] Throws TypeError when property 'labelMap' missing in object passed to function`)
+  data = { labelMap }
+  t.throws(() => { toDocuments(data) }, TypeError, `[10] Throws TypeError when property 'rows' missing`)
 
   // [11] *****************************************************************************************
-  data = { rows: null, labelMap }
-  t.throws(() => { tableToDocs(data) }, TypeError, `[11] Throws TypeError when property 'rows' in object passed to function is null`)
+  data = { rows }
+  t.throws(() => { toDocuments(data) }, TypeError, `[11] Throws TypeError when property 'labelMap'`)
 
   // [12] *****************************************************************************************
-  data = { rows: {}, labelMap }
-  t.throws(() => { tableToDocs(data) }, TypeError, `[12] Throws TypeError when property 'rows' in object passed to function is an object`)
+  data = { rows: null, labelMap }
+  t.throws(() => { toDocuments(data) }, TypeError, `[12] Throws TypeError when property 'rows' is null`)
 
   // [13] *****************************************************************************************
-  data = { rows: 'abc', labelMap }
-  t.throws(() => { tableToDocs(data) }, TypeError, `[13] Throws TypeError when property 'rows' in object passed to function is a string`)
+  data = { rows: {}, labelMap }
+  t.throws(() => { toDocuments(data) }, TypeError, `[13] Throws TypeError when property 'rows' is an object`)
 
   // [14] *****************************************************************************************
-  data = { rows: 12, labelMap }
-  t.throws(() => { tableToDocs(data) }, TypeError, `[14] Throws TypeError when property 'rows' in object passed to function is a number`)
+  data = { rows: 'abc', labelMap }
+  t.throws(() => { toDocuments(data) }, TypeError, `[14] Throws TypeError when property 'rows' is a string`)
 
   // [15] *****************************************************************************************
-  data = { rows: [], labelMap }
-  t.throws(() => { tableToDocs(data) }, TypeError, `[15] Throws TypeError when property 'rows' in object passed to function is an empty array`)
+  data = { rows: 12, labelMap }
+  t.throws(() => { toDocuments(data) }, TypeError, `[15] Throws TypeError when property 'rows' is a number`)
 
   // [16] *****************************************************************************************
-  data = { rows: [[12], 12], labelMap }
-  t.throws(() => { tableToDocs(data) }, TypeError, `[16] Throws TypeError when property 'rows' in object passed to function is an array, but contains elements that are not (sub)arrays`)
+  data = { rows: [], labelMap }
+  t.throws(() => { toDocuments(data) }, TypeError, `[16] Throws TypeError when property 'rows' is an empty array`)
 
   // [17] *****************************************************************************************
-  data = { rows, labelMap: null }
-  t.throws(() => { tableToDocs(data) }, TypeError, `[17] Throws TypeError when property 'labelMap' in object passed to function is null`)
+  data = { rows: [[12], 12], labelMap }
+  t.throws(() => { toDocuments(data) }, TypeError, `[17] Throws TypeError when property 'rows' is an array, but contains elements that are not arrays`)
 
   // [18] *****************************************************************************************
-  data = { rows, labelMap: {} }
-  t.throws(() => { tableToDocs(data) }, TypeError, `[18] Throws TypeError when property 'labelMap' in object passed to function is an object`)
+  data = { rows, labelMap: null }
+  t.throws(() => { toDocuments(data) }, TypeError, `[18] Throws TypeError when property 'labelMap' is null`)
 
   // [19] *****************************************************************************************
-  data = { rows, labelMap: '12' }
-  t.throws(() => { tableToDocs(data) }, TypeError, `[19] Throws TypeError when property 'labelMap' in object passed to function is a string`)
+  data = { rows, labelMap: {} }
+  t.throws(() => { toDocuments(data) }, TypeError, `[19] Throws TypeError when property 'labelMap' is an object`)
 
   // [20] *****************************************************************************************
-  data = { rows, labelMap: 12 }
-  t.throws(() => { tableToDocs(data) }, TypeError, `[20] Throws TypeError when property 'labelMap' in object passed to function is a number`)
+  data = { rows, labelMap: '12' }
+  t.throws(() => { toDocuments(data) }, TypeError, `[20] Throws TypeError when property 'labelMap' is a string`)
 
   // [21] *****************************************************************************************
-  data = { rows, labelMap: [] }
-  t.throws(() => { tableToDocs(data) }, TypeError, `[21] Throws TypeError when property 'labelMap' in object passed to function is an empty array`)
+  data = { rows, labelMap: 12 }
+  t.throws(() => { toDocuments(data) }, TypeError, `[21] Throws TypeError when property 'labelMap' is a number`)
 
   // [22] *****************************************************************************************
-  data = { rows, labelMap: [100, { field: 'belopp' }] }
-  t.throws(() => { tableToDocs(data) }, TypeError, `[22] Throws TypeError when property 'labelMap' in object passed to function is an array, but contains elements that are not objects`)
+  data = { rows, labelMap: [] }
+  t.throws(() => { toDocuments(data) }, TypeError, `[22] Throws TypeError when property 'labelMap' is an empty array`)
 
   // [23] *****************************************************************************************
-  data = { rows, labelMap: [{ key: 'Ränta', field: 'ränta(kr)' }, { key: 'Belopp' }] }
-  t.throws(() => { tableToDocs(data) }, TypeError, `[23] Throws TypeError when property 'labelMap' in object passed to function is an array of objects, but not all objects have a property 'field'`)
+  data = { rows, labelMap: [100, { field: 'belopp' }] }
+  t.throws(() => { toDocuments(data) }, TypeError, `[23] Throws TypeError when property 'labelMap' is an array, but contains elements that are not objects`)
 
   // [24] *****************************************************************************************
-  data = { rows, labelMap: [{ key: 'Ränta', field: 'ränta(kr)' }, { key: 'Belopp', field: 3000 }] }
-  t.throws(() => { tableToDocs(data) }, TypeError, `[24] Throws TypeError when property 'labelMap' in object passed to function is an array of objects, but not all 'field' properties are strings`)
+  data = { rows, labelMap: [{ key: 'Ränta', field: 'ränta(kr)' }, { key: 'Belopp' }] }
+  t.throws(() => { toDocuments(data) }, TypeError, `[24] Throws TypeError when property 'labelMap' is an array of objects, but not all objects have a property 'field'`)
 
   // [25] *****************************************************************************************
-  t.throws(() => tableToDocs(null, { debug: 1, log: false }), TypeError, `[25] tableToDocs(null, { debug: 1, log: false }) throws TypeError (and should output error to terminal but no log error)`)
+  data = { rows, labelMap: [{ key: 'Ränta', field: 'ränta(kr)' }, { key: 'Belopp', field: 3000 }] }
+  t.throws(() => { toDocuments(data) }, TypeError, `[25] Throws TypeError when property 'labelMap' is an array of objects, but not all 'field' properties are strings`)
 
   // [26] *****************************************************************************************
-  t.throws(() => tableToDocs(null, { debug: 1, log: true }), TypeError, `[26] tableToDocs(null, { debug: 1, log: true }) throws TypeError (and should output error to terminal and log error)`)
+  data = { rows, labelMap, fieldInject: { BELOPP: 12 } }
+  t.throws(() => { toDocuments(data) }, RangeError, `[26] Throws RangeError when property 'fieldInject' given same name as a scraped field`)
 
   // [27] *****************************************************************************************
-  t.throws(() => tableToDocs(null, { debug: 0, log: true }), TypeError, `[27] tableToDocs(null, { debug: 0, log: true }) throws TypeError (and should log error but not output error to terminal)`)
+  data = { rows, labelMap, fieldInject: null }
+  t.throws(() => { toDocuments(data) }, TypeError, `[27] Throws TypeError when property 'fieldInject' is null`)
+
+  // [28] *****************************************************************************************
+  data = { rows, labelMap, fieldInject: [] }
+  t.throws(() => { toDocuments(data) }, TypeError, `[28] Throws TypeError when property 'fieldInject' is an array`)
+
+  // [29] *****************************************************************************************
+  data = { rows, labelMap, fieldInject: '12' }
+  t.throws(() => { toDocuments(data) }, TypeError, `[29] Throws TypeError when property 'fieldInject' is a string`)
+
+  // [30] *****************************************************************************************
+  data = { rows, labelMap, fieldInject: 12 }
+  t.throws(() => { toDocuments(data) }, TypeError, `[30] Throws TypeError when property 'fieldInject' is a number`)
 
   t.end()
 })
