@@ -18,6 +18,7 @@
     "print-error": "tap app/tests/test-print-error.js --color --reporter=spec",
     "settled-task-factory": "tap app/tests/test-settled-task-factory.js --color --reporter=spec",
     "staticTable-scraper": "tap app/tests/test-staticTable-scraper.js --color --reporter=spec",
+    "staticTable-task-executor": "tap app/tests/test-staticTable-task-executor.js --color --reporter=spec",
     "staticTable-task-factory": "tap app/tests/test-staticTable-task-factory.js --color --reporter=spec",
     "task-factory": "tap app/tests/test-task-factory.js --color --reporter=spec",
     "task-runner": "tap app/tests/test-task-runner.js --color --reporter=spec",

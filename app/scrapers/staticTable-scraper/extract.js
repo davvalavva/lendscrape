@@ -3,7 +3,7 @@ const parseNum = require('../../lib/parse-number')
 
 module.exports = ({ html, hdSelector, trSelector }) => {
   const $ = cheerio.load(html)
-  const elementContent = el => $(el).text()
+  const elementContent = el => $(el).text().trim()
   const toStringsArray = nodes => nodes.toArray().map(elementContent)
   const labels = toStringsArray($(hdSelector))
   const rowsStr = $(trSelector).toArray().map(trArr => toStringsArray($(trArr).children('td')))

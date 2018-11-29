@@ -7,6 +7,7 @@ module.exports = async (task) => {
   let labels
   let rows
   let response
+
   try {
     const { request, targetURL: uri, hdSelector, trSelector } = task || {} // eslint-disable-line
 
