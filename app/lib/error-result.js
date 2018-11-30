@@ -33,5 +33,5 @@ module.exports = (task, err) => {
     }
   }
 
-  return result ? { ...task, result } : null
+  return result || null
 }

@@ -1,6 +1,12 @@
-const settledTaskFactory = require('./task-factory/settled-task-factory')
+const typeName = require('type-name')
+const errorResult = require('./lib/error-result')
 
-module.exports = async function taskRunner(tasks, accSettledTasks = []) {
+module.exports = async function taskRunner(cfg) {
+  if (typeName(cfg) !== 'Object') throw new TypeError(`Expected an object as argument, found type '${typeName(cfg)}'.`)
+  if (typeName(cfg.tasks) !== 'Array' || cfg.tasks.length === 0) throw new TypeError(`Expected property 'tasks' in argument to be a non empty array, found type '${typeName(cfg.tasks)}'.`)
+  if (cfg.accSettledTasks !== undefined && typeName(cfg.accSettledTasks) !== 'Array') throw new TypeError(`Expected property 'accSettledTasks' in argument to be an array, found type '${typeName(cfg.accSettledTasks)}'.`)
+
+  const { tasks, accSettledTasks = [] } = cfg
   let tryAgain = []
   let settledTasks = accSettledTasks
 
@@ -15,10 +21,10 @@ module.exports = async function taskRunner(tasks, accSettledTasks = []) {
 
     // OPERATIONAL ERRORS
     } catch (e) {
-      const settledTask = settledTaskFactory(task, e)
+      const result = errorResult(task, e)
 
-      if (settledTask) {
-        settledTasks = [...settledTasks, settledTask]
+      if (result) {
+        settledTasks = [...settledTasks, { ...task, result }]
         console.log(`...Failed, aborting!\n`)
       } else {
         task.attemptNo += 1
@@ -27,9 +33,7 @@ module.exports = async function taskRunner(tasks, accSettledTasks = []) {
       }
     }
   }
-  if (tryAgain.length > 0) {
-    settledTasks = await taskRunner(tryAgain, settledTasks)
-  }
+  if (tryAgain.length > 0) settledTasks = await taskRunner({ tryAgain, settledTasks })
 
   return settledTasks
 }

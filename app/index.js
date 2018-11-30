@@ -11,7 +11,7 @@ const taskRunner = require('./task-runner')
 
 async function startApp() {
   const tasks = taskFactory(creditors)
-  const settledTasks = await taskRunner(tasks)
+  const settledTasks = await taskRunner({ tasks })
 
   const cleanedUpTasks = settledTasks
     .map(task => ({ creditor: task.creditor, result: task.result }))
