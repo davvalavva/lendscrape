@@ -80,7 +80,7 @@ test('errorResult(task, err)', (t) => {
   // [21] *****************************************************************************************
   err = new Error()
   err.response = { statusCode: 400 }
-  expected = { response: { statusCode: 400 }, error: { statusCode: 400 } }
+  expected = { response: { statusCode: 400 }, error: { attemptsMade: 1, statusCode: 400 } }
   actual = errorResult(task, err)
   t.strictSame(actual, expected, `[21] Returns an object with expected keys and values`)
 

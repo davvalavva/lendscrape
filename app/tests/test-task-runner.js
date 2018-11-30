@@ -1,93 +1,41 @@
 const { test } = require('tap')
 const taskRunner = require('../task-runner')
+const StatusCodeError = require('../errors/status-code-error')
+const ValidationError = require('../errors/validation-error')
 
-class StatusCodeError extends Error {}
-
-const throw404 = async () => {
-  const err = new StatusCodeError('HTTP 404 error')
-  err.response = { statusCode: 404, message: 'HTTP 404: File not found' }
-  throw err
-}
-
-const schemas = {
-  'test-scraper': {
-    attemptNo: { keyType: ['number'], min: 1, isInteger: true },
-    maxAttempts: { keyType: ['number', 'null'], min: 1, isInteger: true, default: null }, // eslint-disable-line
-    creditor: { keyType: ['string'] },
-    scraper: { keyType: ['function'] },
-    isAsyncScraper: { keyType: ['boolean'] },
-    payload: { keyType: ['string'] },
-    targetURL: { keyType: ['string'], regExp: /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/ }, // eslint-disable-line
-    schema: { keyType: ['object'] },
-    hdSelector: { keyType: ['string'] },
-    trSelector: { keyType: ['string'] },
-    labelMap: { keyType: ['array'] },
-    fieldInject: { keyType: ['object', 'null'], default: null }
-  }
-}
-const successTask1 = {
+const task1 = {
   attemptNo: 1,
-  maxAttempts: 4,
-  creditor: 'testCreditor',
-  scraper: async () => ({
-    response: {},
-    documents: [{ belopp: 100, 'betala-totalt': 150 }, { belopp: 200, 'betala-totalt': 300 }]
-  }),
-  isAsyncScraper: true,
-  payload: 'html',
-  targetURL: 'http://localhost:9999',
-  schema: {
-    belopp: { keyType: ['number'], min: 0, isInteger: true },
-    'betala-totalt': { keyType: ['number'], min: 0, isInteger: true }
-  },
-  hdSelector: 'table > thead > tr > th',
-  trSelector: 'table > tbody > tr',
-  labelMap: [],
-  fieldInject: null
+  maxAttempts: 2,
+  creditor: 'testCreditor-1',
+  request: async () => {},
+  targetURL: 'http://localhost:9999/testpage1.html',
+  documentSchemaId: '/schemas/documents/testSchema.json#',
+  hdSelector: 'thead > tr > th',
+  trSelector: 'tbody > tr',
+  async execute() { return { documents: [] } }
 }
-const successTask1Result = {
-  success: true,
-  response: {},
-  documents: [{ belopp: 100, 'betala-totalt': 150 }, { belopp: 200, 'betala-totalt': 300 }]
-}
-const successTask2 = {
-  ...successTask1,
-  creditor: 'testCreditor2',
-  scraper: () => ({
-    response: {},
-    documents: [{ belopp: 500, 'betala-ungefär': 300 }, { belopp: 600, 'betala-ungefär': 400 }]
-  }),
-  isAsyncScraper: false,
-  schema: {
-    belopp: { keyType: ['number'], min: 0, isInteger: true },
-    'betala-ungefär': { keyType: ['number'], min: 0, isInteger: true }
-  },
-  fieldInject: {
-    leverantörsId: 2
-  }
-}
-const successTask2Result = {
-  success: true,
-  response: {},
-  documents: [{ belopp: 500, 'betala-ungefär': 300 }, { belopp: 600, 'betala-ungefär': 400 }]
+const task2 = {
+  ...task1,
+  creditor: 'testCreditor-2',
+  targetURL: 'http://localhost:9999/testpage1.html'
 }
 
 let describe
 
-test('async taskRunner(tasks, schemas)', async (t) => {
+test('async taskRunner(tasks)', async (t) => {
   // [01] *****************************************************************************************
   try {
-    describe = `[01] Throws ReferenceError when called without arguments`
+    describe = `[01] Throws TypeError when given no arguments`
     await taskRunner()
     t.fail(describe)
   } catch (e) {
-    t.type(e, ReferenceError, describe)
+    t.type(e, TypeError, describe)
   }
 
   // [02] *****************************************************************************************
   try {
-    describe = `[02] Throws TypeError when given null as 1st argument`
-    await taskRunner(null, schemas)
+    describe = `[02] Throws TypeError when given null`
+    await taskRunner(null)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -95,8 +43,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
 
   // [03] *****************************************************************************************
   try {
-    describe = `[03] Throws TypeError when given an object as 1st argument`
-    await taskRunner({}, schemas)
+    describe = `[03] Throws TypeError when given a boolean`
+    await taskRunner(true)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -104,8 +52,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
 
   // [04] *****************************************************************************************
   try {
-    describe = `[04] Throws TypeError when given a function as 1st argument`
-    await taskRunner(() => {}, schemas)
+    describe = `[04] Throws TypeError when given a number`
+    await taskRunner(12)
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -113,8 +61,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
 
   // [05] *****************************************************************************************
   try {
-    describe = `[05] Throws TypeError when given a Promise as 1st argument`
-    await taskRunner(Promise.resolve(1), schemas)
+    describe = `[05] Throws TypeError when given a string`
+    await taskRunner('12')
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -122,8 +70,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
 
   // [06] *****************************************************************************************
   try {
-    describe = `[06] Throws TypeError when given a boolean as 1st argument`
-    await taskRunner(true, schemas)
+    describe = `[06] Throws TypeError when given a function`
+    await taskRunner(() => {})
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -131,8 +79,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
 
   // [07] *****************************************************************************************
   try {
-    describe = `[07] Throws TypeError when given a string as 1st argument`
-    await taskRunner('true', schemas)
+    describe = `[07] Throws TypeError when given a promise`
+    await taskRunner(Promise.resolve(1))
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -140,8 +88,8 @@ test('async taskRunner(tasks, schemas)', async (t) => {
 
   // [08] *****************************************************************************************
   try {
-    describe = `[08] Throws TypeError when given a number as 1st argument`
-    await taskRunner(12, schemas)
+    describe = `[08] Throws TypeError when given an array`
+    await taskRunner([])
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -149,17 +97,17 @@ test('async taskRunner(tasks, schemas)', async (t) => {
 
   // [09] *****************************************************************************************
   try {
-    describe = `[09] Throws ReferenceError when called without 2nd argument`
-    await taskRunner([])
+    describe = `[09] Throws TypeError when argument object doesn't have a property 'tasks'`
+    await taskRunner({})
     t.fail(describe)
   } catch (e) {
-    t.type(e, ReferenceError, describe)
+    t.type(e, TypeError, describe)
   }
 
   // [10] *****************************************************************************************
   try {
-    describe = `[10] Throws TypeError when given null as 2nd argument`
-    await taskRunner([], null)
+    describe = `[10] Throws TypeError when property 'tasks' of argument object is an empty array`
+    await taskRunner({ tasks: [] })
     t.fail(describe)
   } catch (e) {
     t.type(e, TypeError, describe)
@@ -167,117 +115,120 @@ test('async taskRunner(tasks, schemas)', async (t) => {
 
   // [11] *****************************************************************************************
   try {
-    describe = `[11] Throws TypeError when given an array as 2nd argument`
-    await taskRunner([], [])
-    t.fail(describe)
+    describe = `[11] Returns an array with 2 task objects representing successful operations`
+    const expected = [
+      { ...task1, result: { documents: [] } },
+      { ...task2, result: { documents: [] } }
+    ]
+    const actual = await taskRunner({ tasks: [{ ...task1 }, { ...task2 }] })
+
+    t.strictSame(actual, expected, describe)
   } catch (e) {
-    t.type(e, TypeError, describe)
+    t.fail(describe)
+    throw e
   }
 
   // [12] *****************************************************************************************
   try {
-    describe = `[12] Throws TypeError when given a function as 2nd argument`
-    await taskRunner([], () => {})
-    t.fail(describe)
+    describe = `[12] Returns an array with 2 task objects, one representing a successful operation and the other a failed task due to a 404 error`
+
+    const errExecute = () => {
+      const err = new StatusCodeError(`File not found`)
+      err.response = { statusCode: 404, body: {} }
+      throw err
+    }
+    const expected = [
+      {
+        ...task1,
+        maxAttempts: 5,
+        execute: errExecute,
+        result: {
+          error: { statusCode: 404, attemptsMade: 1 },
+          response: { statusCode: 404 }
+        }
+      },
+      { ...task2, result: { documents: [] } }
+    ]
+    const actual = await taskRunner({
+      tasks: [
+        { ...task1, maxAttempts: 5, execute: errExecute },
+        { ...task2 }
+      ]
+    })
+
+    t.strictSame(actual, expected, describe)
   } catch (e) {
-    t.type(e, TypeError, describe)
+    t.fail(describe)
+    throw e
   }
 
   // [13] *****************************************************************************************
   try {
-    describe = `[13] Throws TypeError when given a Promise as 2nd argument`
-    await taskRunner([], Promise.resolve(1))
-    t.fail(describe)
+    describe = `[13] Returns an array with 2 task objects, one representing a successful operation and the other a failed task due to a 408 error`
+
+    const errExecute = () => {
+      const err = new StatusCodeError(`Request Timeout`)
+      err.response = { statusCode: 408, body: {} }
+      throw err
+    }
+    const expected = [
+      { ...task2, result: { documents: [] } },
+      {
+        ...task1,
+        maxAttempts: 5,
+        attemptNo: 5,
+        execute: errExecute,
+        result: {
+          error: { statusCode: 408, attemptsMade: 5 },
+          response: { statusCode: 408 }
+        }
+      }
+    ]
+    const actual = await taskRunner({
+      tasks: [
+        { ...task1, maxAttempts: 5, execute: errExecute },
+        { ...task2 }
+      ]
+    })
+
+    t.strictSame(actual, expected, describe)
   } catch (e) {
-    t.type(e, TypeError, describe)
+    t.fail(describe)
+    throw e
   }
 
   // [14] *****************************************************************************************
   try {
-    describe = `[14] Throws TypeError when given a boolean as 2nd argument`
-    await taskRunner([], true)
-    t.fail(describe)
-  } catch (e) {
-    t.type(e, TypeError, describe)
-  }
+    describe = `[14] Returns an array with 2 task objects, one representing a successful operation and the other a failed task due to a scraping error`
 
-  // [15] *****************************************************************************************
-  try {
-    describe = `[15] Throws TypeError when given a string as 2nd argument`
-    await taskRunner([], 'true')
-    t.fail(describe)
-  } catch (e) {
-    t.type(e, TypeError, describe)
-  }
-
-  // [16] *****************************************************************************************
-  try {
-    describe = `[16] Throws TypeError when given a number as 2nd argument`
-    await taskRunner([], 12)
-    t.fail(describe)
-  } catch (e) {
-    t.type(e, TypeError, describe)
-  }
-
-  // [17] *****************************************************************************************
-  try {
-    describe = `[17] Returns an empty array when given an empty array as 1st argument`
-    t.strictSame(await taskRunner([], schemas), [], describe)
-  } catch (e) {
-    t.fail(describe)
-  }
-
-  // [18] *****************************************************************************************
-  try {
-    describe = `[18] Throws TypeError when given a 3rd argument and the type isn't an array. 3rd argument is only meant to be used by recursive calls.`
-    await taskRunner([], schemas, null)
-    t.fail(describe)
-  } catch (e) {
-    t.type(e, TypeError, describe)
-  }
-
-  // [19] *****************************************************************************************
-  try {
-    describe = `[19] Throws TypeError when given a 4th argument and the type isn't a boolean. 4th argument is only meant to be used by recursive calls.`
-    await taskRunner([], schemas, [], null)
-    t.fail(describe)
-  } catch (e) {
-    t.type(e, TypeError, describe)
-  }
-
-  // [20] *****************************************************************************************
-  try {
-    describe = `[20] Returns an array with 2 tasks that were successfull when given, as 1st argument, an array of 2 tasks expected to succeed.`
-    const actual = await taskRunner([successTask1, successTask2], schemas)
-    const expected = [
-      { ...successTask1, result: successTask1Result },
-      { ...successTask2, result: successTask2Result }
-    ]
-    t.strictSame(actual, expected, describe)
-  } catch (e) {
-    t.fail(describe)
-  }
-
-  // [21] *****************************************************************************************
-  try {
-    describe = `[21] Returns an array with 2 tasks where one is successfull and the other fails due to a HTTP 404 error.`
-    const failTaskStatus404 = { ...successTask1, scraper: throw404 }
-    const failTaskStatus404Result = {
-      success: false,
-      response: {
-        statusCode: 404,
-        message: 'HTTP 404: File not found'
-      },
-      constructor: 'StatusCodeError'
+    const errExecute = () => {
+      const err = new ValidationError(`Invalid document`)
+      err.ajv = { a: 1, b: 2 }
+      throw err
     }
-    const actual = await taskRunner([successTask1, failTaskStatus404], schemas)
     const expected = [
-      { ...successTask1, result: successTask1Result },
-      { ...failTaskStatus404, result: failTaskStatus404Result }
+      {
+        ...task1,
+        maxAttempts: 5,
+        attemptNo: 1,
+        execute: errExecute,
+        result: {
+          error: { jsonValidationError: { a: 1, b: 2 } }
+        }
+      },
+      { ...task2, result: { documents: [] } }
     ]
+    const actual = await taskRunner({
+      tasks: [
+        { ...task1, maxAttempts: 5, execute: errExecute },
+        { ...task2 }
+      ]
+    })
+
     t.strictSame(actual, expected, describe)
   } catch (e) {
     t.fail(describe)
+    throw e
   }
 
   t.end()

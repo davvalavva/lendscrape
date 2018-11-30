@@ -17,23 +17,25 @@ module.exports = async function taskRunner(cfg) {
       const result = await task.execute()
       task.result = { documents: result.documents }
       settledTasks = [...settledTasks, task]
-      console.log(`...Completed!\n`)
+      console.log(`...Success!\n`)
 
     // OPERATIONAL ERRORS
     } catch (e) {
       const result = errorResult(task, e)
 
       if (result) {
-        settledTasks = [...settledTasks, { ...task, result }]
         console.log(`...Failed, aborting!\n`)
+        settledTasks = [...settledTasks, { ...task, result }]
       } else {
+        console.log(`...Failed, retrying!\n`)
         task.attemptNo += 1
         tryAgain = [...tryAgain, task]
-        console.log(`...Failed, retrying!\n`)
       }
     }
   }
-  if (tryAgain.length > 0) settledTasks = await taskRunner({ tryAgain, settledTasks })
+  if (tryAgain.length > 0) {
+    settledTasks = await taskRunner({ tasks: tryAgain, accSettledTasks: settledTasks })
+  }
 
   return settledTasks
 }

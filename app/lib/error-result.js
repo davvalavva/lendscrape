@@ -28,9 +28,7 @@ module.exports = (task, err) => {
     if (isInt(code)) {
       result.error.statusCode = code
     }
-    if (task.attemptNo >= maxAttempts) {
-      result.error.attemptsMade = task.attemptNo
-    }
+    result.error.attemptsMade = task.attemptNo
   }
 
   return result || null
