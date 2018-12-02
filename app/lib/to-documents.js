@@ -57,9 +57,10 @@
  *                @property   {number[[]]}  rows          yes     An array of arrays with numbers which will become the
  *                                                                property values in the objects that are returned in an array.
  *
- *                @property   {object[]}    labelMap      yes     An array of objects having two properties 'label' and 'field'.
- *                                                                The order is the objects correlates to the order of the values
- *                                                                in each array inside the 'rows' argument.
+ *                @property   {object[]}    labelMap      yes     An array of objects having the required property 'field', and
+ *                                                                where any other property is allowed (i.e. 'label') but ignored.
+ *                                                                The order of the objects in the array correlates to the order
+ *                                                                of the values in the arrays inside the 'rows' argument.
  *
  *                @property   {object}      fieldInject   no      An optional object with additional key value pairs to add
  *                                                                to each object returned in the array. Key names that exists
@@ -70,18 +71,17 @@
  */
 /* eslint-enable max-len */
 
-const typeName = require('type-name')
+const assert = require('assert')
+const VError = require('verror')
+const type = require('type-name')
+const { INVALID_ARG_ERR } = require('../errors').errors.names
 
 const valueToObject = (acc, val, index, row) => {
   const { field } = acc.labelMap[index]
 
-  if (index === row.length - 1) {
-    delete acc.labelMap
-  }
-  return {
-    ...acc,
-    [field]: val
-  }
+  if (index === row.length - 1) delete acc.labelMap
+
+  return { ...acc, [field]: val }
 }
 
 const docsFrom = (rows, labelMap) => {
@@ -90,17 +90,38 @@ const docsFrom = (rows, labelMap) => {
   return rows.map(row => rowToDoc(row))
 }
 
-module.exports = ({ rows, labelMap, fieldInject } = {}) => {
-  if (rows && rows.length === 0) throw new TypeError(`Property 'rows' can't be an empty array`)
-  if (labelMap && labelMap.length === 0) throw new TypeError(`Property 'labelMap' can't be an empty array`)
-  if (fieldInject !== undefined && typeName(fieldInject) !== 'Object') throw new TypeError(`Property 'fieldInject' must be an object if given, found type '${typeName(fieldInject)}'`)
+module.exports = (data) => {
+  try {
+    assert.strictEqual(type(data), 'Object', `argument must be an object`)
+    assert.strictEqual(type(data.rows), 'Array', `property 'rows' must be an array`)
+    assert.ok(type(data.rows.length) === 'number' && data.rows.length > 0, `array of property 'rows' must not be empty`)
+    assert.strictEqual(type(data.labelMap), 'Array', `property 'labelMap' must be an array`)
+    assert.ok(type(data.labelMap.length) === 'number' && data.labelMap.length > 0, `array of property 'labelMap' must not be empty`)
+    assert.ok(type(data.fieldInject) === 'undefined' || type(data.fieldInject) === 'Object', `if set, property 'fieldInject' must be an object`)
+    data.rows.forEach((row) => {
+      assert.strictEqual(type(row), 'Array', `all items in array of property 'rows' must be arrays`)
+      row.forEach(val => assert.strictEqual(type(val), 'number', `all items in array of arrays of property 'rows' must be numbers`))
+    })
+    data.labelMap.forEach((obj) => {
+      assert.strictEqual(type(obj), 'Object', `all items in array of property 'labelMap' must be objects`)
+      assert.strictEqual(type(obj.field), 'string', `all 'field' properties of objects in 'labelMap' must have a string value`)
+    })
+  } catch (err) {
+    const info = { argName: 'data', argValue: data, argType: type(data), argPos: 0 } // eslint-disable-line
+    throw new VError({ name: INVALID_ARG_ERR, cause: err, info }, `invalid argument`)
+  }
 
-  if (typeName(fieldInject) === 'Object') {
+  const { rows, labelMap, fieldInject } = data
+
+  if (type(fieldInject) === 'Object') {
     const overwrites = !Object.keys(fieldInject)
       .every(injectKey => labelMap
         .every(map => map.field.toLowerCase() !== injectKey.toLowerCase()))
 
-    if (overwrites) throw new RangeError(`Injected field can not have the same name as a scraped field`)
+    if (overwrites) {
+      const info = { argName: 'data', argValue: data, argType: type(data), argPos: 0 } // eslint-disable-line
+      throw new VError({ name: INVALID_ARG_ERR, info }, `invalid argument: Injected field name already exists as scraped field name`)
+    }
 
     return docsFrom(rows, labelMap).map(document => ({ ...document, ...fieldInject }))
   }
