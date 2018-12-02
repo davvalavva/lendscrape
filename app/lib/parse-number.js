@@ -31,24 +31,33 @@
  */
 /* eslint-enable max-len */
 
-const typeName = require('type-name')
-const ParseError = require('../errors/parse-error')
+const type = require('type-name')
+const assert = require('assert')
+const VError = require('verror')
+const { INVALID_ARG_ERR } = require('../errors').errors.names
 
 module.exports = (str, cfg = {}) => {
-  if (typeName(str) !== 'string' && typeName(str) !== 'number') {
-    throw new TypeError(`Expected a string or a number as first argument but found value with type '${typeName(str)}'`)
+  try {
+    if (type(str) === 'string') {
+      assert.ok(type(str) === 'string' && str.trim() !== '', `argument 'str' must not be an empty string or whitespace only`)
+    } else {
+      assert.strictEqual(type(str), 'number', `argument 'str' must be a string or a number`)
+    }
+  } catch (err) {
+    const info = { argName: 'str', argValue: str, argType: type(str), argPos: 0 } // eslint-disable-line
+    throw new VError({ name: INVALID_ARG_ERR, cause: err, info }, `invalid argument`)
   }
-  if (str.trim && str.trim() === '') {
-    throw new ParseError(`Can't parse empty string or string with only whitespaces`)
-  }
-  if (typeName(cfg) !== 'Object') {
-    throw new TypeError(`When given second argument expects an object, found type '${typeName(cfg)}'`)
+  try {
+    assert.strictEqual(type(cfg), 'Object', `argument 'cfg' must be an object`)
+  } catch (err) {
+    const info = { argName: 'cfg', argValue: cfg, argType: type(cfg), argPos: 1 } // eslint-disable-line
+    throw new VError({ name: INVALID_ARG_ERR, cause: err, info }, `invalid argument`)
   }
 
   const { keepDec = false, decSep = ',' } = cfg
 
   // return str as is, if it's a number
-  if (typeName(str) === 'number') {
+  if (type(str) === 'number') {
     return keepDec ? str : Math.trunc(str) // strip decimals if keepDec set to false
   }
 
