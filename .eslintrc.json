@@ -16,6 +16,7 @@
         "quotes": ["error", "single", { "allowTemplateLiterals": true }],
         "no-invalid-this": "error",
         "no-restricted-syntax": "off",
-        "no-unneeded-ternary": "off"
+        "no-unneeded-ternary": "off",
+        "object-curly-newline": ["error", { "consistent": true }]
     }
 }

@@ -38,7 +38,7 @@ const staticTable = async (task) => {
     assert.strictEqual(type(task.hdSelector), 'string', `property 'hdSelector' must be a string`)
     assert.strictEqual(type(task.trSelector), 'string', `property 'trSelector' must be a string`)
   } catch (err) {
-    const info = { argName: 'task', argValue: task, argType: type(task), argPos: 0 } // eslint-disable-line
+    const info = { argName: 'task', argValue: task, argType: type(task), argPos: 0 }
     throw new VError({ name: INVALID_ARG_ERR, cause: err, info }, `invalid argument`)
   }
 
@@ -66,7 +66,7 @@ const staticTable = async (task) => {
       const message = statusCodes[statusCode] ? statusCodes[statusCode].message : '[message unavailable]'
       throw new VError({
         name: STATUS_CODE_ERR,
-        info: { remoteHostname, remotePort, statusCode, response } // eslint-disable-line
+        info: { remoteHostname, remotePort, statusCode, response }
       }, 'HTTP %d - %s', statusCode, message)
     }
   } catch (err) {

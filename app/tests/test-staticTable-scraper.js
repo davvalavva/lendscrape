@@ -1,5 +1,5 @@
 const { test } = require('tap')
-const typeName = require('type-name')
+const type = require('type-name')
 const VError = require('verror')
 const { staticTable } = require('../scrapers')
 
@@ -226,7 +226,7 @@ test('async staticTable(task)', async (t) => {
       rows: [[200, 250], [3000, 3500]]
     }
     const actual = await staticTable(task)
-    if (typeName(actual) !== 'Object' || typeName(actual.response) !== 'Object') {
+    if (type(actual) !== 'Object' || type(actual.response) !== 'Object') {
       t.fail(describe)
     } else {
       delete actual.response

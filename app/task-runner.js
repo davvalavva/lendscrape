@@ -14,13 +14,13 @@
  */
 /* eslint-enable max-len */
 
-const typeName = require('type-name')
+const type = require('type-name')
 const errorResult = require('./lib/error-result')
 
 module.exports = async function taskRunner(cfg) {
-  if (typeName(cfg) !== 'Object') throw new TypeError(`Expected an object as argument, found type '${typeName(cfg)}'.`)
-  if (typeName(cfg.tasks) !== 'Array' || cfg.tasks.length === 0) throw new TypeError(`Expected property 'tasks' in argument to be a non empty array, found type '${typeName(cfg.tasks)}'.`)
-  if (cfg.accSettledTasks !== undefined && typeName(cfg.accSettledTasks) !== 'Array') throw new TypeError(`Expected property 'accSettledTasks' in argument to be an array, found type '${typeName(cfg.accSettledTasks)}'.`)
+  if (type(cfg) !== 'Object') throw new TypeError(`Expected an object as argument, found type '${type(cfg)}'.`)
+  if (type(cfg.tasks) !== 'Array' || cfg.tasks.length === 0) throw new TypeError(`Expected property 'tasks' in argument to be a non empty array, found type '${type(cfg.tasks)}'.`)
+  if (cfg.accSettledTasks !== undefined && type(cfg.accSettledTasks) !== 'Array') throw new TypeError(`Expected property 'accSettledTasks' in argument to be an array, found type '${type(cfg.accSettledTasks)}'.`)
 
   const { tasks, accSettledTasks = [] } = cfg
   let tryAgain = []

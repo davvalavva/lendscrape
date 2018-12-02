@@ -14,23 +14,23 @@
  */
 /* eslint-enable max-len */
 
-const typeName = require('type-name')
+const type = require('type-name')
 const { staticTable } = require('../scrapers')
 const toDocuments = require('../lib/to-documents')
 const labelsChanged = require('../lib/labels-changed')
 const ValidationError = require('../errors/validation-error')
-const vErrors = require('../lib/validation-errors')
+const realValidationErrors = require('../lib/validation-errors')
 
 module.exports = async (cfg) => {
-  if (typeName(cfg) !== 'Object') throw new TypeError(`Expected an object as argument, found type '${typeName(cfg)}'`)
-  if (typeName(cfg.task) !== 'Object') throw new TypeError(`Expected property 'task' in argument to be an object, found type '${typeName(cfg.task)}'`)
-  if (typeName(cfg.creditor) !== 'Object') throw new TypeError(`Expected property 'creditor' in argument to be an object, found type '${typeName(cfg.creditor)}'`)
+  if (type(cfg) !== 'Object') throw new TypeError(`Expected an object as argument, found type '${type(cfg)}'`)
+  if (type(cfg.task) !== 'Object') throw new TypeError(`Expected property 'task' in argument to be an object, found type '${type(cfg.task)}'`)
+  if (type(cfg.creditor) !== 'Object') throw new TypeError(`Expected property 'creditor' in argument to be an object, found type '${type(cfg.creditor)}'`)
 
   const {
     task,
     // the 'scraper'- and 'validationError' properties that are injected
     // into task is only meant for enabling the use of stubs in the tests file
-    task: { documentSchemaId: $id, scraper = staticTable, validationErrors = vErrors }
+    task: { documentSchemaId: $id, scraper = staticTable, validationErrors = realValidationErrors }
   } = cfg
   const { creditor: { labelMap, fieldInject } } = cfg
   const { labels, rows, response } = await scraper(task)

@@ -107,7 +107,7 @@ module.exports = (data) => {
       assert.strictEqual(type(obj.field), 'string', `all 'field' properties of objects in 'labelMap' must have a string value`)
     })
   } catch (err) {
-    const info = { argName: 'data', argValue: data, argType: type(data), argPos: 0 } // eslint-disable-line
+    const info = { argName: 'data', argValue: data, argType: type(data), argPos: 0 }
     throw new VError({ name: INVALID_ARG_ERR, cause: err, info }, `invalid argument`)
   }
 
@@ -119,7 +119,7 @@ module.exports = (data) => {
         .every(map => map.field.toLowerCase() !== injectKey.toLowerCase()))
 
     if (overwrites) {
-      const info = { argName: 'data', argValue: data, argType: type(data), argPos: 0 } // eslint-disable-line
+      const info = { argName: 'data', argValue: data, argType: type(data), argPos: 0 }
       throw new VError({ name: INVALID_ARG_ERR, info }, `invalid argument: Injected field name already exists as scraped field name`)
     }
 

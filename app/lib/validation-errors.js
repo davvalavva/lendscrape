@@ -22,8 +22,11 @@
 /* eslint-enable max-len */
 
 const Ajv = require('ajv')
-const typeName = require('type-name')
+const assert = require('assert')
+const type = require('type-name')
+const VError = require('verror')
 const schemas = require('../schemas')
+const { INVALID_ARG_ERR } = require('../errors').errors.names
 
 const options = {
   allErrors: true,
@@ -37,15 +40,31 @@ const options = {
 const ajv = new Ajv(options)
 
 
-module.exports = ({ $id, subject } = {}) => {
-  if (typeName($id) !== 'string') {
-    throw new TypeError(`Expected property '$id' to be a string (uri) in object passed, found type '${typeName($id)}'.`)
+const validationErrors = (cfg) => {
+  try {
+    assert.strictEqual(type(cfg), 'Object', `argument must be an object`)
+    assert.strictEqual(type(cfg.$id), 'string', `property '$id' must be a string`)
+  } catch (err) {
+    const info = { argName: 'cfg', argValue: cfg, argType: type(cfg), argPos: 0 }
+    throw new VError({ name: INVALID_ARG_ERR, cause: err, info }, `invalid argument`)
   }
+
+  const { $id, subject } = cfg
   const validate = ajv.getSchema($id)
+  try {
+    assert.strictEqual(type(validate), 'function', `given schema uri in property '$id' doesn't resolve into a validate() function`)
+  } catch (err) {
+    const info = { argName: 'cfg', argValue: cfg, argType: type(cfg), argPos: 0 }
+    throw new VError({ name: INVALID_ARG_ERR, cause: err, info }, `invalid argument`)
+  }
+
   const valid = validate(subject)
+
   const errors = valid
     ? null
     : { schema_$id: $id, errors: validate.errors }
 
   return errors
 }
+
+module.exports = validationErrors

@@ -43,7 +43,7 @@ module.exports = (data) => {
       assert.strictEqual(type(item.label), 'string', `property 'label' in all objects of 'labelMap' array must be strings`)
     })
   } catch (err) {
-    const info = { argName: 'data', argValue: data, argType: type(data), argPos: 0 } // eslint-disable-line
+    const info = { argName: 'data', argValue: data, argType: type(data), argPos: 0 }
     throw new VError({ name: INVALID_ARG_ERR, cause: err, info }, `invalid argument`)
   }
 

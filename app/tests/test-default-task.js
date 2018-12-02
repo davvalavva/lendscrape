@@ -1,5 +1,5 @@
 const { test } = require('tap')
-const defaultTaskFactory = require('../task-factory/default-task-factory')
+const defaultTaskFactory = require('../task-factory/default-task')
 
 const creditor = {
   name: 'somename',

@@ -44,13 +44,13 @@ module.exports = (str, cfg = {}) => {
       assert.strictEqual(type(str), 'number', `argument 'str' must be a string or a number`)
     }
   } catch (err) {
-    const info = { argName: 'str', argValue: str, argType: type(str), argPos: 0 } // eslint-disable-line
+    const info = { argName: 'str', argValue: str, argType: type(str), argPos: 0 }
     throw new VError({ name: INVALID_ARG_ERR, cause: err, info }, `invalid argument`)
   }
   try {
     assert.strictEqual(type(cfg), 'Object', `argument 'cfg' must be an object`)
   } catch (err) {
-    const info = { argName: 'cfg', argValue: cfg, argType: type(cfg), argPos: 1 } // eslint-disable-line
+    const info = { argName: 'cfg', argValue: cfg, argType: type(cfg), argPos: 1 }
     throw new VError({ name: INVALID_ARG_ERR, cause: err, info }, `invalid argument`)
   }
 

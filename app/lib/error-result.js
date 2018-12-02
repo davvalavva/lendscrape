@@ -25,13 +25,13 @@ module.exports = (task, err) => {
   try {
     assert.strictEqual(type(task), 'Object', `first argument must be an object`)
   } catch (e) {
-    const info = { argName: 'task', argValue: task, argType: type(task), argPos: 0 } // eslint-disable-line
+    const info = { argName: 'task', argValue: task, argType: type(task), argPos: 0 }
     throw new VError({ name: INVALID_ARG_ERR, cause: e, info }, `invalid argument`)
   }
   try {
     assert.ok(err instanceof Error, `second argument must be an instance of Error`)
   } catch (e) {
-    const info = { argName: 'err', argValue: err, argType: type(err), argPos: 1 } // eslint-disable-line
+    const info = { argName: 'err', argValue: err, argType: type(err), argPos: 1 }
     throw new VError({ name: INVALID_ARG_ERR, cause: e, info }, `invalid argument`)
   }
 

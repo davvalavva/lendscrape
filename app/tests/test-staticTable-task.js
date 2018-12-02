@@ -1,5 +1,5 @@
 const { test } = require('tap')
-const staticTableTaskFactory = require('../task-factory/staticTable-task-factory')
+const staticTableTaskFactory = require('../task-factory/staticTable-task')
 const ValidationError = require('../errors/validation-error')
 
 const creditor = {

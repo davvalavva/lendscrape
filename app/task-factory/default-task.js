@@ -15,10 +15,10 @@
 /* eslint-enable max-len */
 
 const requestPromiseNative = require('request-promise-native')
-const typeName = require('type-name')
+const type = require('type-name')
 
 module.exports = function defaultTaskFactory(creditor) {
-  if (typeName(creditor) !== 'Object') throw new TypeError(`Expected an object as argument, found type '${typeName(creditor)}'`)
+  if (type(creditor) !== 'Object') throw new TypeError(`Expected an object as argument, found type '${type(creditor)}'`)
 
   const task = {
     attemptNo: 1,

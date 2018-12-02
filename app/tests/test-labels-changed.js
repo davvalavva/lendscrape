@@ -21,7 +21,7 @@ test('labelsChanged({ labels, labelMap })', (t) => {
   t.throws(() => { labelsChanged() }, VError, `[01] Throws VError when called with no arguments`)
 
   // [02] *****************************************************************************************
-  t.throws(() => { labelsChanged({}) }, VError, `[02] Throws VError when called with an empty object`) // eslint-disable-line no-empty-pattern
+  t.throws(() => { labelsChanged({}) }, VError, `[02] Throws VError when called with an empty object`)
 
   // [03] *****************************************************************************************
   t.throws(() => { labelsChanged({ labels }) }, VError, `[03] Throws VError when called without property 'labelMap' in object passed`)

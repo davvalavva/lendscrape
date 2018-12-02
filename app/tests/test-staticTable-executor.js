@@ -1,5 +1,5 @@
 const { test } = require('tap')
-const executor = require('../task-factory/staticTable-task-executor.js')
+const executor = require('../task-factory/staticTable-executor.js')
 const ValidationError = require('../errors/validation-error')
 
 const labels = ['Belopp', 'Total']
