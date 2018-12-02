@@ -6,18 +6,18 @@
  * This function validates data (that can be represented as JSON) against a JSON schema using the specification found
  * at http://json-schema.org (draft-07).
  *
- * PARAMETERS     Type      Name      Required    Description
+ * PARAMETERS     Type      Name            Required    Description
  * =====================================================================================================================================================
- * @param         {Object}  {}        yes         An object with a reference to schema to be used and the subject of the validation.
+ * @param         {object}  <unavailable>     yes       An object with a reference to schema to be used and the subject of the validation.
  *                   ▼
  *                   ▼
  *                   ▼      Type      Name        Required    Description
  *                ============================================================================================================================
- *                @property {String}  $id         yes         The schema URI defined in the schemas $id property.
- *                @property {any}     subject     yes         The subject of the validation. Any value that can be transformed to valid JSON.
+ *                @property {string}  $id           yes       The schema URI defined in the schemas $id property.
+ *                @property {any}     subject       yes       The subject of the validation. Any value that can be transformed to valid JSON.
  *
  *
- * @return {null|Object}    Returns null if no validation errors found, otherwise an object with details about the error.
+ * @return {null|object}    Returns null if no validation errors found, otherwise an object with details about the error.
  */
 /* eslint-enable max-len */
 

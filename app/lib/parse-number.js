@@ -12,22 +12,22 @@
  * PARAMETERS
  * first-to-last  Type      Name    Required  Default   Description
  * ================================================================================================================================================
- * @param         {String}  str     yes                 A required string or a number. If this is a string it will be converted
+ * @param         {string}  str     yes                 A required string or a number. If this is a string it will be converted
  *                                                      to a Number. If this is a number it will just be returned with any
  *                                                      decimals truncated unless the keepDec setting is set to true,
  *                                                      then it will return the number as is.
  *
- * @param         {Object}  cfg     no        {}        Optional config object for altering the parsers behavior. See properties below.
+ * @param         {object}  cfg     no        {}        Optional config object for altering the parsers behavior. See properties below.
  *                   ▼
  *                   ▼
  *                   ▼        Type      Name      Required  Default   Description
  *                =======================================================================================================================
- *                @property   {Boolean} keepDec   no        false     If set to true, keeps the decimals in the resulting number.
- *                @property   {String}  decSep    no        ','       The character that the parser interprets as the decimal separator.
+ *                @property   {boolean} keepDec      no     false     If set to true, keeps the decimals in the resulting number.
+ *                @property   {string}  decSep       no     ','       The character that the parser interprets as the decimal separator.
  *                                                                    If set, must be one character only.
  *
  *
- * @return {Number} Returns the parsed number
+ * @return {number} Returns the parsed number
  */
 /* eslint-enable max-len */
 

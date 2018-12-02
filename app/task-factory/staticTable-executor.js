@@ -1,3 +1,19 @@
+/** @module task-factory/staticTable-executor */
+
+/* eslint-disable max-len */
+/**
+ * @function
+ * @todo write a description
+ *
+ * PARAMETERS     Type        Name        Required    Description
+ * ================================================================================================================================================
+ * @param         {object}    cfg           yes       @todo write a description
+ *
+ *
+ * @return {object} @todo write a description
+ */
+/* eslint-enable max-len */
+
 const typeName = require('type-name')
 const { staticTable } = require('../scrapers')
 const toDocuments = require('../lib/to-documents')

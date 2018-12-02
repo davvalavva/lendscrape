@@ -1,4 +1,20 @@
-const staticTableTaskFactory = require('./staticTable-task-factory')
+/** @module task-factory/ */
+
+/* eslint-disable max-len */
+/**
+ * @function
+ * @todo write a description
+ *
+ * PARAMETERS     Type        Name        Required    Description
+ * ================================================================================================================================================
+ * @param         {object[]}  creditors     yes       @todo write a description
+ *
+ *
+ * @return {object[]} @todo write a description
+ */
+/* eslint-enable max-len */
+
+const staticTableTaskFactory = require('./staticTable-task')
 const ValidationError = require('../errors/validation-error')
 
 module.exports = function taskFactory(creditors) {

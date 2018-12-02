@@ -1,3 +1,20 @@
+/** @module lib/error-result */
+
+/* eslint-disable max-len */
+/**
+ * @function
+ * @todo write a description
+ *
+ * PARAMETERS     Type        Name    Required    Description
+ * ================================================================================================================================================
+ * @param         {object}    task      yes       @todo write a description
+ * @param         {error}     err       yes       @todo write a description
+ *
+ *
+ * @return {object|null} @todo write a description
+ */
+/* eslint-enable max-len */
+
 const typeName = require('type-name')
 const { defaultMaxAttempts } = require('../config/runtime.json')
 

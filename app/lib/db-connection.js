@@ -1,3 +1,11 @@
+/** @module lib/db-connection */
+
+/* eslint-disable max-len */
+/**
+ * @todo write docs
+ */
+/* eslint-enable max-len */
+
 const { MongoClient } = require('mongodb')
 const { dbConnectionURL, dbName } = require('../config/runtime.json')
 

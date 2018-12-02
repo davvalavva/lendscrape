@@ -46,27 +46,27 @@
  *  }
  * ]
  *
- * PARAMETERS     Type      Name  Required  Description
+ * PARAMETERS     Type      Name            Required  Description
  * ============================================================================================================================
- * @param         {Object}  {}    yes       An object holding the data and it's associated map needed for the creation of
- *                   ▼                      the array of objects (documents) to be returned.
+ * @param         {object}  <unavailable>     yes     An object holding the data and it's associated map needed for
+ *                   ▼                                the creation of the array of objects (documents) to be returned.
  *                   ▼
  *                   ▼
  *                   ▼        Type          Name        Required  Description
  *                =============================================================================================================
- *                @property   {Number[[]]}  rows          yes       An array of arrays with numbers which will become the
- *                                                                  property values in the objects that are returned in an array.
+ *                @property   {number[[]]}  rows          yes     An array of arrays with numbers which will become the
+ *                                                                property values in the objects that are returned in an array.
  *
- *                @property   {Object[]}    labelMap      yes       An array of objects having two properties 'label' and 'field'.
- *                                                                  The order is the objects correlates to the order of the values
- *                                                                  in each array inside the 'rows' argument.
+ *                @property   {object[]}    labelMap      yes     An array of objects having two properties 'label' and 'field'.
+ *                                                                The order is the objects correlates to the order of the values
+ *                                                                in each array inside the 'rows' argument.
  *
- *                @property   {Object}      fieldInject   no        An optional object with additional key value pairs to add
- *                                                                  to each object returned in the array. Key names that exists
- *                                                                  in 'field' property of 'labelMap' are not allowed.
+ *                @property   {object}      fieldInject   no      An optional object with additional key value pairs to add
+ *                                                                to each object returned in the array. Key names that exists
+ *                                                                in 'field' property of 'labelMap' are not allowed.
  *
  *
- * @return {Object[]} Returns an array of objects containing the data passed in the 'rows' property in the object passed to the function.
+ * @return {object[]} Returns an array of objects containing the data passed in the 'rows' property in the object passed to the function.
  */
 /* eslint-enable max-len */
 

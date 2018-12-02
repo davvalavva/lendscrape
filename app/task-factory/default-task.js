@@ -1,3 +1,19 @@
+/** @module task-factory/default-task */
+
+/* eslint-disable max-len */
+/**
+ * @function
+ * @todo write a description
+ *
+ * PARAMETERS     Type        Name        Required    Description
+ * ================================================================================================================================================
+ * @param         {object}    creditor      yes       @todo write a description
+ *
+ *
+ * @return {object} @todo write a description
+ */
+/* eslint-enable max-len */
+
 const requestPromiseNative = require('request-promise-native')
 const typeName = require('type-name')
 

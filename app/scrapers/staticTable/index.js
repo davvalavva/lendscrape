@@ -1,3 +1,27 @@
+/** @module scrapers/staticTable */
+
+/* eslint-disable max-len */
+/**
+ * @function
+ * @todo write a description
+ *
+ * PARAMETERS     Type      Name    Required  Default   Description
+ * ================================================================================================================================================
+ * @param         {object}  task      yes       {}      @todo write a description
+ *                   ▼
+ *                   ▼
+ *                   ▼        Type        Name        Required  Description
+ *                =======================================================================================================================
+ *                @property   {function}  request       yes     @todo write a description
+ *                @property   {string}    targetURL     yes     @todo write a description
+ *                @property   {string}    hdSelector    yes     @todo write a description
+ *                @property   {string}    trSelector    yes     @todo write a description
+ *
+ *
+ * @return {object} @todo write a description
+ */
+/* eslint-enable max-len */
+
 const assert = require('assert')
 const type = require('type-name')
 const VError = require('verror')

@@ -9,16 +9,16 @@
  * The function checks that the strings of the labels (extracted from a web page) matches what is
  * expected from before (by passing an object holding the expected labels).
  *
- * PARAMETERS   Type      Name  Required  Description
+ * PARAMETERS   Type      Name            Required  Description
  * ============================================================================================================================
- * @param       {Object}  {}    yes       An object holding the labels and the map object to check
+ * @param       {object}  <unavailable>     yes     An object holding the labels and the map object to check
  *                 ▼
  *                 ▼
  *                 ▼
  *                 ▼        Type          Name      Required  Description
  *              =====================================================================================================================
- *              @property   {string[]}    labels    yes       The labels that are to be checked (extracted from some web page)
- *              @property   {object[]}    labelMap  yes       An array with objects where the property label of every object
+ *              @property   {string[]}    labels      yes     The labels that are to be checked (extracted from some web page)
+ *              @property   {object[]}    labelMap    yes     An array with objects where the property label of every object
  *                                                            in the array contains the label that is expected to be found on the web page.
  *                                                            The order of the objects must match the order of the corresponding labels
  *                                                            found in the 'labels' array.
