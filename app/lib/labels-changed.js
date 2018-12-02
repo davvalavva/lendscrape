@@ -18,7 +18,7 @@
  *                 ▼        Type          Name      Required  Description
  *              =====================================================================================================================
  *              @property   {string[]}    labels      yes     The labels that are to be checked (extracted from some web page)
- *              @property   {object[]}    labelMap    yes     An array with objects where the property label of every object
+ *              @property   {object[]}    labelMap    yes     An array with objects where the property 'label' of every object
  *                                                            in the array contains the label that is expected to be found on the web page.
  *                                                            The order of the objects must match the order of the corresponding labels
  *                                                            found in the 'labels' array.
@@ -27,15 +27,27 @@
  * @return {boolean} Returns true if labels have changed, false otherwise
  */
 
-const typeName = require('type-name')
+const assert = require('assert')
+const VError = require('verror')
+const type = require('type-name')
+const { INVALID_ARG_ERR } = require('../errors').errors.names
 
-module.exports = ({ labels, labelMap }) => {
-  if (typeName(labels) !== 'Array' || !labels.every(label => typeName(label) === 'string')) {
-    throw TypeError(`Expected first argument to be an array of (only) strings`)
+module.exports = (data) => {
+  try {
+    assert.strictEqual(type(data), 'Object', `argument must be an object`)
+    assert.strictEqual(type(data.labels), 'Array', `property 'labels' must be an array`)
+    data.labels.forEach(label => assert.strictEqual(type(label), 'string', `all items in array of property 'labels' must be strings`))
+    assert.strictEqual(type(data.labelMap), 'Array', `property 'labelMap' must be an array`)
+    data.labelMap.forEach((item) => {
+      assert.strictEqual(type(item), 'Object', `all items in array of property 'labelMap' must be objects`)
+      assert.strictEqual(type(item.label), 'string', `property 'label' in all objects of 'labelMap' array must be strings`)
+    })
+  } catch (err) {
+    const info = { argName: 'data', argValue: data, argType: type(data), argPos: 0 } // eslint-disable-line
+    throw new VError({ name: INVALID_ARG_ERR, cause: err, info }, `invalid argument`)
   }
-  if (typeName(labelMap) !== 'Array' || !labelMap.every(item => typeName(item.label) === 'string')) {
-    throw TypeError(`Expected second argument to be an array of objects where every object having a property 'label' (with a string value)`)
-  }
+
+  const { labels, labelMap } = data
 
   const clean = str => str.trim().toLowerCase()
   if (labels.length !== labelMap.length) {
