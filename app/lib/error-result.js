@@ -15,16 +15,26 @@
  */
 /* eslint-enable max-len */
 
-const typeName = require('type-name')
+const assert = require('assert')
+const VError = require('verror')
+const type = require('type-name')
 const { defaultMaxAttempts } = require('../config/runtime.json')
+const { INVALID_ARG_ERR } = require('../errors').errors.names
 
 module.exports = (task, err) => {
-  if (typeName(task) !== 'Object') {
-    throw TypeError(`Expected first argument to be an object, found type ${typeName(task)}`)
+  try {
+    assert.strictEqual(type(task), 'Object', `first argument must be an object`)
+  } catch (e) {
+    const info = { argName: 'task', argValue: task, argType: type(task), argPos: 0 } // eslint-disable-line
+    throw new VError({ name: INVALID_ARG_ERR, cause: e, info }, `invalid argument`)
   }
-  if (!(err instanceof Error)) {
-    throw TypeError(`Expected second argument to be an instance of Error, found type ${typeName(err)}. instanceof err === ${typeof err}`)
+  try {
+    assert.ok(err instanceof Error, `second argument must be an instance of Error`)
+  } catch (e) {
+    const info = { argName: 'err', argValue: err, argType: type(err), argPos: 1 } // eslint-disable-line
+    throw new VError({ name: INVALID_ARG_ERR, cause: e, info }, `invalid argument`)
   }
+
   const { isInteger: isInt, parseInt } = Number
   const { response } = err
   const maxAttempts = task.maxAttempts || defaultMaxAttempts
