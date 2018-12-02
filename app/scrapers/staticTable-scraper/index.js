@@ -1,39 +1,60 @@
-const typeName = require('type-name')
-const { printError, logError, filepath, debugMode: debug, enableLogging: log } = require('../../helpers/common-debug-tools.js') // eslint-disable-line
-const StatusCodeError = require('../../errors/status-code-error')
+const assert = require('assert')
+const type = require('type-name')
+const VError = require('verror')
 const extract = require('./extract')
+const { debugMode } = require('../../config/runtime.json')
+const { statusCodes } = require('../../errors').errors
+const { INVALID_ARG_ERR, STATUS_CODE_ERR, REQUEST_ERR } = require('../../errors').errors.names
 
-module.exports = async (task) => {
-  let labels
-  let rows
+const staticTable = async (task) => {
+  try {
+    assert.strictEqual(type(task), 'Object', `argument must be an object`)
+    assert.strictEqual(type(task.request), 'function', `property 'request' must be a function`)
+    assert.strictEqual(type(task.targetURL), 'string', `property 'targetURL' must be a string`)
+    assert.strictEqual(type(task.hdSelector), 'string', `property 'hdSelector' must be a string`)
+    assert.strictEqual(type(task.trSelector), 'string', `property 'trSelector' must be a string`)
+  } catch (err) {
+    const info = { argName: 'task', argValue: task, argType: type(task), argPos: 0 } // eslint-disable-line
+    throw new VError({ name: INVALID_ARG_ERR, cause: err, info }, `invalid argument`)
+  }
+
+  const {
+    request,
+    targetURL: uri,
+    hdSelector,
+    trSelector
+  } = task
   let response
+  let html
+  let url
+
+  const urlObj = new URL(uri)
 
   try {
-    const { request, targetURL: uri, hdSelector, trSelector } = task || {} // eslint-disable-line
-
-    if (typeName(task) !== 'Object') {
-      throw new TypeError(`Argument must be an object, found type '${typeName(task)}'`)
-    }
-
-    request.debug = debug === 1
+    const { hostname: remoteHostname, port: remotePort } = urlObj
+    url = urlObj.href
+    request.debug = debugMode === 1
     response = await request({ uri, simple: false, resolveWithFullResponse: true })
+    html = response.body
+    const { statusCode } = response
 
-    // throw status codes other than 2xx
-    if (!(/^2/.test(response.statusCode.toString()))) {
-      const err = new StatusCodeError(`A HTTP ${response.statusCode} response was returned from the request`)
-      err.response = response
-      throw err
+    if (statusCode < 200 || statusCode > 299) {
+      const message = statusCodes[statusCode] ? statusCodes[statusCode].message : '[message unavailable]'
+      throw new VError({
+        name: STATUS_CODE_ERR,
+        info: { remoteHostname, remotePort, statusCode, response } // eslint-disable-line
+      }, 'HTTP %d - %s', statusCode, message)
     }
+  } catch (err) {
+    if (err.name === STATUS_CODE_ERR) throw err
 
-    ({ labels, rows } = extract({ html: response.body, hdSelector, trSelector }))
-  //
-  } catch (e) {
-    e.path = filepath(__filename)
-    if (debug === 1) printError(e)
-    if (log) logError(e)
-    throw e
+    throw new VError({ name: REQUEST_ERR, cause: err, info: { url } }, `request failed`)
   }
+
+  const { labels, rows } = extract({ html, hdSelector, trSelector })
 
   delete response.body
   return { labels, rows, response }
 }
+
+module.exports = staticTable

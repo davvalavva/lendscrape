@@ -16,7 +16,6 @@
     "log-error": "tap app/tests/test-log-error.js --color --reporter=spec",
     "parse-error": "tap app/tests/test-parse-error.js --color --reporter=spec",
     "parse-number": "tap app/tests/test-parse-number.js --color --reporter=spec",
-    "print-error": "tap app/tests/test-print-error.js --color --reporter=spec",
     "staticTable-scraper": "tap app/tests/test-staticTable-scraper.js --color --reporter=spec",
     "staticTable-scraper-extract": "tap app/tests/test-staticTable-scraper-extract.js --color --reporter=spec",
     "staticTable-task-executor": "tap app/tests/test-staticTable-task-executor.js --color --reporter=spec",
@@ -42,7 +41,8 @@
     "puppeteer": "^1.9.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
-    "type-name": "^2.0.2"
+    "type-name": "^2.0.2",
+    "verror": "^1.10.0"
   },
   "devDependencies": {
     "browser-sync": "^2.26.3",
