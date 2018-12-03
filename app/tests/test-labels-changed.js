@@ -42,79 +42,71 @@ test('labelsChanged({ labels, labelMap })', (t) => {
   t.throws(() => { labelsChanged({ labels: badLabels, labelMap }) }, VError, `[07] Throws VError when property 'labels' is an object`)
 
   // [08] *****************************************************************************************
-  badLabels = () => {}
-  t.throws(() => { labelsChanged({ labels: badLabels, labelMap }) }, VError, `[08] Throws VError when property 'labels' is a function`)
+  badLabels = Promise.resolve(1)
+  t.throws(() => { labelsChanged({ labels: badLabels, labelMap }) }, VError, `[08] Throws VError when property 'labels' is a promise`)
 
   // [09] *****************************************************************************************
-  badLabels = Promise.resolve(1)
-  t.throws(() => { labelsChanged({ labels: badLabels, labelMap }) }, VError, `[09] Throws VError when property 'labels' is a promise`)
+  badLabels = true
+  t.throws(() => { labelsChanged({ labels: badLabels, labelMap }) }, VError, `[09] Throws VError when property 'labels' is a boolean`)
 
   // [10] *****************************************************************************************
-  badLabels = true
-  t.throws(() => { labelsChanged({ labels: badLabels, labelMap }) }, VError, `[10] Throws VError when property 'labels' is a boolean`)
+  badLabels = null
+  t.throws(() => { labelsChanged({ labels: badLabels, labelMap }) }, VError, `[10] Throws VError when property 'labels' is null`)
 
   // [11] *****************************************************************************************
-  badLabels = null
-  t.throws(() => { labelsChanged({ labels: badLabels, labelMap }) }, VError, `[11] Throws VError when property 'labels' is null`)
-
-  // [12] *****************************************************************************************
   badLabels = [...labels]
   badLabels[0] = 12
-  t.throws(() => { labelsChanged({ labels: badLabels, labelMap }) }, VError, `[12] Throws VError when property 'labels' is an array having a number element`)
+  t.throws(() => { labelsChanged({ labels: badLabels, labelMap }) }, VError, `[11] Throws VError when property 'labels' is an array having a number element`)
+
+  // [12] *****************************************************************************************
+  badLabelMap = 'Belopp'
+  t.throws(() => { labelsChanged({ labels, labelMap: badLabelMap }) }, VError, `[12] Throws VError when property 'labelMap' is a string`)
 
   // [13] *****************************************************************************************
-  badLabelMap = 'Belopp'
-  t.throws(() => { labelsChanged({ labels, labelMap: badLabelMap }) }, VError, `[13] Throws VError when property 'labelMap' is a string`)
+  badLabelMap = 12
+  t.throws(() => { labelsChanged({ labels, labelMap: badLabelMap }) }, VError, `[13] Throws VError when property 'labelMap' is a number`)
 
   // [14] *****************************************************************************************
-  badLabelMap = 12
-  t.throws(() => { labelsChanged({ labels, labelMap: badLabelMap }) }, VError, `[14] Throws VError when property 'labelMap' is a number`)
+  badLabelMap = {}
+  t.throws(() => { labelsChanged({ labels, labelMap: badLabelMap }) }, VError, `[14] Throws VError when property 'labelMap' is an object`)
 
   // [15] *****************************************************************************************
-  badLabelMap = {}
-  t.throws(() => { labelsChanged({ labels, labelMap: badLabelMap }) }, VError, `[15] Throws VError when property 'labelMap' is an object`)
+  badLabelMap = Promise.resolve(1)
+  t.throws(() => { labelsChanged({ labels, labelMap: badLabelMap }) }, VError, `[15] Throws VError when property 'labelMap' is a promise`)
 
   // [16] *****************************************************************************************
-  badLabelMap = () => {}
-  t.throws(() => { labelsChanged({ labels, labelMap: badLabelMap }) }, VError, `[16] Throws VError when property 'labelMap' is a function`)
+  badLabelMap = true
+  t.throws(() => { labelsChanged({ labels, labelMap: badLabelMap }) }, VError, `[16] Throws VError when property 'labelMap' is a boolean`)
 
   // [17] *****************************************************************************************
-  badLabelMap = Promise.resolve(1)
-  t.throws(() => { labelsChanged({ labels, labelMap: badLabelMap }) }, VError, `[17] Throws VError when property 'labelMap' is a promise`)
+  badLabelMap = null
+  t.throws(() => { labelsChanged({ labels, labelMap: badLabelMap }) }, VError, `[17] Throws VError when property 'labelMap' is null`)
 
   // [18] *****************************************************************************************
-  badLabelMap = true
-  t.throws(() => { labelsChanged({ labels, labelMap: badLabelMap }) }, VError, `[18] Throws VError when property 'labelMap' is a boolean`)
-
-  // [19] *****************************************************************************************
-  badLabelMap = null
-  t.throws(() => { labelsChanged({ labels, labelMap: badLabelMap }) }, VError, `[19] Throws VError when property 'labelMap' is null`)
-
-  // [20] *****************************************************************************************
   badLabelMap = [...labelMap]
   badLabelMap[0] = { field: 'amount' }
-  t.throws(() => { labelsChanged({ labels, labelMap: badLabelMap }) }, VError, `[20] Throws VError when property 'labelMap' is an array having an object without property 'label'`)
+  t.throws(() => { labelsChanged({ labels, labelMap: badLabelMap }) }, VError, `[18] Throws VError when property 'labelMap' is an array having an object without property 'label'`)
 
-  // [21] *****************************************************************************************
+  // [19] *****************************************************************************************
   badLabelMap = [...labelMap]
   badLabelMap[0] = { field: 'amount', label: 12 }
-  t.throws(() => { labelsChanged({ labels, labelMap: badLabelMap }) }, VError, `[21] Throws VError when property 'labelMap' is an array having an object where property 'label' is a number`)
+  t.throws(() => { labelsChanged({ labels, labelMap: badLabelMap }) }, VError, `[19] Throws VError when property 'labelMap' is an array having an object where property 'label' is a number`)
+
+  // [20] *****************************************************************************************
+  t.type(labelsChanged({ labels, labelMap }), 'boolean', `[20] Returns a boolean when given valid arguments`)
+
+  // [21] *****************************************************************************************
+  t.equal(labelsChanged({ labels, labelMap }), false, `[21] Returns false when given valid arguments and labels haven't changed`)
 
   // [22] *****************************************************************************************
-  t.type(labelsChanged({ labels, labelMap }), 'boolean', `[22] Returns a boolean when given valid arguments`)
-
-  // [23] *****************************************************************************************
-  t.equal(labelsChanged({ labels, labelMap }), false, `[23] Returns false when given valid arguments and labels haven't changed`)
-
-  // [24] *****************************************************************************************
   badLabels = [...labels]
   badLabels[2] = 'Aviavgift'
-  t.equal(labelsChanged({ labels: badLabels, labelMap }), true, `[24] Returns true when given valid arguments and there exists a label not matching correspinding label in map object`)
+  t.equal(labelsChanged({ labels: badLabels, labelMap }), true, `[22] Returns true when given valid arguments and there exists a label not matching correspinding label in map object`)
 
-  // [25] *****************************************************************************************
+  // [23] *****************************************************************************************
   badLabels = [...labels]
   badLabels.pop()
-  t.equal(labelsChanged({ labels: badLabels, labelMap }), true, `[25] Returns true when nr of labels not equal to nr of labels in labelMap`)
+  t.equal(labelsChanged({ labels: badLabels, labelMap }), true, `[23] Returns true when nr of labels not equal to nr of labels in labelMap`)
 
   t.end()
 })

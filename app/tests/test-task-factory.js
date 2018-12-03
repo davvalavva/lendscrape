@@ -1,5 +1,6 @@
 const { test } = require('tap')
 const taskFactory = require('../task-factory')
+const type = require('type-name')
 const ValidationError = require('../errors/validation-error')
 
 const creditors = [{
@@ -44,61 +45,58 @@ test('taskFactory(creditors)', (t) => {
   t.throws(() => { taskFactory(true) }, TypeError, `[06] Throws TypeError when argument is a boolean`)
 
   // [07] *****************************************************************************************
-  t.throws(() => { taskFactory(() => {}) }, TypeError, `[07] Throws TypeError when argument is a function`)
+  t.throws(() => { taskFactory(Promise.resolve(1)) }, TypeError, `[07] Throws TypeError when argument is a promise`)
 
   // [08] *****************************************************************************************
-  t.throws(() => { taskFactory(Promise.resolve(1)) }, TypeError, `[08] Throws TypeError when argument is a promise`)
+  t.strictSame(type(taskFactory(creditors)), 'Array', `[08] Returns an array`)
 
   // [09] *****************************************************************************************
-  if (taskFactory(creditors) instanceof Array) t.pass(`[09] Returns an array`)
+  const task = taskFactory(creditors)[0]
+  t.type(task.request, 'function', `[09] Property 'request' of first object in the array returned is a function`)
 
   // [10] *****************************************************************************************
-  const task = taskFactory(creditors)[0]
-  t.type(task.request, 'function', `[10] Property 'request' of first object in the array returned is a function`)
+  t.type(task.execute, 'function', `[10] Property 'execute' of first object in the array returned is a function`)
 
-  // [12] *****************************************************************************************
-  t.type(task.execute, 'function', `[12] Property 'execute' of first object in the array returned is a function`)
-
-  // [13] *****************************************************************************************
+  // [11] *****************************************************************************************
   delete task.request
   delete task.scraper
   delete task.execute
-  t.strictSame([task], expected, `[13] Returns an array with one object having properties and values as expected`)
+  t.strictSame([task], expected, `[11] Returns an array with one object having properties and values as expected`)
 
-  // [14] *****************************************************************************************
+  // [12] *****************************************************************************************
   let invalidcreditors = [{ ...creditors[0] }]
   delete invalidcreditors[0].name
+  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[12] Throws ValidationError when passed invalid creditors object`)
+
+  // [13] *****************************************************************************************
+  invalidcreditors = [{ ...creditors[0] }]
+  delete invalidcreditors[0].task
+  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[13] Throws ValidationError when passed invalid creditors object`)
+
+  // [14] *****************************************************************************************
+  invalidcreditors = [{ ...creditors[0] }]
+  delete invalidcreditors[0].targetURL
   t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[14] Throws ValidationError when passed invalid creditors object`)
 
   // [15] *****************************************************************************************
   invalidcreditors = [{ ...creditors[0] }]
-  delete invalidcreditors[0].task
+  delete invalidcreditors[0].documentSchemaId
   t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[15] Throws ValidationError when passed invalid creditors object`)
 
   // [16] *****************************************************************************************
   invalidcreditors = [{ ...creditors[0] }]
-  delete invalidcreditors[0].targetURL
+  delete invalidcreditors[0].hdSelector
   t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[16] Throws ValidationError when passed invalid creditors object`)
 
   // [17] *****************************************************************************************
   invalidcreditors = [{ ...creditors[0] }]
-  delete invalidcreditors[0].documentSchemaId
+  delete invalidcreditors[0].trSelector
   t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[17] Throws ValidationError when passed invalid creditors object`)
 
   // [18] *****************************************************************************************
   invalidcreditors = [{ ...creditors[0] }]
-  delete invalidcreditors[0].hdSelector
-  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[18] Throws ValidationError when passed invalid creditors object`)
-
-  // [19] *****************************************************************************************
-  invalidcreditors = [{ ...creditors[0] }]
-  delete invalidcreditors[0].trSelector
-  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[19] Throws ValidationError when passed invalid creditors object`)
-
-  // [20] *****************************************************************************************
-  invalidcreditors = [{ ...creditors[0] }]
   delete invalidcreditors[0].labelMap
-  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[20] Throws ValidationError when passed invalid creditors object`)
+  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[18] Throws ValidationError when passed invalid creditors object`)
 
   t.end()
 })

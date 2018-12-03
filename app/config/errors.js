@@ -6,7 +6,9 @@ module.exports = {
       REQUEST_ERR: 'RequestError',
       URI_ERR: 'URIError',
       CRED_CFG_ERR: 'CreditorConfigurationError',
-      VALIDATION_ERR: 'ValidationError'
+      VALIDATION_ERR: 'ValidationError',
+      MAP_ERR: 'MappingError',
+      TRANSFORM_DATA_ERR: 'TransformDataError'
     },
     statusCodes: {
       400: { message: 'Bad Request' },

@@ -44,60 +44,57 @@ test('staticTableTaskFactory(creditor)', (t) => {
   t.throws(() => { staticTableTaskFactory(true) }, VError, `[06] Throws VError when given a boolean`)
 
   // [07] *****************************************************************************************
-  t.throws(() => { staticTableTaskFactory(() => {}) }, VError, `[07] Throws VError when given a function`)
+  t.throws(() => { staticTableTaskFactory(Promise.resolve(1)) }, VError, `[07] Throws VError when given a promise`)
 
   // [08] *****************************************************************************************
-  t.throws(() => { staticTableTaskFactory(Promise.resolve(1)) }, VError, `[08] Throws VError when given a promise`)
+  t.type(staticTableTaskFactory(creditor), 'object', `[08] Returns an object`)
 
   // [09] *****************************************************************************************
-  t.type(staticTableTaskFactory(creditor), 'object', `[09] Returns an object`)
+  const task = staticTableTaskFactory(creditor)
+  t.type(task.request, 'function', `[09] Returns an object where property 'request' is a function`)
 
   // [10] *****************************************************************************************
-  const task = staticTableTaskFactory(creditor)
-  t.type(task.request, 'function', `[10] Returns an object where property 'request' is a function`)
+  t.type(task.execute, 'function', `[10] Property 'execute' of return object is a function`)
 
   // [11] *****************************************************************************************
-  t.type(task.execute, 'function', `[11] Property 'execute' of return object is a function`)
-
-  // [12] *****************************************************************************************
   delete task.request
   delete task.execute
-  t.strictSame(task, expected, `[12] Returns object with properties and values as expected`)
+  t.strictSame(task, expected, `[11] Returns object with properties and values as expected`)
 
-  // [13] *****************************************************************************************
+  // [12] *****************************************************************************************
   let invalidCreditor = { ...creditor }
   delete invalidCreditor.name
+  t.throws(() => { staticTableTaskFactory(invalidCreditor) }, VError, `[12] Throws VError when passed invalid creditor object`)
+
+  // [13] *****************************************************************************************
+  invalidCreditor = { ...creditor }
+  delete invalidCreditor.task
   t.throws(() => { staticTableTaskFactory(invalidCreditor) }, VError, `[13] Throws VError when passed invalid creditor object`)
 
   // [14] *****************************************************************************************
   invalidCreditor = { ...creditor }
-  delete invalidCreditor.task
+  delete invalidCreditor.targetURL
   t.throws(() => { staticTableTaskFactory(invalidCreditor) }, VError, `[14] Throws VError when passed invalid creditor object`)
 
   // [15] *****************************************************************************************
   invalidCreditor = { ...creditor }
-  delete invalidCreditor.targetURL
+  delete invalidCreditor.documentSchemaId
   t.throws(() => { staticTableTaskFactory(invalidCreditor) }, VError, `[15] Throws VError when passed invalid creditor object`)
 
   // [16] *****************************************************************************************
   invalidCreditor = { ...creditor }
-  delete invalidCreditor.documentSchemaId
+  delete invalidCreditor.hdSelector
   t.throws(() => { staticTableTaskFactory(invalidCreditor) }, VError, `[16] Throws VError when passed invalid creditor object`)
 
   // [17] *****************************************************************************************
   invalidCreditor = { ...creditor }
-  delete invalidCreditor.hdSelector
+  delete invalidCreditor.trSelector
   t.throws(() => { staticTableTaskFactory(invalidCreditor) }, VError, `[17] Throws VError when passed invalid creditor object`)
 
   // [18] *****************************************************************************************
   invalidCreditor = { ...creditor }
-  delete invalidCreditor.trSelector
-  t.throws(() => { staticTableTaskFactory(invalidCreditor) }, VError, `[18] Throws VError when passed invalid creditor object`)
-
-  // [19] *****************************************************************************************
-  invalidCreditor = { ...creditor }
   delete invalidCreditor.labelMap
-  t.throws(() => { staticTableTaskFactory(invalidCreditor) }, VError, `[19] Throws VError when passed invalid creditor object`)
+  t.throws(() => { staticTableTaskFactory(invalidCreditor) }, VError, `[18] Throws VError when passed invalid creditor object`)
 
   t.end()
 })

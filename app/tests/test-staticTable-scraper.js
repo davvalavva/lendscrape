@@ -58,8 +58,8 @@ test('async staticTable(task)', async (t) => {
 
   // [04] *****************************************************************************************
   try {
-    describe = `[04] Throws VError when given a function`
-    await staticTable(() => {})
+    describe = `[04] Throws VError when given a promise`
+    await staticTable(new Promise(() => {}))
     t.fail(describe)
   } catch (e) {
     t.type(e, VError, describe)
@@ -67,8 +67,8 @@ test('async staticTable(task)', async (t) => {
 
   // [05] *****************************************************************************************
   try {
-    describe = `[05] Throws VError when given a promise`
-    await staticTable(new Promise(() => {}))
+    describe = `[05] Throws VError when given a boolean`
+    await staticTable(true)
     t.fail(describe)
   } catch (e) {
     t.type(e, VError, describe)
@@ -76,8 +76,8 @@ test('async staticTable(task)', async (t) => {
 
   // [06] *****************************************************************************************
   try {
-    describe = `[06] Throws VError when given a boolean`
-    await staticTable(true)
+    describe = `[06] Throws VError when given a number`
+    await staticTable(12)
     t.fail(describe)
   } catch (e) {
     t.type(e, VError, describe)
@@ -85,8 +85,8 @@ test('async staticTable(task)', async (t) => {
 
   // [07] *****************************************************************************************
   try {
-    describe = `[07] Throws VError when given a number`
-    await staticTable(12)
+    describe = `[07] Throws VError when given a string`
+    await staticTable('12')
     t.fail(describe)
   } catch (e) {
     t.type(e, VError, describe)
@@ -94,16 +94,7 @@ test('async staticTable(task)', async (t) => {
 
   // [08] *****************************************************************************************
   try {
-    describe = `[08] Throws VError when given a string`
-    await staticTable('12')
-    t.fail(describe)
-  } catch (e) {
-    t.type(e, VError, describe)
-  }
-
-  // [09] *****************************************************************************************
-  try {
-    describe = `[09] Throws VError when property 'request' isn't set for the argument object given`
+    describe = `[08] Throws VError when property 'request' isn't set for the argument object given`
 
     const task = { hdSelector, trSelector, targetURL }
     await staticTable(task)
@@ -112,9 +103,9 @@ test('async staticTable(task)', async (t) => {
     t.type(e, VError, describe)
   }
 
-  // [10] *****************************************************************************************
+  // [09] *****************************************************************************************
   try {
-    describe = `[10] Throws VError when property 'targetURL' isn't set for the argument object given`
+    describe = `[09] Throws VError when property 'targetURL' isn't set for the argument object given`
 
     const task = { hdSelector, trSelector, request }
     await staticTable(task)
@@ -123,9 +114,9 @@ test('async staticTable(task)', async (t) => {
     t.type(e, VError, describe)
   }
 
-  // [11] *****************************************************************************************
+  // [10] *****************************************************************************************
   try {
-    describe = `[11] Throws VError when property 'hdSelector' isn't set for the argument object given`
+    describe = `[10] Throws VError when property 'hdSelector' isn't set for the argument object given`
 
     const task = { trSelector, request, targetURL }
     await staticTable(task)
@@ -134,9 +125,9 @@ test('async staticTable(task)', async (t) => {
     t.type(e, VError, describe)
   }
 
-  // [12] *****************************************************************************************
+  // [11] *****************************************************************************************
   try {
-    describe = `[12] Throws VError when property 'trSelector' isn't set for the argument object given`
+    describe = `[11] Throws VError when property 'trSelector' isn't set for the argument object given`
 
     const task = { hdSelector, request, targetURL }
     await staticTable(task)
@@ -145,15 +136,31 @@ test('async staticTable(task)', async (t) => {
     t.type(e, VError, describe)
   }
 
-  // [13] *****************************************************************************************
+  // [12] *****************************************************************************************
   try {
-    describe = `[13] Throws VError with error property 'name' set to 'StatusCodeError' when response with status code 404 is returned`
+    describe = `[12] Throws VError with error property 'name' set to 'StatusCodeError' when response with status code 404 is returned`
 
     const task = {
       hdSelector,
       trSelector,
       targetURL,
       request() { return { statusCode: '404' } }
+    }
+    await staticTable(task)
+    t.fail(describe)
+  } catch (e) {
+    t.strictSame(e.name, 'StatusCodeError', describe)
+  }
+
+  // [13] *****************************************************************************************
+  try {
+    describe = `[13] Throws VError with error property 'name' set to 'StatusCodeError' when response with status code 999 is returned`
+
+    const task = {
+      hdSelector,
+      trSelector,
+      targetURL,
+      request() { return { statusCode: '999' } }
     }
     await staticTable(task)
     t.fail(describe)
@@ -195,20 +202,6 @@ test('async staticTable(task)', async (t) => {
     } else {
       t.type(e, VError, describe)
     }
-    // console.log('***************************')
-    // console.log(e.name)
-    // console.log('***************************')
-    // console.log(e.message)
-    // console.log('***************************')
-    // console.log(VError.info(e))
-    // console.log('***************************')
-    // console.log(e.cause().name)
-    // console.log('***************************')
-    // console.log(e.cause().message)
-    // console.log('***************************')
-    // console.log(JSON.stringify(e.cause()))
-    // console.log('***************************')
-    // throw e
   }
 
   // [16] *****************************************************************************************

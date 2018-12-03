@@ -34,36 +34,33 @@ test('staticTableExtract({ html, hdSelector, trSelector })', (t) => {
   t.throws(() => { staticTableExtract([]) }, VError, `[03] Throws VError when given an array`)
 
   // [04] *****************************************************************************************
-  t.throws(() => { staticTableExtract(() => {}) }, VError, `[04] Throws VError when given a function`)
+  t.throws(() => { staticTableExtract(Promise.resolve(1)) }, VError, `[04] Throws VError when given a promise`)
 
   // [05] *****************************************************************************************
-  t.throws(() => { staticTableExtract(Promise.resolve(1)) }, VError, `[05] Throws VError when given a promise`)
+  t.throws(() => { staticTableExtract(true) }, VError, `[05] Throws VError when given a boolean`)
 
   // [06] *****************************************************************************************
-  t.throws(() => { staticTableExtract(true) }, VError, `[06] Throws VError when given a boolean`)
+  t.throws(() => { staticTableExtract(12) }, VError, `[06] Throws VError when given a number`)
 
   // [07] *****************************************************************************************
-  t.throws(() => { staticTableExtract(12) }, VError, `[07] Throws VError when given a number`)
+  t.throws(() => { staticTableExtract('12') }, VError, `[07] Throws VError when given a string`)
 
   // [08] *****************************************************************************************
-  t.throws(() => { staticTableExtract('12') }, VError, `[08] Throws VError when given a string`)
+  t.throws(() => { staticTableExtract({ hdSelector, trSelector }) }, VError, `[08] Throws VError when missing 'html' property in passed object`)
 
   // [09] *****************************************************************************************
-  t.throws(() => { staticTableExtract({ hdSelector, trSelector }) }, VError, `[09] Throws VError when missing 'html' property in passed object`)
+  t.throws(() => { staticTableExtract({ html: 1, hdSelector, trSelector }) }, VError, `[09] Throws VError when 'html' property isn't a string`)
 
   // [10] *****************************************************************************************
-  t.throws(() => { staticTableExtract({ html: 1, hdSelector, trSelector }) }, VError, `[10] Throws VError when 'html' property isn't a string`)
+  t.throws(() => { staticTableExtract({ html, hdSelector: 1, trSelector }) }, VError, `[10] Throws VError when 'hdSelector' property isn't a string`)
 
   // [11] *****************************************************************************************
-  t.throws(() => { staticTableExtract({ html, hdSelector: 1, trSelector }) }, VError, `[11] Throws VError when 'hdSelector' property isn't a string`)
+  t.throws(() => { staticTableExtract({ html, hdSelector, trSelector: 1 }) }, VError, `[11] Throws VError when 'trSelector' property isn't a string`)
 
   // [12] *****************************************************************************************
-  t.throws(() => { staticTableExtract({ html, hdSelector, trSelector: 1 }) }, VError, `[12] Throws VError when 'trSelector' property isn't a string`)
-
-  // [13] *****************************************************************************************
   const expected = { labels: ['Belopp', 'Total'], rows: [[200, 250], [3000, 3500]] }
   const actual = staticTableExtract({ html, hdSelector, trSelector })
-  t.strictSame(actual, expected, `[13] Returns object with expected properties and values`)
+  t.strictSame(actual, expected, `[12] Returns object with expected properties and values`)
 
   t.end()
 })

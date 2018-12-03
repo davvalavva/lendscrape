@@ -63,105 +63,102 @@ test('toDocuments({ rows, labelMap, fieldInject })', (t) => {
   t.throws(() => { toDocuments([]) }, VError, `[06] Throws VError when given an array`)
 
   // [07] *****************************************************************************************
-  t.throws(() => { toDocuments(() => {}) }, VError, `[07] Throws VError when given a function`)
+  t.throws(() => { toDocuments('abc') }, VError, `[07] Throws VError when given a string`)
 
   // [08] *****************************************************************************************
-  t.throws(() => { toDocuments('abc') }, VError, `[08] Throws VError when given a string`)
+  t.throws(() => { toDocuments(12) }, VError, `[08] Throws VError when given a number`)
 
   // [09] *****************************************************************************************
-  t.throws(() => { toDocuments(12) }, VError, `[09] Throws VError when given a number`)
+  data = { labelMap }
+  t.throws(() => { toDocuments(data) }, VError, `[09] Throws VError when property 'rows' is missing`)
 
   // [10] *****************************************************************************************
-  data = { labelMap }
-  t.throws(() => { toDocuments(data) }, VError, `[10] Throws VError when property 'rows' is missing`)
+  data = { rows }
+  t.throws(() => { toDocuments(data) }, VError, `[10] Throws VError when property 'labelMap' is missing`)
 
   // [11] *****************************************************************************************
-  data = { rows }
-  t.throws(() => { toDocuments(data) }, VError, `[11] Throws VError when property 'labelMap' is missing`)
+  data = { rows: null, labelMap }
+  t.throws(() => { toDocuments(data) }, VError, `[11] Throws VError when property 'rows' is null`)
 
   // [12] *****************************************************************************************
-  data = { rows: null, labelMap }
-  t.throws(() => { toDocuments(data) }, VError, `[12] Throws VError when property 'rows' is null`)
+  data = { rows: {}, labelMap }
+  t.throws(() => { toDocuments(data) }, VError, `[12] Throws VError when property 'rows' is an object`)
 
   // [13] *****************************************************************************************
-  data = { rows: {}, labelMap }
-  t.throws(() => { toDocuments(data) }, VError, `[13] Throws VError when property 'rows' is an object`)
+  data = { rows: 'abc', labelMap }
+  t.throws(() => { toDocuments(data) }, VError, `[13] Throws VError when property 'rows' is a string`)
 
   // [14] *****************************************************************************************
-  data = { rows: 'abc', labelMap }
-  t.throws(() => { toDocuments(data) }, VError, `[14] Throws VError when property 'rows' is a string`)
+  data = { rows: 12, labelMap }
+  t.throws(() => { toDocuments(data) }, VError, `[14] Throws VError when property 'rows' is a number`)
 
   // [15] *****************************************************************************************
-  data = { rows: 12, labelMap }
-  t.throws(() => { toDocuments(data) }, VError, `[15] Throws VError when property 'rows' is a number`)
+  data = { rows: [], labelMap }
+  t.throws(() => { toDocuments(data) }, VError, `[15] Throws VError when property 'rows' is an empty array`)
 
   // [16] *****************************************************************************************
-  data = { rows: [], labelMap }
-  t.throws(() => { toDocuments(data) }, VError, `[16] Throws VError when property 'rows' is an empty array`)
+  data = { rows: [[12], 12], labelMap }
+  t.throws(() => { toDocuments(data) }, VError, `[16] Throws VError when property 'rows' is an array, but contains elements that are not arrays`)
 
   // [17] *****************************************************************************************
-  data = { rows: [[12], 12], labelMap }
-  t.throws(() => { toDocuments(data) }, VError, `[17] Throws VError when property 'rows' is an array, but contains elements that are not arrays`)
+  data = { rows: [[12], ['12']], labelMap }
+  t.throws(() => { toDocuments(data) }, VError, `[17] Throws VError when property 'rows' is an array of arrays but contains elements that are not numbers`)
 
   // [18] *****************************************************************************************
-  data = { rows: [[12], ['12']], labelMap }
-  t.throws(() => { toDocuments(data) }, VError, `[18] Throws VError when property 'rows' is an array of arrays but contains elements that are not numbers`)
+  data = { rows, labelMap: null }
+  t.throws(() => { toDocuments(data) }, VError, `[18] Throws VError when property 'labelMap' is null`)
 
   // [19] *****************************************************************************************
-  data = { rows, labelMap: null }
-  t.throws(() => { toDocuments(data) }, VError, `[19] Throws VError when property 'labelMap' is null`)
+  data = { rows, labelMap: {} }
+  t.throws(() => { toDocuments(data) }, VError, `[19] Throws VError when property 'labelMap' is an object`)
 
   // [20] *****************************************************************************************
-  data = { rows, labelMap: {} }
-  t.throws(() => { toDocuments(data) }, VError, `[20] Throws VError when property 'labelMap' is an object`)
+  data = { rows, labelMap: '12' }
+  t.throws(() => { toDocuments(data) }, VError, `[20] Throws VError when property 'labelMap' is a string`)
 
   // [21] *****************************************************************************************
-  data = { rows, labelMap: '12' }
-  t.throws(() => { toDocuments(data) }, VError, `[21] Throws VError when property 'labelMap' is a string`)
+  data = { rows, labelMap: 12 }
+  t.throws(() => { toDocuments(data) }, VError, `[21] Throws VError when property 'labelMap' is a number`)
 
   // [22] *****************************************************************************************
-  data = { rows, labelMap: 12 }
-  t.throws(() => { toDocuments(data) }, VError, `[22] Throws VError when property 'labelMap' is a number`)
+  data = { rows, labelMap: [] }
+  t.throws(() => { toDocuments(data) }, VError, `[22] Throws VError when property 'labelMap' is an empty array`)
 
   // [23] *****************************************************************************************
-  data = { rows, labelMap: [] }
-  t.throws(() => { toDocuments(data) }, VError, `[23] Throws VError when property 'labelMap' is an empty array`)
+  data = { rows, labelMap: [100, { field: 'belopp' }] }
+  t.throws(() => { toDocuments(data) }, VError, `[23] Throws VError when property 'labelMap' is an array, but contains elements that are not objects`)
 
   // [24] *****************************************************************************************
-  data = { rows, labelMap: [100, { field: 'belopp' }] }
-  t.throws(() => { toDocuments(data) }, VError, `[24] Throws VError when property 'labelMap' is an array, but contains elements that are not objects`)
+  data = { rows, labelMap: [{ label: ' Belopp' }, { field: 'belopp' }] }
+  t.throws(() => { toDocuments(data) }, VError, `[24] Throws VError when property 'labelMap' is an array of objects, but not all objects have a 'field' property`)
 
   // [25] *****************************************************************************************
-  data = { rows, labelMap: [{ label: ' Belopp' }, { field: 'belopp' }] }
-  t.throws(() => { toDocuments(data) }, VError, `[25] Throws VError when property 'labelMap' is an array of objects, but not all objects have a 'field' property`)
+  data = { rows, labelMap: [{ label: 'Ränta', field: 'ränta(kr)' }, { label: 'Belopp' }] }
+  t.throws(() => { toDocuments(data) }, VError, `[25] Throws VError when property 'labelMap' is an array of objects, but not all objects have a property 'field'`)
 
   // [26] *****************************************************************************************
-  data = { rows, labelMap: [{ label: 'Ränta', field: 'ränta(kr)' }, { label: 'Belopp' }] }
-  t.throws(() => { toDocuments(data) }, VError, `[26] Throws VError when property 'labelMap' is an array of objects, but not all objects have a property 'field'`)
+  data = { rows, labelMap: [{ label: 'Ränta', field: 'ränta(kr)' }, { label: 'Belopp', field: 3000 }] }
+  t.throws(() => { toDocuments(data) }, VError, `[26] Throws VError when property 'labelMap' is an array of objects, but there exists 'field' property values that are not strings`)
 
   // [27] *****************************************************************************************
-  data = { rows, labelMap: [{ label: 'Ränta', field: 'ränta(kr)' }, { label: 'Belopp', field: 3000 }] }
-  t.throws(() => { toDocuments(data) }, VError, `[27] Throws VError when property 'labelMap' is an array of objects, but there exists 'field' property values that are not strings`)
+  data = { rows, labelMap, fieldInject: { BELOPP: 12 } }
+  t.throws(() => { toDocuments(data) }, VError, `[27] Throws VError when property 'fieldInject' given same name (case insensitive) as a scraped field`)
 
   // [28] *****************************************************************************************
-  data = { rows, labelMap, fieldInject: { BELOPP: 12 } }
-  t.throws(() => { toDocuments(data) }, VError, `[28] Throws VError when property 'fieldInject' given same name (case insensitive) as a scraped field`)
+  data = { rows, labelMap, fieldInject: null }
+  t.throws(() => { toDocuments(data) }, VError, `[28] Throws VError when property 'fieldInject' is null`)
 
   // [29] *****************************************************************************************
-  data = { rows, labelMap, fieldInject: null }
-  t.throws(() => { toDocuments(data) }, VError, `[29] Throws VError when property 'fieldInject' is null`)
+  data = { rows, labelMap, fieldInject: [] }
+  t.throws(() => { toDocuments(data) }, VError, `[29] Throws VError when property 'fieldInject' is an array`)
 
   // [30] *****************************************************************************************
-  data = { rows, labelMap, fieldInject: [] }
-  t.throws(() => { toDocuments(data) }, VError, `[30] Throws VError when property 'fieldInject' is an array`)
+  data = { rows, labelMap, fieldInject: '12' }
+  t.throws(() => { toDocuments(data) }, VError, `[30] Throws VError when property 'fieldInject' is a string`)
 
   // [31] *****************************************************************************************
-  data = { rows, labelMap, fieldInject: '12' }
-  t.throws(() => { toDocuments(data) }, VError, `[31] Throws VError when property 'fieldInject' is a string`)
-
-  // [32] *****************************************************************************************
   data = { rows, labelMap, fieldInject: 12 }
-  t.throws(() => { toDocuments(data) }, VError, `[32] Throws VError when property 'fieldInject' is a number`)
+  t.throws(() => { toDocuments(data) }, VError, `[31] Throws VError when property 'fieldInject' is a number`)
 
   t.end()
 })

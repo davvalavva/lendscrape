@@ -36,21 +36,18 @@ test('defaultTaskFactory(creditor)', (t) => {
   t.throws(() => { defaultTaskFactory(true) }, VError, `[06] Throws VError when argument is a boolean`)
 
   // [07] *****************************************************************************************
-  t.throws(() => { defaultTaskFactory(() => {}) }, VError, `[07] Throws VError when argument is a function`)
+  t.throws(() => { defaultTaskFactory(Promise.resolve(1)) }, VError, `[07] Throws VError when argument is a promise`)
 
   // [08] *****************************************************************************************
-  t.throws(() => { defaultTaskFactory(Promise.resolve(1)) }, VError, `[08] Throws VError when argument is a promise`)
+  t.type(defaultTaskFactory(creditor), 'object', `[08] Returns a value of type Object`)
 
   // [09] *****************************************************************************************
-  t.type(defaultTaskFactory(creditor), 'object', `[09] Returns a value of type Object`)
+  const task = defaultTaskFactory(creditor)
+  t.type(task.request, 'function', `[09] Property 'request' of return object is a function`)
 
   // [10] *****************************************************************************************
-  const task = defaultTaskFactory(creditor)
-  t.type(task.request, 'function', `[10] Property 'request' of return object is a function`)
-
-  // [11] *****************************************************************************************
   delete task.request
-  t.strictSame(task, expected, `[11] Returns object with properties and values as expected`)
+  t.strictSame(task, expected, `[10] Returns object with properties and values as expected`)
 
   t.end()
 })
