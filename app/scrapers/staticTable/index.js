@@ -27,8 +27,8 @@ const type = require('type-name')
 const VError = require('verror')
 const extract = require('./extract')
 const { debugMode } = require('../../config/runtime.json')
-const { statusCodes } = require('../../errors').errors
-const { INVALID_ARG_ERR, STATUS_CODE_ERR, REQUEST_ERR } = require('../../errors').errors.names
+const { statusCodes } = require('../../config/errors').errors
+const { INVALID_ARG_ERR, STATUS_CODE_ERR, REQUEST_ERR } = require('../../config/errors').errors.names
 
 const staticTable = async (task) => {
   try {

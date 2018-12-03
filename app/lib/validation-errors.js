@@ -26,7 +26,7 @@ const assert = require('assert')
 const type = require('type-name')
 const VError = require('verror')
 const schemas = require('../schemas')
-const { INVALID_ARG_ERR } = require('../errors').errors.names
+const { INVALID_ARG_ERR, URI_ERR } = require('../config/errors').errors.names
 
 const options = {
   allErrors: true,
@@ -54,8 +54,7 @@ const validationErrors = (cfg) => {
   try {
     assert.strictEqual(type(validate), 'function', `given schema uri in property '$id' doesn't resolve into a validate() function`)
   } catch (err) {
-    const info = { argName: 'cfg', argValue: cfg, argType: type(cfg), argPos: 0 }
-    throw new VError({ name: INVALID_ARG_ERR, cause: err, info }, `invalid argument`)
+    throw new VError({ name: URI_ERR, cause: err, info: { uri: $id } }, `invalid schema uri`)
   }
 
   const valid = validate(subject)

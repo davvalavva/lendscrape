@@ -3,7 +3,10 @@ module.exports = {
     names: {
       INVALID_ARG_ERR: 'InvalidArgumentError',
       STATUS_CODE_ERR: 'StatusCodeError',
-      REQUEST_ERR: 'RequestError'
+      REQUEST_ERR: 'RequestError',
+      URI_ERR: 'URIError',
+      CRED_CFG_ERR: 'CreditorConfigurationError',
+      VALIDATION_ERR: 'ValidationError'
     },
     statusCodes: {
       400: { message: 'Bad Request' },

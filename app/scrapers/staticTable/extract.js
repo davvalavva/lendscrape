@@ -26,7 +26,7 @@ const type = require('type-name')
 const VError = require('verror')
 const cheerio = require('cheerio')
 const parseNum = require('../../lib/parse-number')
-const { INVALID_ARG_ERR } = require('../../errors').errors.names
+const { INVALID_ARG_ERR } = require('../../config/errors').errors.names
 
 const staticTableExtract = (config) => {
   try {

@@ -30,7 +30,7 @@
 const assert = require('assert')
 const VError = require('verror')
 const type = require('type-name')
-const { INVALID_ARG_ERR } = require('../errors').errors.names
+const { INVALID_ARG_ERR } = require('../config/errors').errors.names
 
 module.exports = (data) => {
   try {

@@ -18,7 +18,7 @@ const assert = require('assert')
 const VError = require('verror')
 const requestPromiseNative = require('request-promise-native')
 const type = require('type-name')
-const { INVALID_ARG_ERR } = require('../errors').errors.names
+const { INVALID_ARG_ERR } = require('../config/errors').errors.names
 
 module.exports = function defaultTaskFactory(creditor) {
   try {
