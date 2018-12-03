@@ -1,4 +1,5 @@
 const { test } = require('tap')
+const VError = require('verror')
 const defaultTaskFactory = require('../task-factory/default-task')
 
 const creditor = {
@@ -17,28 +18,28 @@ const expected = {
 
 test('defaultTaskFactory(creditor)', (t) => {
   // [01] *****************************************************************************************
-  t.throws(() => { defaultTaskFactory() }, TypeError, `[01] Throws TypeError when called without any argument`)
+  t.throws(() => { defaultTaskFactory() }, VError, `[01] Throws VError when called without any argument`)
 
   // [02] *****************************************************************************************
-  t.throws(() => { defaultTaskFactory(null) }, TypeError, `[02] Throws TypeError when argument is null`)
+  t.throws(() => { defaultTaskFactory(null) }, VError, `[02] Throws VError when argument is null`)
 
   // [03] *****************************************************************************************
-  t.throws(() => { defaultTaskFactory([]) }, TypeError, `[03] Throws TypeError when argument is an array`)
+  t.throws(() => { defaultTaskFactory([]) }, VError, `[03] Throws VError when argument is an array`)
 
   // [04] *****************************************************************************************
-  t.throws(() => { defaultTaskFactory(12) }, TypeError, `[04] Throws TypeError when argument is a number`)
+  t.throws(() => { defaultTaskFactory(12) }, VError, `[04] Throws VError when argument is a number`)
 
   // [05] *****************************************************************************************
-  t.throws(() => { defaultTaskFactory('12') }, TypeError, `[05] Throws TypeError when argument is a string`)
+  t.throws(() => { defaultTaskFactory('12') }, VError, `[05] Throws VError when argument is a string`)
 
   // [06] *****************************************************************************************
-  t.throws(() => { defaultTaskFactory(true) }, TypeError, `[06] Throws TypeError when argument is a boolean`)
+  t.throws(() => { defaultTaskFactory(true) }, VError, `[06] Throws VError when argument is a boolean`)
 
   // [07] *****************************************************************************************
-  t.throws(() => { defaultTaskFactory(() => {}) }, TypeError, `[07] Throws TypeError when argument is a function`)
+  t.throws(() => { defaultTaskFactory(() => {}) }, VError, `[07] Throws VError when argument is a function`)
 
   // [08] *****************************************************************************************
-  t.throws(() => { defaultTaskFactory(Promise.resolve(1)) }, TypeError, `[08] Throws TypeError when argument is a promise`)
+  t.throws(() => { defaultTaskFactory(Promise.resolve(1)) }, VError, `[08] Throws VError when argument is a promise`)
 
   // [09] *****************************************************************************************
   t.type(defaultTaskFactory(creditor), 'object', `[09] Returns a value of type Object`)

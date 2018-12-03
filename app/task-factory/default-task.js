@@ -14,11 +14,19 @@
  */
 /* eslint-enable max-len */
 
+const assert = require('assert')
+const VError = require('verror')
 const requestPromiseNative = require('request-promise-native')
 const type = require('type-name')
+const { INVALID_ARG_ERR } = require('../errors').errors.names
 
 module.exports = function defaultTaskFactory(creditor) {
-  if (type(creditor) !== 'Object') throw new TypeError(`Expected an object as argument, found type '${type(creditor)}'`)
+  try {
+    assert.strictEqual(type(creditor), 'Object', `argument must be an object`)
+  } catch (err) {
+    const info = { argName: 'creditor', argValue: creditor, argType: type(creditor), argPos: 0 }
+    throw new VError({ name: INVALID_ARG_ERR, cause: err, info }, `invalid argument`)
+  }
 
   const task = {
     attemptNo: 1,
