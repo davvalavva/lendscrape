@@ -8,7 +8,8 @@ module.exports = {
       CRED_CFG_ERR: 'CreditorConfigurationError',
       VALIDATION_ERR: 'ValidationError',
       MAP_ERR: 'MappingError',
-      TRANSFORM_DATA_ERR: 'TransformDataError'
+      TRANSFORM_DATA_ERR: 'TransformDataError',
+      NOT_IMPL_ERR: 'NotImplementedError'
     },
     statusCodes: {
       400: { message: 'Bad Request' },

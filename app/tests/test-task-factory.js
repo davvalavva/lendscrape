@@ -1,7 +1,7 @@
 const { test } = require('tap')
-const taskFactory = require('../task-factory')
+const VError = require('verror')
 const type = require('type-name')
-const ValidationError = require('../errors/validation-error')
+const taskFactory = require('../task-factory')
 
 const creditors = [{
   name: 'somename',
@@ -27,25 +27,25 @@ const expected = [{
 
 test('taskFactory(creditors)', (t) => {
   // [01] *****************************************************************************************
-  t.throws(() => { taskFactory() }, TypeError, `[01] Throws TypeError when called without any argument`)
+  t.throws(() => { taskFactory() }, VError, `[01] Throws VError when called without any argument`)
 
   // [02] *****************************************************************************************
-  t.throws(() => { taskFactory(null) }, TypeError, `[02] Throws TypeError when argument is null`)
+  t.throws(() => { taskFactory(null) }, VError, `[02] Throws VError when argument is null`)
 
   // [03] *****************************************************************************************
-  t.throws(() => { taskFactory({}) }, TypeError, `[03] Throws TypeError when argument is an object`)
+  t.throws(() => { taskFactory({}) }, VError, `[03] Throws VError when argument is an object`)
 
   // [04] *****************************************************************************************
-  t.throws(() => { taskFactory(12) }, TypeError, `[04] Throws TypeError when argument is a number`)
+  t.throws(() => { taskFactory(12) }, VError, `[04] Throws VError when argument is a number`)
 
   // [05] *****************************************************************************************
-  t.throws(() => { taskFactory('12') }, TypeError, `[05] Throws TypeError when argument is a string`)
+  t.throws(() => { taskFactory('12') }, VError, `[05] Throws VError when argument is a string`)
 
   // [06] *****************************************************************************************
-  t.throws(() => { taskFactory(true) }, TypeError, `[06] Throws TypeError when argument is a boolean`)
+  t.throws(() => { taskFactory(true) }, VError, `[06] Throws VError when argument is a boolean`)
 
   // [07] *****************************************************************************************
-  t.throws(() => { taskFactory(Promise.resolve(1)) }, TypeError, `[07] Throws TypeError when argument is a promise`)
+  t.throws(() => { taskFactory(Promise.resolve(1)) }, VError, `[07] Throws VError when argument is a promise`)
 
   // [08] *****************************************************************************************
   t.strictSame(type(taskFactory(creditors)), 'Array', `[08] Returns an array`)
@@ -66,37 +66,37 @@ test('taskFactory(creditors)', (t) => {
   // [12] *****************************************************************************************
   let invalidcreditors = [{ ...creditors[0] }]
   delete invalidcreditors[0].name
-  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[12] Throws ValidationError when passed invalid creditors object`)
+  t.throws(() => { taskFactory(invalidcreditors) }, VError, `[12] Throws VError when passed invalid creditors object`)
 
   // [13] *****************************************************************************************
   invalidcreditors = [{ ...creditors[0] }]
   delete invalidcreditors[0].task
-  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[13] Throws ValidationError when passed invalid creditors object`)
+  t.throws(() => { taskFactory(invalidcreditors) }, VError, `[13] Throws VError when passed invalid creditors object`)
 
   // [14] *****************************************************************************************
   invalidcreditors = [{ ...creditors[0] }]
   delete invalidcreditors[0].targetURL
-  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[14] Throws ValidationError when passed invalid creditors object`)
+  t.throws(() => { taskFactory(invalidcreditors) }, VError, `[14] Throws VError when passed invalid creditors object`)
 
   // [15] *****************************************************************************************
   invalidcreditors = [{ ...creditors[0] }]
   delete invalidcreditors[0].documentSchemaId
-  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[15] Throws ValidationError when passed invalid creditors object`)
+  t.throws(() => { taskFactory(invalidcreditors) }, VError, `[15] Throws VError when passed invalid creditors object`)
 
   // [16] *****************************************************************************************
   invalidcreditors = [{ ...creditors[0] }]
   delete invalidcreditors[0].hdSelector
-  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[16] Throws ValidationError when passed invalid creditors object`)
+  t.throws(() => { taskFactory(invalidcreditors) }, VError, `[16] Throws VError when passed invalid creditors object`)
 
   // [17] *****************************************************************************************
   invalidcreditors = [{ ...creditors[0] }]
   delete invalidcreditors[0].trSelector
-  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[17] Throws ValidationError when passed invalid creditors object`)
+  t.throws(() => { taskFactory(invalidcreditors) }, VError, `[17] Throws VError when passed invalid creditors object`)
 
   // [18] *****************************************************************************************
   invalidcreditors = [{ ...creditors[0] }]
   delete invalidcreditors[0].labelMap
-  t.throws(() => { taskFactory(invalidcreditors) }, ValidationError, `[18] Throws ValidationError when passed invalid creditors object`)
+  t.throws(() => { taskFactory(invalidcreditors) }, VError, `[18] Throws VError when passed invalid creditors object`)
 
   t.end()
 })
