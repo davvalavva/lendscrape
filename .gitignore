@@ -10,7 +10,7 @@ mongo-scripts/
 
 # BrowserSync local server #
 ############################
-server/
+#server/
 
 
 # playaround and try out things #
